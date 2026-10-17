@@ -11,12 +11,12 @@ class Telegram:
         self.chat_id = int(os.environ["TELEGRAM_CHAT_ID"])
         self.offset = None
 
-    def _call(self, method, timeout=60, files=None, **params):
+    def _call(self, method, http_timeout=60, files=None, **params):
         if files:
             data = {k: json.dumps(v) if isinstance(v, (dict, list)) else v for k, v in params.items()}
-            r = requests.post(f"{self.base}/{method}", data=data, files=files, timeout=timeout)
+            r = requests.post(f"{self.base}/{method}", data=data, files=files, timeout=http_timeout)
         else:
-            r = requests.post(f"{self.base}/{method}", json=params, timeout=timeout)
+            r = requests.post(f"{self.base}/{method}", json=params, timeout=http_timeout)
         body = r.json()
         if not body.get("ok"):
             raise RuntimeError(f"Telegram {method}: {body.get('description')}")
@@ -34,7 +34,7 @@ class Telegram:
         files = {f"p{i}": open(p, "rb") for i, p in enumerate(paths)}
         try:
             media = [{"type": "photo", "media": f"attach://p{i}"} for i in range(len(paths))]
-            return self._call("sendMediaGroup", timeout=180, files=files,
+            return self._call("sendMediaGroup", http_timeout=180, files=files,
                               chat_id=self.chat_id, media=media)
         finally:
             for f in files.values():
@@ -62,7 +62,7 @@ class Telegram:
         if self.offset is not None:
             params["offset"] = self.offset
         try:
-            updates = self._call("getUpdates", timeout=poll_seconds + 15, **params)
+            updates = self._call("getUpdates", http_timeout=poll_seconds + 15, **params)
         except requests.RequestException:
             return []
         out = []
