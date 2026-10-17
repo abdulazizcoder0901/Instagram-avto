@@ -14,7 +14,7 @@ from zoneinfo import ZoneInfo
 
 import requests
 
-from bot import buffer, notion, writer
+from bot import buffer, music, notion, writer
 from bot.telegram import Telegram
 from bot.render import render_post
 
@@ -125,24 +125,46 @@ def send_review(tg, day):
     )
 
 
-def send_music_menu(tg, day):
-    post = day.post()
-    options = buffer.music_options(post["music_query"])
-    if options:
-        day.state.update(music_mode="catalog", music_options=options)
-        note = "Tanlangan musiqa postga avtomatik qo'shiladi."
-    else:
-        options = [{"id": None, **m} for m in post["music_suggestions"][:5]]
-        day.state.update(music_mode="reminder", music_options=options)
-        note = ("Buffer'da Instagram musiqa katalogi ulanmagan. Musiqa tanlasangiz, post vaqtida Buffer "
-                "telefoningizga eslatma yuboradi: Instagram'da shu musiqani qo'shib, post qilasiz.\n"
-                "0 tanlasangiz, post musiqasiz, o'zi avtomatik chiqadi.")
+def send_confirm(tg, day):
+    day.state["stage"] = "confirm"
+    day.save()
+    tg.send("❓ Rostdan ham shu variantni tasdiqlaysizmi?\n"
+            "Keyin musiqa tanlaysiz va post Instagram'ga o'zi chiqadi.",
+            buttons=[[("✅ Ha, tasdiqlayman", f"confirm:{day.version}"), ("↩️ Yo'q", f"back:{day.version}")]])
+
+
+def _label(option):
+    return option["title"] + (f" — {option['artist']}" if option["artist"] else "")
+
+
+def send_music_menu(tg, day, fresh=True):
+    if fresh or "music_options" not in day.state:
+        mode, options = music.options(day.post())
+        day.state.update(music_mode=mode, music_options=options)
+    options = day.state["music_options"]
     day.state["stage"] = "music"
     day.save()
-    lines = [f"{i}. {o['title']}" + (f" — {o['artist']}" if o["artist"] else "") for i, o in enumerate(options, 1)]
-    tg.send("🎵 Musiqani tanlang (tugmani bosing yoki raqamini yozing):\n\n" + "\n".join(lines)
-            + f"\n0. Musiqasiz\n\n{note}",
-            buttons=[[(str(i), f"music:{i}") for i in range(1, len(options) + 1)], [("0 · Musiqasiz", "music:0")]])
+    note = ("Raqamni bosing — musiqani eshitib ko'rasiz. Yoqsa, ostidagi «✅ Yoqdi» tugmasi uni postga qo'shadi."
+            if day.state["music_mode"] == "catalog" else
+            "Raqamni bosing — musiqani eshitib ko'rasiz.\n⚠️ Buffer'da Instagram Facebook orqali ulanmagan, "
+            "shuning uchun musiqani postga avtomatik qo'shib bo'lmaydi: post musiqasiz, o'zi chiqadi. "
+            "Ulash: Buffer → Channels → Instagram → Reconnect → Facebook orqali.")
+    lines = [f"{i}. {_label(o)}" for i, o in enumerate(options, 1)]
+    tg.send("🎵 Musiqa:\n\n" + "\n".join(lines) + f"\n0. Musiqasiz\n\n{note}",
+            buttons=[[(str(i), f"play:{i}") for i in range(1, len(options) + 1)], [("0 · Musiqasiz", "music:0")]])
+
+
+def send_preview(tg, day, choice):
+    option = day.state["music_options"][choice - 1]
+    buttons = [[("✅ Yoqdi", f"music:{choice}"), ("🔁 Boshqasi", "menu:0")]]
+    if option.get("preview_url"):
+        try:
+            path = music.download(option["preview_url"], day.refs_dir / f"music-{choice}.m4a")
+            tg.send_audio(path, option["title"], option["artist"], buttons=buttons)
+            return
+        except Exception:
+            pass
+    tg.send(f"🎵 {_label(option)}\nBu trekning namunasini topa olmadim.", buttons=buttons)
 
 
 def publish(tg, day, choice):
@@ -152,20 +174,16 @@ def publish(tg, day, choice):
         wait_public(url)
     due = buffer.publish_time(now())
     option = day.state["music_options"][choice - 1] if choice else None
-    reminder = False
-    if option and day.state["music_mode"] == "catalog":
-        try:
-            created = buffer.create_post(urls, post["caption"], post["alt_text"], due, music=option["id"])
-        except RuntimeError as e:
-            tg.send(f"⚠️ Musiqani avtomatik qo'shib bo'lmadi ({e}). Eslatma rejimida yuboraman.")
-            reminder = True
-    elif option:
-        reminder = True
-    else:
+    with_music = bool(option and day.state["music_mode"] == "catalog")
+    try:
+        created = buffer.create_post(urls, post["caption"], post["alt_text"], due,
+                                     music=option["id"] if with_music else None)
+    except RuntimeError as e:
+        if not with_music:
+            raise
+        tg.send(f"⚠️ Musiqani qo'shib bo'lmadi ({e}). Post musiqasiz chiqadi.")
+        with_music = False
         created = buffer.create_post(urls, post["caption"], post["alt_text"], due)
-    if reminder:
-        label = option["title"] + (f" — {option['artist']}" if option["artist"] else "")
-        created = buffer.create_post(urls, post["caption"], post["alt_text"], due, music=label, reminder=True)
 
     notion.mark_posted(day.state["topic"]["id"], day.date)
     day.state.update(stage="done", buffer_post_id=created["id"], music_choice=choice)
@@ -173,12 +191,8 @@ def publish(tg, day, choice):
     commit([day.dir], f"Post {day.date}: Buffer'ga yuborildi")
 
     when = f"bugun soat {due:%H:%M} da" if due else "hozir"
-    if reminder:
-        tg.send(f"✅ Buffer'ga qo'yildi. {when.capitalize()} Buffer ilovasi eslatma yuboradi — "
-                f"Instagram'da 🎵 «{label}» ni qo'shib post qiling.")
-    else:
-        tg.send(f"✅ Tayyor! Post {when} Instagram'ga chiqadi."
-                + (f"\n🎵 {option['title']}" if option else ""))
+    extra = f"\n🎵 {_label(option)}" if with_music else ("\n🔇 Musiqasiz" if option else "")
+    tg.send(f"✅ Tayyor! Post {when} Instagram'ga o'zi chiqadi.{extra}")
 
 
 def wait_until(hhmm):
@@ -221,7 +235,7 @@ def run():
         wait_until(os.environ["SEND_AT"])
     tg.skip_pending()
     if day.state.get("stage") == "music":
-        send_music_menu(tg, day)
+        send_music_menu(tg, day, fresh=False)
     else:
         day.state["stage"] = "review"
         send_review(tg, day)
@@ -243,11 +257,21 @@ def run():
             tg.answer(cb_id)
             if action in ("approve", "reject") and (stage != "review" or int(arg) != day.version):
                 continue
-            if action == "music" and stage != "music":
+            if action in ("confirm", "back") and (stage != "confirm" or int(arg) != day.version):
                 continue
-            tg.clear_buttons(msg_id)
+            if action in ("play", "music", "menu") and stage != "music":
+                continue
+            if action != "play":
+                tg.clear_buttons(msg_id)
             if action == "approve":
+                send_confirm(tg, day)
+            elif action == "confirm":
                 send_music_menu(tg, day)
+            elif action == "back":
+                day.state["stage"] = "review"
+                day.save()
+                tg.send("Yaxshi. O'zgartirish kerak bo'lsa, izoh yozing yoki rasm yuboring.",
+                        buttons=[[("✅ Tasdiqlash", f"approve:{day.version}"), ("❌ Yoqmadi", f"reject:{day.version}")]])
             elif action == "reject":
                 day.state["stage"] = "feedback"
                 day.save()
@@ -255,6 +279,10 @@ def run():
                         "Masalan: «hookni kuchliroq qil», «real misollar qo'sh», «3-slaydni qisqartir».\n\n"
                         "📎 Rasm ham yuborishingiz mumkin: postga qo'yish uchun (foto, skrinshot, haqiqiy misol) "
                         "yoki namuna sifatida («shunga o'xshash qil»). Rasm izohiga nima qilishni yozing.")
+            elif action == "play":
+                send_preview(tg, day, int(arg))
+            elif action == "menu":
+                send_music_menu(tg, day, fresh=False)
             elif action == "music":
                 publish(tg, day, int(arg))
                 return
@@ -262,10 +290,15 @@ def run():
         texts = [e[1] for e in events if e[0] == "text"]
         photos = [e for e in events if e[0] == "photo"]
         stage = day.state["stage"]
-        if stage == "music" and texts and texts[-1].isdigit() and int(texts[-1]) <= len(day.state["music_options"]):
-            publish(tg, day, int(texts[-1]))
-            return
-        if stage not in ("review", "feedback") or not (texts or photos):
+        if stage == "music" and texts and texts[-1].isdigit():
+            n = int(texts[-1])
+            if 1 <= n <= len(day.state["music_options"]):
+                send_preview(tg, day, n)
+            elif n == 0:
+                publish(tg, day, 0)
+                return
+            continue
+        if stage not in ("review", "feedback", "confirm") or not (texts or photos):
             continue
 
         first = len(day.refs()) + 1

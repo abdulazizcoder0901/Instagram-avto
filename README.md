@@ -13,27 +13,25 @@ Har kuni @mr_abdulazz uchun carousel post: **Notion → Claude → slaydlar → 
    topilmasa — bepul fotobazadan (Openverse/Wikimedia). Bot slaydlarni Chromium'da 1080×1350
    rasmga aylantiradi va `posts/<sana>/` papkasiga saqlaydi.
 3. **10:00** — Telegram bot'ga slaydlar va post matni keladi, ostida 2 ta tugma bo'ladi:
-   - **✅ Tasdiqlash** — musiqa tanlash bosqichiga o'tadi;
+   - **✅ Tasdiqlash** — bot "Rostdan ham?" deb bir marta so'raydi, keyin musiqa tanlash boshlanadi;
    - **❌ Yoqmadi** — bot nimani o'zgartirish kerakligini so'raydi. Siz yozasiz, Claude postni qayta
      yozadi va yangi variantni yuboradi. Tugmani bosmasdan to'g'ridan-to'g'ri izoh yozsangiz ham bo'ladi.
    - **Rasm yuborish** — foto/skrinshotni postga qo'ydirish ("shuni slaydlar orasiga qo'y") yoki
      boshqa postni namuna qilib berish ("shunga o'xshash dizaynda qil"). Albom ham bo'ladi.
-4. Musiqa: bot 5 ta variant beradi, siz raqamini bosasiz yoki yozasiz (0 — musiqasiz).
-5. Post Buffer'ga yuboriladi va Buffer'dagi bugungi vaqtda chiqadi. Agar bugungi vaqt o'tib ketgan
-   bo'lsa, darhol chiqadi. Notion'da mavzu "Post" deb belgilanadi.
+4. Musiqa: bot 5 ta variant beradi. Raqamni bossangiz, musiqa namunasi keladi — eshitib ko'rasiz.
+   Yoqsa **✅ Yoqdi** (postga qo'shiladi), yoqmasa **🔁 Boshqasi**. 0 — musiqasiz.
+5. Post Buffer'ga **avtomatik** chiqishga qo'yiladi va Buffer'dagi bugungi vaqtda o'zi chiqadi
+   (vaqt o'tib ketgan bo'lsa — darhol). Qo'lda hech narsa qilish shart emas. Notion'da mavzu "Post" bo'ladi.
 
 Agar soat ~15:10 gacha javob bermasangiz, o'sha kungi post yuborilmaydi. Davom ettirish uchun:
 GitHub → **Actions** → **Daily Instagram post** → **Run workflow**. Bot to'xtagan joyidan davom etadi.
 
 ### Musiqa haqida
 
-Buffer musiqani Instagram postga avtomatik qo'sha oladi, lekin buning uchun Instagram akkaunt
-Buffer'ga **Facebook Login orqali** ulangan bo'lishi kerak (Buffer → Channels → Instagram → Reconnect).
-- Shunday ulangan bo'lsa: bot Instagram kutubxonasidan haqiqiy treklarni taklif qiladi, tanlangani
-  postga o'zi qo'shiladi.
-- Ulanmagan bo'lsa: bot Claude tavsiya qilgan treklarni ko'rsatadi. Musiqa tanlasangiz, post vaqtida
-  Buffer telefoningizga eslatma yuboradi va siz Instagram ilovasida musiqani qo'shib post qilasiz.
-  0 ni tanlasangiz, post musiqasiz, o'zi avtomatik chiqadi.
+Musiqa postga avtomatik qo'shilishi uchun Instagram akkaunt Buffer'ga **Facebook Login orqali**
+ulangan bo'lishi kerak (Buffer → Channels → Instagram → Reconnect → Facebook). Shunda bot Instagram
+kutubxonasidagi haqiqiy treklarni taklif qiladi.
+Ulanmagan bo'lsa, musiqani faqat eshitib ko'rish mumkin (iTunes namunasi), post esa musiqasiz chiqadi.
 
 ## Bir martalik sozlash
 

@@ -34,37 +34,44 @@ def todays_slot(now):
     return None
 
 
-def music_options(query, limit=5):
-    """Instagram musiqa katalogidan variantlar. Kanal Facebook Login orqali ulanmagan bo'lsa None."""
-    q = """query($ch: ChannelId!, $q: String!) {
-      search: searchInstagramAudio(input: {channelId: $ch, audioType: music, query: $q}) {
-        __typename ... on SearchInstagramAudioSuccess { audio { id title displayArtist } } }
-      trending: trendingInstagramAudio(input: {channelId: $ch, audioType: music}) {
-        __typename ... on SearchInstagramAudioSuccess { audio { id title displayArtist } } } }"""
-    data = _gql(q, {"ch": CHANNEL_ID, "q": query})
-    if data["search"]["__typename"] != "SearchInstagramAudioSuccess":
-        return None
-    found = data["search"].get("audio", [])
-    trending = (data.get("trending") or {}).get("audio", [])
-    # qidiruvdan 3 ta + trenddan 2 ta, yetmasa qolganidan to'ldiriladi
-    candidates = found[:3] + trending[:2] + found[3:] + trending[2:]
-    seen, out = set(), []
-    for a in candidates:
-        if a["id"] not in seen and len(out) < limit:
-            seen.add(a["id"])
-            out.append({"id": a["id"], "title": a["title"], "artist": a.get("displayArtist") or ""})
-    return out
+AUDIO_FIELDS = "__typename ... on SearchInstagramAudioSuccess { audio { id title displayArtist previewUrl } }"
 
 
-def create_post(image_urls, caption, alt_text, due_at=None, music=None, reminder=False):
-    """Carousel post yaratadi. due_at bo'lmasa darhol chiqaradi."""
+def music_catalog(suggestions, limit=5):
+    """Instagram musiqa katalogidan treklar (namunasi bilan). Kanal Facebook Login orqali ulanmagan bo'lsa None."""
+    def search(q):
+        data = _gql(f"""query($ch: ChannelId!, $q: String!) {{
+            r: searchInstagramAudio(input: {{channelId: $ch, audioType: music, query: $q}}) {{ {AUDIO_FIELDS} }} }}""",
+                    {"ch": CHANNEL_ID, "q": q})["r"]
+        return data.get("audio") if data["__typename"] == "SearchInstagramAudioSuccess" else None
+
+    out, seen = [], set()
+    for s in suggestions:
+        found = search(f"{s['title']} {s['artist']}")
+        if found is None:
+            return None
+        for a in found[:1]:
+            if a["id"] not in seen:
+                seen.add(a["id"])
+                out.append(a)
+    if len(out) < limit:
+        trending = _gql(f"""query($ch: ChannelId!) {{
+            r: trendingInstagramAudio(input: {{channelId: $ch, audioType: music}}) {{ {AUDIO_FIELDS} }} }}""",
+                        {"ch": CHANNEL_ID})["r"]
+        out += [a for a in trending.get("audio", []) if a["id"] not in seen][:limit - len(out)]
+    return [{"id": a["id"], "title": a["title"], "artist": a.get("displayArtist") or "",
+             "preview_url": a.get("previewUrl")} for a in out[:limit]]
+
+
+def create_post(image_urls, caption, alt_text, due_at=None, music=None):
+    """Carousel postni avtomatik chiqishga qo'yadi. due_at bo'lmasa darhol chiqaradi; music — katalog trek id."""
     instagram = {"type": "post", "shouldShareToFeed": True, "isAiGenerated": True}
     if music:
         instagram["stickerFields"] = {"music": music}
     variables = {"input": {
         "channelId": CHANNEL_ID,
         "text": caption,
-        "schedulingType": "notification" if reminder else "automatic",
+        "schedulingType": "automatic",
         "mode": "customScheduled" if due_at else "shareNow",
         "assets": [{"image": {"url": u, "metadata": {"altText": alt_text}}} for u in image_urls],
         "metadata": {"instagram": instagram},
