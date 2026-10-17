@@ -1,0 +1,24 @@
+name: Photo search test
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: |
+          python -m tools.photo_test \
+            "Edge of Tomorrow 2014 Tom Cruise exosuit" \
+            "Edge of Tomorrow Emily Blunt exosuit sword" \
+            "Darth Vader helmet Profiles in History auction" \
+            "Empathy Suite Palms Casino Las Vegas" \
+            "La Bonnotte potato Noirmoutier"
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tests/photo-test/*.jpg && git commit -m "photo search test" && git push
