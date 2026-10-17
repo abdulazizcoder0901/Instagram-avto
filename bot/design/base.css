@@ -1,112 +1,64 @@
-/* @mr_abdulazz carousel brend to'plami. Kanvas: 1080x1350. */
-:root {
-  --orange: #FF5A1F;
-  --amber: #FF9A1F;
-  --yellow: #FFD21F;
-  --blue: #2D5BFF;
-  --ink: #111111;
-  --white: #FFFFFF;
-  --cream: #F6F1E9;
-  --dark: #0D0D0F;
-}
-
+/* @mr_abdulazz carousel uslubi: fonda oq-qora foto, kulrang tus, markazda oq matn. Kanvas 1080x1350. */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { width: 1080px; height: 1350px; overflow: hidden; }
+html, body { width: 1080px; height: 1350px; overflow: hidden; background: #1c1c1e; }
 body { font-family: "Inter", sans-serif; -webkit-font-smoothing: antialiased; }
 
 .slide {
-  position: relative; width: 1080px; height: 1350px; overflow: hidden;
-  padding: 150px 80px 170px; display: flex; flex-direction: column; gap: 36px;
-  color: var(--white);
+  position: relative; width: 1080px; height: 1350px; overflow: hidden; color: #fff;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  justify-content: flex-end; gap: 30px; padding: 140px 96px 250px;
+  background: radial-gradient(120% 90% at 50% 20%, #5a5a5c 0%, #2c2c2e 55%, #161618 100%);
 }
+.slide.pos-center { justify-content: center; padding-bottom: 200px; }
+.slide.pos-top { justify-content: flex-start; padding-top: 170px; }
 
-/* ---------- Fonlar ---------- */
-.bg-orange { background: radial-gradient(120% 90% at 85% 95%, #FFC23D 0%, var(--amber) 30%, var(--orange) 70%, #E8400F 100%); }
-.bg-blue   { background: var(--blue); }
-.bg-yellow { background: var(--yellow); color: var(--ink); }
-.bg-cream  { background: var(--cream); color: var(--ink); }
-.bg-dark   { background: radial-gradient(90% 70% at 50% 100%, #8A3410 0%, #3A1406 45%, var(--dark) 100%); }
+/* ---------- Fon rasmi (bot qo'yadi) ---------- */
+.bg-photo {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;
+  filter: grayscale(1) contrast(1.06) brightness(.86);
+}
+.shade {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(180deg, rgba(0,0,0,.28) 0%, rgba(0,0,0,0) 28%, rgba(0,0,0,.08) 48%,
+                              rgba(0,0,0,.55) 72%, rgba(0,0,0,.78) 100%);
+}
+.pos-top .shade {
+  background: linear-gradient(180deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,.5) 35%, rgba(0,0,0,.05) 60%, rgba(0,0,0,.45) 100%);
+}
+.pos-center .shade { background: rgba(0,0,0,.48); }
+.slide > * { position: relative; z-index: 2; }
+.slide > .bg-photo, .slide > .shade { position: absolute; }
 
-/* ---------- Tepa va past qism (bot o'zi qo'shadi) ---------- */
-.chrome-top {
-  position: absolute; top: 56px; left: 80px; right: 80px;
-  display: flex; justify-content: space-between; align-items: center;
-  font: 600 30px "Inter"; z-index: 10;
+/* ---------- Pastki qism (bot qo'yadi) ---------- */
+.handle { position: absolute !important; bottom: 92px; left: 0; right: 0; font: 500 30px "Inter"; opacity: .85; z-index: 5; }
+.dots { position: absolute !important; bottom: 52px; left: 0; right: 0; display: flex; justify-content: center; gap: 12px; z-index: 5; }
+.dots i { width: 13px; height: 13px; border-radius: 50%; background: rgba(255,255,255,.4); }
+.dots i.on { background: #fff; }
+.arrow {
+  position: absolute !important; right: 72px; bottom: 150px; z-index: 5;
+  width: 112px; height: 112px; border-radius: 50%; border: 4px solid #fff;
+  display: grid; place-items: center; font: 400 56px "Inter";
 }
-.chrome-top .handle { opacity: .9; }
-.chrome-top .count {
-  border: 2.5px solid currentColor; border-radius: 999px; padding: 6px 20px; font-size: 26px;
-}
-.next {
-  position: absolute; bottom: 64px; right: 80px; z-index: 10;
-  display: inline-flex; align-items: center; gap: 14px;
-  background: var(--ink); color: var(--white); border-radius: 999px;
-  padding: 18px 34px 18px 18px; font: 700 32px "Inter";
-}
-.next::before {
-  content: "→"; display: grid; place-items: center; width: 48px; height: 48px;
-  border-radius: 50%; background: var(--yellow); color: var(--ink); font-size: 28px;
-}
-.bg-dark .next, .bg-blue .next { background: var(--white); color: var(--ink); }
 
 /* ---------- Matn ---------- */
-.kicker { font: 800 34px "Montserrat"; letter-spacing: .04em; text-transform: uppercase; color: var(--yellow); }
-.bg-yellow .kicker, .bg-cream .kicker { color: var(--orange); }
-.h1 { font: 900 104px/1.02 "Montserrat"; letter-spacing: -.01em; text-transform: uppercase; }
-.h2 { font: 800 76px/1.08 "Montserrat"; }
-.h3 { font: 800 56px/1.12 "Montserrat"; }
-.mega { font: 900 170px/0.95 "Montserrat"; text-transform: uppercase; letter-spacing: -.02em; }
-.body { font: 500 40px/1.42 "Inter"; }
-.small { font: 500 32px/1.4 "Inter"; opacity: .9; }
-.center { text-align: center; align-items: center; }
-.dim { opacity: .75; }
-.dark-text { color: var(--ink); }
+.kicker { font: 600 30px "Inter"; letter-spacing: .14em; text-transform: uppercase; opacity: .8; }
+.h1 { font: 700 96px/1.04 "Inter"; letter-spacing: -.04em; text-wrap: balance; }
+.h2 { font: 700 76px/1.08 "Inter"; letter-spacing: -.035em; text-wrap: balance; }
+.h3 { font: 700 56px/1.12 "Inter"; letter-spacing: -.03em; text-wrap: balance; }
+.num { font: 800 210px/0.9 "Inter"; letter-spacing: -.05em; }
+.body { font: 500 40px/1.42 "Inter"; letter-spacing: -.01em; opacity: .93; max-width: 860px; text-wrap: pretty; }
+.small { font: 500 32px/1.4 "Inter"; opacity: .8; }
+.em { font-style: italic; }
+.soft { opacity: .65; }
+.left { text-align: left; align-self: stretch; }
 
-/* Ajratilgan so'zlar */
-.hl { background: var(--yellow); color: var(--ink); border-radius: 22px; padding: 0 18px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-.hl-ink { background: var(--ink); color: var(--white); border-radius: 22px; padding: 0 18px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-.hl-text { color: var(--yellow); }
-.ring { border: 5px solid var(--orange); border-radius: 50%; padding: 0 22px; }
-.strike { text-decoration: line-through; text-decoration-thickness: 5px; }
-
-/* ---------- Rasmlar ---------- */
-.photo { width: 100%; object-fit: cover; border-radius: 48px; display: block; }
-.photo-circle { width: 600px; height: 600px; object-fit: cover; border-radius: 50%; border: 14px solid var(--white); display: block; }
-.photo-pill { width: 100%; height: 520px; object-fit: cover; border-radius: 300px; border: 12px solid var(--white); display: block; }
-/* Kinematik: to'liq fon rasmi, qorong'i-to'q sariq tus */
-.photo-bg {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;
-  filter: grayscale(1) sepia(1) saturate(2.4) hue-rotate(-14deg) brightness(.62) contrast(1.15);
+/* ---------- Qo'shimcha elementlar ---------- */
+.tag { border: 2.5px solid rgba(255,255,255,.85); border-radius: 999px; padding: 10px 26px; font: 600 28px "Inter"; }
+.glass {
+  background: rgba(20,20,22,.55); backdrop-filter: blur(14px); border: 1.5px solid rgba(255,255,255,.18);
+  border-radius: 36px; padding: 40px 44px; text-align: left; align-self: stretch;
 }
-.photo-bg-tint {
-  position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(180deg, rgba(13,13,15,.85) 0%, rgba(13,13,15,.2) 40%, rgba(13,13,15,.25) 65%, rgba(13,13,15,.9) 100%);
-}
-.slide > * { position: relative; z-index: 2; }
-.slide > .photo-bg, .slide > .photo-bg-tint { position: absolute; }
-.slide > .watermark, .slide > .abs { position: absolute; }
-.slide > .chrome-top, .slide > .next { position: absolute; z-index: 10; }
-.slide > .watermark { z-index: 1; }
-.next { align-self: auto; }
-
-/* ---------- Bezaklar ---------- */
-.sticker {
-  display: inline-block; background: var(--white); color: var(--ink); border-radius: 999px;
-  padding: 12px 26px; font: 700 30px "Inter"; transform: rotate(-6deg);
-  box-shadow: 0 6px 0 rgba(0,0,0,.18);
-}
-.sticker.yellow { background: var(--yellow); }
-.sticker.orange { background: var(--orange); color: var(--white); }
-.sticker.blue { background: var(--blue); color: var(--white); }
-.badge {
-  display: inline-grid; place-items: center; width: 110px; height: 110px; border-radius: 28px;
-  background: rgba(255,255,255,.14); border: 3px solid rgba(255,255,255,.35); font: 800 64px "Montserrat";
-}
-.card { background: var(--white); color: var(--ink); border-radius: 40px; padding: 48px; box-shadow: 18px 18px 0 var(--ink); }
-.watermark {
-  position: absolute; right: -20px; bottom: 60px; z-index: 1; pointer-events: none;
-  font: 900 620px/1 "Montserrat"; color: rgba(255,255,255,.12);
-}
-.row { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
-.grow { flex: 1; }
-.abs { position: absolute; }
+.list { display: flex; flex-direction: column; gap: 22px; text-align: left; align-self: stretch; }
+.list .item { display: flex; gap: 22px; align-items: baseline; font: 500 38px/1.35 "Inter"; }
+.list .item b { font-weight: 800; min-width: 52px; }
+.divider { width: 120px; height: 3px; background: rgba(255,255,255,.7); border-radius: 3px; }

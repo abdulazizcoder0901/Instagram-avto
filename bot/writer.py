@@ -25,49 +25,45 @@ MATN QOIDALARI
 - Oxirgi chiqqan mavzularni va ularning hook uslubini takrorlama.
 - Notion'dagi ssenariy — xomaki g'oya. Uni asos qil, lekin yaxshilab qayta yoz.
 
-DIZAYN
-Har bir slayd 1080x1350 kanvas. Slayd uchun faqat ichki HTML yozasan (html maydoni) va fon tanlaysan (bg).
-Bot o'zi qo'shadi: tepada @mr_abdulazz va "01 / 08" hisoblagich, pastda "→ Keyingisi" tugmasi
-(oxirgisidan tashqari) — ularni yozma. Slayd flex-column, padding 150px 80px 170px, elementlar orasi 36px.
-Brend uslubi (energik, rangli, zamonaviy — yuqoridagi reference'larga o'xshash):
-- Fonlar: orange (asosiy), blue, yellow, cream, dark (kinematik). Slaydlarda fonni almashtirib tur,
-  lekin bitta postda 2–3 xil fondan oshma. Cover — odatda orange yoki dark+foto.
-- Sarlavhalar Montserrat qalin: .h1 (katta, UPPERCASE), .h2, .h3, .mega (bitta kalit so'z/raqam uchun).
-- Kalit so'zni ajrat: <span class="hl">..</span> (sariq fon), .hl-ink (qora fon), .hl-text (sariq rang),
-  .ring (atrofida halqa), .strike (ustidan chizilgan).
-- Bezaklar: .sticker (+ .yellow/.orange/.blue) — qiyshiq kichik yorliq; .card — oq kartochka;
-  .badge — raqamli kvadrat; .watermark — orqada katta xira raqam; .kicker — kichik sarlavha usti yozuvi.
-- Matn: .body (asosiy matn, 40px), .small; .center — markazlash; .dark-text — sariq/krem fonda qora matn.
-- Joylash: .row (gorizontal qator), <div style="flex:1"></div> — bo'sh joy bilan pastga surish,
-  .abs + style="top:..;left:.." — erkin joylash (stikerlar uchun).
-- Kerak bo'lsa inline style ishlat, lekin <style>, <script> va tashqi CSS yozma.
-O'qilishi muhim: telefonda ham oson o'qilsin. Har slaydda bitta fikr; sarlavha 2–8 so'z,
-.body 35 so'zdan oshmasin. Hech narsa pastki 155px ga (tugma joyi) va kanvas chetidan chiqmasin.
+DIZAYN (sahifaning yagona uslubi)
+Har bir slayd 1080x1350. Fonda butun ekran bo'ylab HAQIQIY foto turadi, bot uni oq-qora (kulrang)
+qiladi va pastga qorong'i soya beradi. Ustida oq, markazlashtirilgan, toza matn (Inter shrifti):
+katta qalin sarlavha, kalit qism kursivda — masalan: Marketingingizni tekshiradigan <span class="em">6 ta savol.</span>
+Bot o'zi qo'shadi: fon rasmi va soya, pastda @mr_abdulazz, nuqtali progress va "→" aylana tugmasi —
+ularni yozma. Har slayd uchun:
+- position: "bottom" (matn pastki qismda — asosiy holat, foto yuqorida ko'rinib turadi),
+  "center" (foto qorong'iroq, matn o'rtada — ro'yxat yoki ko'p matn uchun), "top" (matn tepada).
+- html: faqat matn bloklari. Klasslar: .kicker (kichik ustki yozuv), .h1 (cover sarlavhasi), .h2, .h3,
+  .num (katta raqam), .body (asosiy matn), .small, .em (kursiv ajratish), .soft (xiraroq), .tag (konturli
+  yorliq), .glass (shaffof qorong'i panel), .list > .item > <b>1</b> matn (raqamli ro'yxat), .divider, .left.
+  Inline style mumkin, lekin <style>, <script>, <img> yozma.
+O'qilishi muhim: telefonda oson o'qilsin, minimal va premium. Har slaydda bitta fikr; sarlavha 2–8 so'z,
+.body 30 so'zdan oshmasin. Matn pastki 245px ga (tugma va handle joyi) va tepadagi 120px ga kirmasin.
 
-RASMLAR
-- Bepul foto: <img class="photo-pill" data-q="luxury hotel room"> — data-q ichiga INGLIZCHA, aniq va
-  ko'rinadigan narsani yoz (obyekt, joy, jarayon). Bot Openverse/Wikimedia'dan litsenziyasi ochiq foto
-  topib qo'yadi. Mashhur odamlar va film kadrlari u yerda kam — umumiy obyekt/joy so'ra.
-  Topilmasa rasm o'chadi, shuning uchun slayd rasmsiz ham chiroyli turishi kerak.
-- Klasslar: .photo-pill (kapsula), .photo-circle (aylana), .photo (to'rtburchak, style="height:..px"),
-  .photo-bg (butun fon, kinematik — darhol keyin <div class="photo-bg-tint"></div> qo'y, bg="dark").
-- Postda 2–4 ta slaydda rasm bo'lsin (cover'da ham bo'lsa yaxshi).
-- Sahifa egasi yuborgan rasmlar: <img class="..." src="ref-01.jpg"> (aynan berilgan nom bilan).
+FON RASMLARI — HAQIQIY RASMLAR
+Bot har slayd uchun rasmni Google/Pinterest kabi rasm qidiruvidan o'zi topadi. Sen faqat photo_search
+yozasan: mavzuning O'ZIGA oid haqiqiy rasmni topadigan aniq INGLIZCHA so'rov. Film bo'lsa — film nomi,
+yili, aktyor va sahna ("Edge of Tomorrow 2014 Tom Cruise exosuit battle"), joy bo'lsa — aniq nom
+("Empathy Suite Palms Casino Las Vegas"), mahsulot/odam bo'lsa — aniq nomi bilan.
+- Har slaydda boshqa kadr/burchak so'ra (sahna, yaqin plan, kostyum detali, kadr ortidan, afisha va h.k.).
+- Umumiy so'z ("luxury", "money") emas, aniq nom yoz — shunda haqiqiy rasm chiqadi.
+- Rasm linkini o'zing to'qib chiqarma, link yozma — faqat so'rov.
+- photo_ref: sahifa egasi yuborgan rasm shu slayd foni bo'lishi kerak bo'lsa "ref-01.jpg", aks holda "".
 
 SAHIFA EGASINING IZOHLARI VA RASMLARI
 - Izohni so'zma-so'z emas, maqsadini tushunib bajar. "Real misollar qo'sh" — aniq haqiqiy holatlar bilan slaydlar.
 - Egasi rasm yuborsa, avval Read bilan har birini ko'r:
-  * Postga qo'yish uchun (foto, skrinshot, haqiqiy misol, "shuni qo'y") — src="ref-NN.jpg" bilan slaydga joyla.
-  * Reference/namuna ("shunga o'xshash", "shu uslubda", boshqa sahifaning posti) — postga qo'yma; undagi
-    kompozitsiya, ranglar, ajratish usullari, rasm joylashuvi, hook va tuzilmani o'rganib, shu dizayn
-    to'plami bilan iloji boricha o'xshatib qayta chiz.
-  * Aniq aytilmagan bo'lsa: mavzuga oid foto — postga qo'y; boshqa sahifaning tayyor dizayni — reference.
+  * Postga qo'yish uchun (foto, kadr, haqiqiy misol, "shuni qo'y") — o'sha slaydning photo_ref'iga
+    "ref-NN.jpg" ni yoz.
+  * Reference/namuna ("shunga o'xshash", "shu uslubda", boshqa sahifaning posti) — postga qo'yma;
+    undagi hook, tuzilma, matn joylashuvi va ohangni o'rganib, shu uslub doirasida qo'lla.
+  * Aniq aytilmagan bo'lsa: mavzuga oid foto — postga qo'y; boshqa sahifaning tayyor posti — reference.
 
 Dizayn to'plami (CSS) — faqat shu klasslardan foydalan:
 """ + DESIGN_CSS + """
 
 CHIQISH
-slides: 6–9 ta slayd, har biri {bg, html}. 1-slayd — cover/hook, oxirgisi — izohga undovchi savol va
+slides: 6–9 ta slayd, har biri {position, photo_search, photo_ref, html}. 1-slayd — cover/hook, oxirgisi — izohga undovchi savol va
 obuna/saqlashga chaqiriq.
 caption: 2–4 qisqa abzats; birinchi qator hook; oxirida izohga chaqiriq va 5–8 ta mos hashtag.
 alt_text: carousel mazmunining bir gaplik tavsifi.
@@ -78,10 +74,12 @@ music_suggestions: postga mos 5 ta mashhur trek (Instagram'da odatda bor bo'lgan
 SLIDE = {
     "type": "object",
     "properties": {
-        "bg": {"type": "string", "enum": ["orange", "blue", "yellow", "cream", "dark"]},
+        "position": {"type": "string", "enum": ["bottom", "center", "top"]},
+        "photo_search": {"type": "string"},
+        "photo_ref": {"type": "string"},
         "html": {"type": "string"},
     },
-    "required": ["bg", "html"],
+    "required": ["position", "photo_search", "photo_ref", "html"],
     "additionalProperties": False,
 }
 
@@ -130,10 +128,10 @@ def _call(prompt, image_dir=None, images=()):
 def _validate(post, image_names=frozenset()):
     slides = post["slides"]
     for slide in slides:
-        # mavjud bo'lmagan ref-rasmlarga ishora qiluvchi teglarni olib tashlaymiz
-        slide["html"] = re.sub(
-            r'<img\b[^>]*\bsrc="(ref-[^"]+)"[^>]*>',
-            lambda m: m.group(0) if m.group(1) in image_names else "", slide["html"])
+        # mavjud bo'lmagan ref-rasmlarni olib tashlaymiz
+        if slide["photo_ref"] not in image_names:
+            slide["photo_ref"] = ""
+        slide["html"] = re.sub(r"<(img|script|style)\b[^>]*>", "", slide["html"])
     if not 3 <= len(slides) <= 10:
         raise ValueError(f"Slaydlar soni noto'g'ri: {len(slides)}")
     return post
