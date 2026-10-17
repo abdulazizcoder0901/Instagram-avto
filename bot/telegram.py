@@ -1,6 +1,7 @@
 """Telegram Bot API uchun minimal mijoz."""
 import json
 import os
+from pathlib import Path
 
 import requests
 
@@ -57,7 +58,8 @@ class Telegram:
             self.offset = updates[-1]["update_id"] + 1
 
     def events(self, poll_seconds=50):
-        """Faqat egasining chatidan kelgan ('button', data, cb_id, msg_id) yoki ('text', matn) hodisalari."""
+        """Faqat egasining chatidan kelgan hodisalar:
+        ('button', data, cb_id, msg_id), ('text', matn) yoki ('photo', file_id, izoh)."""
         params = {"timeout": poll_seconds, "allowed_updates": ["message", "callback_query"]}
         if self.offset is not None:
             params["offset"] = self.offset
@@ -73,7 +75,23 @@ class Telegram:
                 if cb["message"]["chat"]["id"] == self.chat_id:
                     out.append(("button", cb["data"], cb["id"], cb["message"]["message_id"]))
             elif "message" in u and u["message"]["chat"]["id"] == self.chat_id:
-                text = u["message"].get("text", "").strip()
-                if text:
-                    out.append(("text", text))
+                msg = u["message"]
+                file_id = None
+                if msg.get("photo"):
+                    file_id = msg["photo"][-1]["file_id"]  # eng katta o'lcham
+                elif msg.get("document", {}).get("mime_type", "").startswith("image/"):
+                    file_id = msg["document"]["file_id"]
+                if file_id:
+                    out.append(("photo", file_id, msg.get("caption", "").strip()))
+                elif msg.get("text", "").strip():
+                    out.append(("text", msg["text"].strip()))
         return out
+
+    def download(self, file_id, dest):
+        path = self._call("getFile", file_id=file_id)["file_path"]
+        token = self.base.rsplit("/bot", 1)[1]
+        r = requests.get(f"https://api.telegram.org/file/bot{token}/{path}", timeout=120)
+        r.raise_for_status()
+        Path(dest).parent.mkdir(parents=True, exist_ok=True)
+        Path(dest).write_bytes(r.content)
+        return Path(dest)

@@ -8,17 +8,19 @@ JSON tuzilmasi:
       "slides": [
         {"type": "cover", "kicker": "...", "title": "...", "subtitle": "..."},
         {"type": "content", "title": "...", "body": "..."},
+        {"type": "image", "title": "...", "body": "...", "image": "rasm.jpg"},
         {"type": "cta", "title": "...", "body": "..."}
       ]
     }
 
 Slaydlar JSON fayl turgan papkaga 01.jpg, 02.jpg, ... nomlari bilan saqlanadi.
+"image" slayddagi rasm ham shu papkadan qidiriladi.
 """
 import json
 import sys
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 W, H = 1080, 1350
 MARGIN = 96
@@ -135,19 +137,47 @@ def draw_cta(draw, s):
         text_block(draw, s["body"], font("regular", 44), y + 48, MUTED, line_gap=1.4)
 
 
-def render_slides(slides, out_dir):
-    """Slaydlarni out_dir ga 01.jpg, 02.jpg, ... qilib saqlaydi va yo'llarini qaytaradi."""
+def draw_image(img, draw, s, photo_path):
+    """Haqiqiy rasm/misol slaydi: sarlavha, yumaloq burchakli rasm, qisqa izoh."""
+    y = 220
+    tf = fit_font(draw, s["title"], "display", 64, 44, 2)
+    y = text_block(draw, s["title"], tf, y, INK, line_gap=1.12) + 36
+    body = s.get("body", "")
+    bf = font("regular", 38)
+    body_lines = wrap(draw, body, bf, W - 2 * MARGIN)[:3] if body else []
+    bottom = H - 170 - (len(body_lines) * int(bf.size * 1.38) + 30 if body_lines else 0)
+    box = (W - 2 * MARGIN, bottom - y)
+    photo = ImageOps.fit(ImageOps.exif_transpose(Image.open(photo_path)).convert("RGB"), box,
+                         Image.LANCZOS)
+    mask = Image.new("L", box, 0)
+    ImageDraw.Draw(mask).rounded_rectangle([0, 0, box[0] - 1, box[1] - 1], radius=28, fill=255)
+    img.paste(photo, (MARGIN, y), mask)
+    y = bottom + 30
+    for line in body_lines:
+        draw.text((MARGIN, y), line, font=bf, fill=MUTED)
+        y += int(bf.size * 1.38)
+
+
+def render_slides(slides, out_dir, assets_dir=None):
+    """Slaydlarni out_dir ga 01.jpg, 02.jpg, ... qilib saqlaydi va yo'llarini qaytaradi.
+
+    "image" slayd rasmlari assets_dir (berilmasa out_dir) dan olinadi; rasm topilmasa,
+    slayd oddiy matnli slayd sifatida chiziladi.
+    """
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     total = len(slides)
     outputs = []
+    assets_dir = Path(assets_dir or out_dir)
     content_no = 0
     for i, s in enumerate(slides, start=1):
         img = Image.new("RGB", (W, H), BG)
         draw = ImageDraw.Draw(img)
         if s["type"] == "cover":
             draw_cover(draw, s)
-        elif s["type"] == "content":
+        elif s["type"] == "image" and s.get("image") and (assets_dir / s["image"]).is_file():
+            draw_image(img, draw, s, assets_dir / s["image"])
+        elif s["type"] in ("content", "image"):
             content_no += 1
             draw_content(draw, s, content_no)
         elif s["type"] == "cta":

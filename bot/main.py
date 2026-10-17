@@ -84,10 +84,18 @@ class Day:
     def slides(self):
         return sorted(self.version_dir().glob("[0-9][0-9].jpg"))
 
+    @property
+    def refs_dir(self):
+        # Telegram'dan kelgan rasmlar; git'ga qo'shilmaydi, faqat slaydlarga chizilgani chiqadi
+        return self.dir / "refs"
+
+    def refs(self):
+        return sorted(self.refs_dir.glob("ref-*.jpg"))
+
     def add_version(self, post):
         v = self.version + 1
         out = self.version_dir(v)
-        render_slides(post["slides"], out)
+        render_slides(post["slides"], out, assets_dir=self.refs_dir)
         (out / "post.json").write_text(json.dumps(post, ensure_ascii=False, indent=2))
         self.state.update(version=v, stage="review")
         self.save()
@@ -205,37 +213,63 @@ def run():
         day.state["stage"] = "review"
         send_review(tg, day)
 
+    pending = []  # izohsiz kelgan rasmlar: keyingi izoh bilan birga ishlatiladi
     while now() < deadline:
-        for event in tg.events():
+        events = tg.events()
+        # albom bo'lib yuborilgan rasmlar bir necha qismda keladi — hammasini yig'ib olamiz
+        while any(e[0] == "photo" for e in events[-1:] or []):
+            more = tg.events(poll_seconds=3)
+            if not more:
+                break
+            events += more
+
+        for event in [e for e in events if e[0] == "button"]:
             stage = day.state["stage"]
-            if event[0] == "button":
-                _, data, cb_id, msg_id = event
-                action, _, arg = data.partition(":")
-                tg.answer(cb_id)
-                if action in ("approve", "reject") and (stage != "review" or int(arg) != day.version):
-                    continue
-                if action == "music" and stage != "music":
-                    continue
-                tg.clear_buttons(msg_id)
-                if action == "approve":
-                    send_music_menu(tg, day)
-                elif action == "reject":
-                    day.state["stage"] = "feedback"
-                    day.save()
-                    tg.send("✏️ Nimani o'zgartiray? Yozib yuboring.\n"
-                            "Masalan: «hookni kuchliroq qil», «3-slaydni qisqartir», «oxiriga amaliy maslahat qo'sh».")
-                elif action == "music":
-                    publish(tg, day, int(arg))
-                    return
-            else:
-                text = event[1]
-                if stage == "music" and text.isdigit() and int(text) <= len(day.state["music_options"]):
-                    publish(tg, day, int(text))
-                    return
-                if stage in ("review", "feedback"):
-                    tg.send("⏳ Izohingiz bo'yicha qayta yozyapman, 1–2 daqiqa...")
-                    day.add_version(writer.revise_post(topic, script, recent, day.post(), text))
-                    send_review(tg, day)
+            _, data, cb_id, msg_id = event
+            action, _, arg = data.partition(":")
+            tg.answer(cb_id)
+            if action in ("approve", "reject") and (stage != "review" or int(arg) != day.version):
+                continue
+            if action == "music" and stage != "music":
+                continue
+            tg.clear_buttons(msg_id)
+            if action == "approve":
+                send_music_menu(tg, day)
+            elif action == "reject":
+                day.state["stage"] = "feedback"
+                day.save()
+                tg.send("✏️ Nimani o'zgartiray? Yozib yuboring.\n"
+                        "Masalan: «hookni kuchliroq qil», «real misollar qo'sh», «3-slaydni qisqartir».\n\n"
+                        "📎 Rasm ham yuborishingiz mumkin: postga qo'yish uchun (foto, skrinshot, haqiqiy misol) "
+                        "yoki namuna sifatida («shunga o'xshash qil»). Rasm izohiga nima qilishni yozing.")
+            elif action == "music":
+                publish(tg, day, int(arg))
+                return
+
+        texts = [e[1] for e in events if e[0] == "text"]
+        photos = [e for e in events if e[0] == "photo"]
+        stage = day.state["stage"]
+        if stage == "music" and texts and texts[-1].isdigit() and int(texts[-1]) <= len(day.state["music_options"]):
+            publish(tg, day, int(texts[-1]))
+            return
+        if stage not in ("review", "feedback") or not (texts or photos):
+            continue
+
+        first = len(day.refs()) + 1
+        new = [tg.download(e[1], day.refs_dir / f"ref-{first + i:02d}.jpg") for i, e in enumerate(photos)]
+        feedback = "\n".join([e[2] for e in photos if e[2]] + texts)
+        if not feedback:
+            pending += new
+            tg.send(f"📎 {len(new)} ta rasm qabul qilindi. Endi ular bilan nima qilishni yozing.\n"
+                    "Masalan: «shu rasmlarni slaydlar orasiga qo'y» yoki «shu postlarga o'xshash uslubda yoz».")
+            continue
+        new, pending = pending + new, []
+        tg.send("⏳ Izohingiz bo'yicha qayta yozyapman, 2–4 daqiqa..."
+                + (f"\n📎 {len(new)} ta rasm ham hisobga olinadi." if new else ""))
+        revised = writer.revise_post(topic, script, recent, day.post(), feedback,
+                                     images=day.refs(), new_images=new)
+        day.add_version(revised)
+        send_review(tg, day)
 
     day.save()
     commit([day.dir], f"Post {date}: tasdiqlanmadi")
