@@ -95,7 +95,8 @@ def _bing(query):
     r = requests.get("https://www.bing.com/images/search", timeout=30, headers=BROWSER, params={
         "q": query, "qft": "+filterui:imagesize-large", "form": "IRFLTR", "first": 1})
     r.raise_for_status()
-    for m in re.finditer(r'\bm="(\{[^"]+\})"', r.text):
+    # faqat haqiqiy natija kartochkalari (class="iusc"), sahifadagi reklama/bezaklar emas
+    for m in re.finditer(r'class="iusc"[^>]*?\sm="(\{[^"]+\})"', r.text):
         try:
             url = json.loads(html.unescape(m.group(1))).get("murl")
         except ValueError:
