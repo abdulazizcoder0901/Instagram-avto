@@ -16,7 +16,7 @@ import requests
 
 from bot import buffer, notion, writer
 from bot.telegram import Telegram
-from scripts.carousel import render_slides
+from bot.render import render_post
 
 TZ = ZoneInfo("Asia/Tashkent")
 ROOT = Path(__file__).resolve().parent.parent
@@ -92,10 +92,18 @@ class Day:
     def refs(self):
         return sorted(self.refs_dir.glob("ref-*.jpg"))
 
-    def add_version(self, post):
+    def add_version(self, post, fix=None):
+        """Slaydlarni chizadi. Matn sig'masa yoki rasm ochilmasa, fix(post, muammolar) bilan bir marta tuzatadi."""
         v = self.version + 1
         out = self.version_dir(v)
-        render_slides(post["slides"], out, assets_dir=self.refs_dir)
+        _, credits, problems = render_post(post["slides"], out, self.refs_dir)
+        if problems and fix:
+            report = "\n".join(f"{n}-slayd: {'; '.join(items)}" for n, items in problems.items())
+            post = fix(post, report)
+            _, credits, problems = render_post(post["slides"], out, self.refs_dir)
+        post["caption"] = post["caption"].split("\n\n📷 ")[0]
+        if credits:
+            post["caption"] += "\n\n📷 " + "; ".join(credits)
         (out / "post.json").write_text(json.dumps(post, ensure_ascii=False, indent=2))
         self.state.update(version=v, stage="review")
         self.save()
@@ -201,8 +209,13 @@ def run():
     script = notion.page_text(topic["id"])
     recent = notion.recent_titles()
 
+    def fixer(post, report):
+        return writer.revise_post(topic, script, recent, post,
+                                  "Texnik muammo, faqat shuni tuzat (mazmunni o'zgartirma):\n" + report,
+                                  images=day.refs())
+
     if not day.version:
-        day.add_version(writer.write_post(topic, script, recent))
+        day.add_version(writer.write_post(topic, script, recent), fix=fixer)
 
     if os.environ.get("SEND_AT"):
         wait_until(os.environ["SEND_AT"])
@@ -268,7 +281,7 @@ def run():
                 + (f"\n📎 {len(new)} ta rasm ham hisobga olinadi." if new else ""))
         revised = writer.revise_post(topic, script, recent, day.post(), feedback,
                                      images=day.refs(), new_images=new)
-        day.add_version(revised)
+        day.add_version(revised, fix=fixer)
         send_review(tg, day)
 
     day.save()

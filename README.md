@@ -8,11 +8,15 @@ Har kuni @mr_abdulazz uchun carousel post: **Notion → Claude → slaydlar → 
    undan oldin bo'lgan, hali "Post" bo'lmagan eng birinchi mavzu. Bir kunga 2 ta mavzu tushsa yoki bir
    kun o'tib ketsa, mavzu yo'qolmaydi: keyingi kuni chiqadi.
 2. Claude Notion'dagi ssenariy asosida carousel yozadi (hook, amaliy misollar, faktlarni internetdan
-   tekshiradi) va slaydlar (1080×1350) chiziladi. Slaydlar `posts/<sana>/` papkasiga saqlanadi.
+   tekshiradi) va har bir slaydni brend dizayn to'plami (`bot/design/base.css`) bilan HTML'da chizadi.
+   Bot ularni Chromium'da 1080×1350 rasmga aylantiradi va `posts/<sana>/` papkasiga saqlaydi.
+   Fotolar Openverse/Wikimedia'dan bepul olinadi, mualliflari post matni oxiriga yoziladi.
 3. **10:00** — Telegram bot'ga slaydlar va post matni keladi, ostida 2 ta tugma bo'ladi:
    - **✅ Tasdiqlash** — musiqa tanlash bosqichiga o'tadi;
    - **❌ Yoqmadi** — bot nimani o'zgartirish kerakligini so'raydi. Siz yozasiz, Claude postni qayta
      yozadi va yangi variantni yuboradi. Tugmani bosmasdan to'g'ridan-to'g'ri izoh yozsangiz ham bo'ladi.
+   - **Rasm yuborish** — foto/skrinshotni postga qo'ydirish ("shuni slaydlar orasiga qo'y") yoki
+     boshqa postni namuna qilib berish ("shunga o'xshash dizaynda qil"). Albom ham bo'ladi.
 4. Musiqa: bot 5 ta variant beradi, siz raqamini bosasiz yoki yozasiz (0 — musiqasiz).
 5. Post Buffer'ga yuboriladi va Buffer'dagi bugungi vaqtda chiqadi. Agar bugungi vaqt o'tib ketgan
    bo'lsa, darhol chiqadi. Notion'da mavzu "Post" deb belgilanadi.
@@ -48,21 +52,17 @@ Workflow faqat **asosiy (`main`) branch'da** turganida har kuni o'zi ishga tusha
 ## Tuzilma
 
 ```
-bot/main.py        kunlik jarayon (holat: posts/<sana>/state.json)
-bot/writer.py      Claude: post yozish va izoh bo'yicha qayta yozish
-bot/notion.py      mavzuni olish, "Post" deb belgilash
-bot/telegram.py    Telegram bot
-bot/buffer.py      Buffer: jadval, musiqa, post yaratish
-scripts/carousel.py  slaydlarni chizish (JSON → JPEG)
-posts/<sana>/vN/   har bir variantning slaydlari va matni
+bot/main.py          kunlik jarayon (holat: posts/<sana>/state.json)
+bot/writer.py        Claude: post va slayd HTML'ini yozish, izoh/rasm bo'yicha qayta yozish
+bot/design/base.css  brend dizayn to'plami (fonlar, ajratishlar, stikerlar, foto shakllari)
+bot/render.py        HTML → JPEG (Chromium), matn sig'maganini tekshirish
+bot/photos.py        bepul fotolar: Openverse, Wikimedia Commons
+bot/notion.py        mavzuni olish, "Post" deb belgilash
+bot/telegram.py      Telegram bot
+bot/buffer.py        Buffer: jadval, musiqa, post yaratish
+posts/<sana>/vN/     har bir variantning slaydlari va matni
 ```
 
 Slaydlar Buffer'ga `raw.githubusercontent.com/.../<commit-sha>/...` linki orqali beriladi. Repo
 public bo'lgani uchun link login so'ramaydi, commit SHA bilan bo'lgani uchun esa hech qachon o'zgarmaydi.
 
-Slaydni qo'lda chizib ko'rish:
-
-```bash
-pip install -r requirements.txt
-python3 scripts/carousel.py posts/<sana>/v1/post.json
-```
