@@ -9,5 +9,35 @@
     ]
   },
   "version": 4,
-  "stage": "review"
+  "stage": "done",
+  "music_mode": "reminder",
+  "music_options": [
+    {
+      "id": null,
+      "title": "Time",
+      "artist": "Hans Zimmer"
+    },
+    {
+      "id": null,
+      "title": "Believer",
+      "artist": "Imagine Dragons"
+    },
+    {
+      "id": null,
+      "title": "Mount Everest",
+      "artist": "Labrinth"
+    },
+    {
+      "id": null,
+      "title": "Can You Hear The Music",
+      "artist": "Ludwig Göransson"
+    },
+    {
+      "id": null,
+      "title": "Enemy",
+      "artist": "Imagine Dragons"
+    }
+  ],
+  "buffer_post_id": "6ad3f632769b457934987a34",
+  "music_choice": 1
 }
