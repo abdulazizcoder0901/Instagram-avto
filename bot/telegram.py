@@ -49,7 +49,12 @@ class Telegram:
             pass
 
     def answer(self, callback_id, text=""):
-        self._call("answerCallbackQuery", callback_query_id=callback_id, text=text)
+        # bot band paytida (masalan, qayta yozayotganda) bosilgan tugma uchun Telegram
+        # "query is too old" qaytaradi — bu zararsiz, e'tiborsiz qoldiramiz
+        try:
+            self._call("answerCallbackQuery", callback_query_id=callback_id, text=text)
+        except RuntimeError:
+            pass
 
     def skip_pending(self):
         """Bot ishga tushishidan oldingi eski xabarlarni o'tkazib yuboradi."""
