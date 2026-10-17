@@ -1,9 +1,9 @@
-"""JSON ssenariydan premium-minimal carousel slaydlar (1080x1350 PNG) yaratadi.
+"""JSON ssenariydan premium-minimal carousel slaydlar (1080x1350 JPEG) yaratadi.
 
 Ishlatish:
     python3 scripts/carousel.py posts/2026-10-18/post.json
 
-JSON tuzilmasi (posts/README.md ga qarang):
+JSON tuzilmasi:
     {
       "slides": [
         {"type": "cover", "kicker": "...", "title": "...", "subtitle": "..."},
@@ -12,7 +12,7 @@ JSON tuzilmasi (posts/README.md ga qarang):
       ]
     }
 
-Slaydlar JSON fayl turgan papkaga 01.png, 02.png, ... nomlari bilan saqlanadi.
+Slaydlar JSON fayl turgan papkaga 01.jpg, 02.jpg, ... nomlari bilan saqlanadi.
 """
 import json
 import sys
@@ -135,10 +135,10 @@ def draw_cta(draw, s):
         text_block(draw, s["body"], font("regular", 44), y + 48, MUTED, line_gap=1.4)
 
 
-def render(spec_path):
-    spec_path = Path(spec_path)
-    spec = json.loads(spec_path.read_text(encoding="utf-8"))
-    slides = spec["slides"]
+def render_slides(slides, out_dir):
+    """Slaydlarni out_dir ga 01.jpg, 02.jpg, ... qilib saqlaydi va yo'llarini qaytaradi."""
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
     total = len(slides)
     outputs = []
     content_no = 0
@@ -153,13 +153,19 @@ def render(spec_path):
         elif s["type"] == "cta":
             draw_cta(draw, s)
         else:
-            sys.exit(f"Noma'lum slayd turi: {s['type']}")
+            raise ValueError(f"Noma'lum slayd turi: {s['type']}")
         chrome(draw, i, total, show_swipe=i < total)
-        out = spec_path.parent / f"{i:02d}.png"
-        img.save(out, "PNG", optimize=True)
+        out = out_dir / f"{i:02d}.jpg"
+        img.save(out, "JPEG", quality=95, optimize=True)
         outputs.append(out)
-        print(out)
     return outputs
+
+
+def render(spec_path):
+    spec_path = Path(spec_path)
+    spec = json.loads(spec_path.read_text(encoding="utf-8"))
+    for out in render_slides(spec["slides"], spec_path.parent):
+        print(out)
 
 
 if __name__ == "__main__":

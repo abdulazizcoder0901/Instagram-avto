@@ -1,46 +1,68 @@
 # Instagram-avto
 
-Instagram'ga Claude + Buffer orqali avtomatik post chiqarish uchun **media hosting**.
+Har kuni @mr_abdulazz uchun carousel post: **Notion → Claude → slaydlar → Telegram'da tasdiqlash → Buffer → Instagram**.
 
-Repo **public** bo'lgani uchun bu yerga yuklangan har bir rasm/video login so'ramaydigan
-ochiq HTTPS link orqali ochiladi — Buffer aynan shunday URL talab qiladi.
+## Har kuni nima bo'ladi
 
-## Jarayon
+1. **09:40** — GitHub Actions ishga tushadi va Notion'dan bugungi mavzuni oladi: sanasi bugun yoki
+   undan oldin bo'lgan, hali "Post" bo'lmagan eng birinchi mavzu. Bir kunga 2 ta mavzu tushsa yoki bir
+   kun o'tib ketsa, mavzu yo'qolmaydi: keyingi kuni chiqadi.
+2. Claude Notion'dagi ssenariy asosida carousel yozadi (hook, amaliy misollar, faktlarni internetdan
+   tekshiradi) va slaydlar (1080×1350) chiziladi. Slaydlar `posts/<sana>/` papkasiga saqlanadi.
+3. **10:00** — Telegram bot'ga slaydlar va post matni keladi, ostida 2 ta tugma bo'ladi:
+   - **✅ Tasdiqlash** — musiqa tanlash bosqichiga o'tadi;
+   - **❌ Yoqmadi** — bot nimani o'zgartirish kerakligini so'raydi. Siz yozasiz, Claude postni qayta
+     yozadi va yangi variantni yuboradi. Tugmani bosmasdan to'g'ridan-to'g'ri izoh yozsangiz ham bo'ladi.
+4. Musiqa: bot 5 ta variant beradi, siz raqamini bosasiz yoki yozasiz (0 — musiqasiz).
+5. Post Buffer'ga yuboriladi va Buffer'dagi bugungi vaqtda chiqadi. Agar bugungi vaqt o'tib ketgan
+   bo'lsa, darhol chiqadi. Notion'da mavzu "Post" deb belgilanadi.
 
-```
-Claude → rasm/video yaratadi → shu repoga push qiladi → raw URL oladi → Buffer'ga beradi → Instagram
-```
+Agar soat ~15:10 gacha javob bermasangiz, o'sha kungi post yuborilmaydi. Davom ettirish uchun:
+GitHub → **Actions** → **Daily Instagram post** → **Run workflow**. Bot to'xtagan joyidan davom etadi.
+
+### Musiqa haqida
+
+Buffer musiqani Instagram postga avtomatik qo'sha oladi, lekin buning uchun Instagram akkaunt
+Buffer'ga **Facebook Login orqali** ulangan bo'lishi kerak (Buffer → Channels → Instagram → Reconnect).
+- Shunday ulangan bo'lsa: bot Instagram kutubxonasidan haqiqiy treklarni taklif qiladi, tanlangani
+  postga o'zi qo'shiladi.
+- Ulanmagan bo'lsa: bot Claude tavsiya qilgan treklarni ko'rsatadi. Musiqa tanlasangiz, post vaqtida
+  Buffer telefoningizga eslatma yuboradi va siz Instagram ilovasida musiqani qo'shib post qilasiz.
+  0 ni tanlasangiz, post musiqasiz, o'zi avtomatik chiqadi.
+
+## Bir martalik sozlash
+
+GitHub repo → **Settings → Secrets and variables → Actions → New repository secret** bo'limiga
+quyidagi 5 ta secret qo'shiladi:
+
+| Secret | Qayerdan olinadi |
+|---|---|
+| `TELEGRAM_BOT_TOKEN` | Telegram'da [@BotFather](https://t.me/BotFather) → `/newbot` → bergan token. Keyin o'z bot'ingizni ochib **Start** bosing. |
+| `TELEGRAM_CHAT_ID` | [@userinfobot](https://t.me/userinfobot) ga istalgan xabar yozing, u `Id` raqamingizni beradi. Bot faqat shu chatga javob beradi. |
+| `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com) → API Keys. Bu Claude obunasidan alohida, ishlatilganiga qarab to'lanadi. |
+| `NOTION_TOKEN` | [notion.so/profile/integrations](https://www.notion.so/profile/integrations) → New integration → Internal → secret'ni nusxalang. Keyin Notion'da **Kontent Plan** sahifasi → `•••` → **Connections** → shu integratsiyani qo'shing. |
+| `BUFFER_API_KEY` | [publish.buffer.com/settings/api](https://publish.buffer.com/settings/api) |
+
+Workflow faqat **asosiy (`main`) branch'da** turganida har kuni o'zi ishga tushadi.
 
 ## Tuzilma
 
 ```
-media/YYYY-MM-DD/   # har kunning rasmlari (carousel bo'lsa 1.png, 2.png, ...)
-scripts/            # rasm yaratish skriptlari
+bot/main.py        kunlik jarayon (holat: posts/<sana>/state.json)
+bot/writer.py      Claude: post yozish va izoh bo'yicha qayta yozish
+bot/notion.py      mavzuni olish, "Post" deb belgilash
+bot/telegram.py    Telegram bot
+bot/buffer.py      Buffer: jadval, musiqa, post yaratish
+scripts/carousel.py  slaydlarni chizish (JSON → JPEG)
+posts/<sana>/vN/   har bir variantning slaydlari va matni
 ```
 
-## URL formati
+Slaydlar Buffer'ga `raw.githubusercontent.com/.../<commit-sha>/...` linki orqali beriladi. Repo
+public bo'lgani uchun link login so'ramaydi, commit SHA bilan bo'lgani uchun esa hech qachon o'zgarmaydi.
 
-Faylni to'g'ridan-to'g'ri ochadigan link (`github.com/.../blob/...` emas!):
-
-```
-https://raw.githubusercontent.com/abdulazizcoder0901/Instagram-avto/<commit-sha>/media/<sana>/<fayl>.png
-```
-
-Branch nomi o'rniga **commit SHA** ishlatiladi — shunda link hech qachon o'zgarmaydi va
-post Instagram'da chiqquncha ishlaydi.
-
-Tekshirish: linkni brauzerning Incognito oynasida oching — rasm login so'ramasdan ochilsa,
-Buffer ham uni ola oladi.
-
-## Instagram talablari
-
-- Format: JPG yoki PNG (video: MP4)
-- O'lcham: 1080×1350 (4:5) yoki 1080×1080 (1:1)
-- Fayl hajmi: rasm 8 MB gacha
-- GitHub'da bitta fayl 100 MB dan oshmasligi kerak
-
-## Rasm yaratish
+Slaydni qo'lda chizib ko'rish:
 
 ```bash
-python3 scripts/make_post_image.py media/2026-10-17/1.png "Sarlavha" "Qisqa matn"
+pip install -r requirements.txt
+python3 scripts/carousel.py posts/<sana>/v1/post.json
 ```
