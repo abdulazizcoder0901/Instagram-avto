@@ -29,16 +29,16 @@ CHECK_JS = """(limit) => {
 
 
 def _photo(slide, assets_dir, credits, used):
-    """Fon rasmi: egasining rasmi (ref-..), keyin haqiqiy rasm qidiruvi, keyin bepul fotobaza."""
+    """Fon rasmi: egasining rasmi (ref-..), keyin maqolalardagi haqiqiy rasm, keyin bepul fotobaza."""
     ref = slide.get("photo_ref", "")
     if ref and (assets_dir / ref).is_file():
         return ref
+    path = photos.from_pages(slide.get("photo_pages", []), assets_dir, used)
+    if path:
+        return path.name
     query = slide.get("photo_search", "").strip()
     if not query:
         return None
-    path = photos.search_real(query, assets_dir, used)
-    if path:
-        return path.name
     path, credit = photos.find(query, assets_dir)
     if path:
         if credit:
@@ -82,7 +82,7 @@ def render_post(slides, out_dir, assets_dir):
             page.evaluate("document.fonts.ready")
             issues = page.evaluate(CHECK_JS, 1105)
             if not photo:
-                issues.append("fon rasmi topilmadi — photo_search'ni boshqacha, aniqroq yoz")
+                issues.append("fon rasmi topilmadi — photo_pages'ga boshqa maqolalar ber")
             if issues:
                 problems[i] = issues
             out = out_dir / f"{i:02d}.jpg"

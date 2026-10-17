@@ -1,15 +1,14 @@
 """Slayd fonlari uchun fotolar.
 
-search_real — haqiqiy rasmlar (film kadrlari, aniq joy/odam/mahsulot): Bing Images, keyin DuckDuckGo.
+from_pages — haqiqiy rasmlar: Claude topgan maqolalarning asosiy rasmi (og:image).
 find — zaxira: litsenziyasi ochiq bepul fotolar (Openverse, Wikimedia Commons).
 """
 import hashlib
 import html
 import io
-import json
 import re
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 import requests
 from PIL import Image
@@ -91,49 +90,32 @@ def download(url, folder):
         return None
 
 
-def _bing(query):
-    r = requests.get("https://www.bing.com/images/search", timeout=30, headers=BROWSER, params={
-        "q": query, "qft": "+filterui:imagesize-large", "form": "IRFLTR", "first": 1})
+def _page_images(url):
+    """Maqola sahifasidagi asosiy rasm(lar): og:image, twitter:image, image_src."""
+    r = requests.get(url, timeout=30, headers={**BROWSER, "Accept": "text/html,*/*"})
     r.raise_for_status()
-    # faqat haqiqiy natija kartochkalari (class="iusc"), sahifadagi reklama/bezaklar emas
-    for m in re.finditer(r'class="iusc"[^>]*?\sm="(\{[^"]+\})"', r.text):
-        try:
-            url = json.loads(html.unescape(m.group(1))).get("murl")
-        except ValueError:
-            continue
-        if url:
-            yield url
+    found = []
+    for tag in re.findall(r"<(?:meta|link)\b[^>]+>", r.text[:400_000], re.I):
+        if re.search(r'(?:property|name|rel)=["\'](?:og:image(?::secure_url)?|twitter:image(?::src)?|image_src)["\']',
+                     tag, re.I):
+            m = re.search(r'(?:content|href)=["\']([^"\']+)', tag, re.I)
+            if m:
+                found.append(urljoin(url, html.unescape(m.group(1))))
+    return list(dict.fromkeys(found))
 
 
-def _duckduckgo(query):
-    page = requests.get("https://duckduckgo.com/", timeout=30, headers=BROWSER,
-                        params={"q": query, "iax": "images", "ia": "images"})
-    token = re.search(r"vqd=['\"]?([\d-]+)", page.text)
-    if not token:
-        return
-    r = requests.get("https://duckduckgo.com/i.js", timeout=30,
-                     headers={**BROWSER, "Referer": "https://duckduckgo.com/"},
-                     params={"l": "us-en", "o": "json", "q": query, "vqd": token.group(1),
-                             "f": ",size:Large,,,", "p": "1"})
-    r.raise_for_status()
-    for item in r.json().get("results", []):
-        if item.get("image"):
-            yield item["image"]
-
-
-def search_real(query, folder, used=None, tries=8):
-    """Haqiqiy rasmni qidirib yuklaydi; used — shu postda ishlatilgan linklar (takrorlanmasin)."""
+def from_pages(pages, folder, used=None):
+    """Claude topgan maqolalardan asosiy rasmni yuklaydi; used — shu postda ishlatilganlar."""
     used = used if used is not None else set()
-    for source in (_bing, _duckduckgo):
+    for page in pages:
         try:
-            for n, url in enumerate(source(query)):
-                if n >= tries:
-                    break
+            for url in _page_images(page):
                 if url in used:
                     continue
                 path = download(url, folder)
-                if path:
-                    used.add(url)
+                digest = path and hashlib.md5(path.read_bytes()).hexdigest()
+                if path and digest not in used:
+                    used.update({url, digest})
                     return path
         except (requests.RequestException, ValueError):
             continue

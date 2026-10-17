@@ -41,13 +41,14 @@ O'qilishi muhim: telefonda oson o'qilsin, minimal va premium. Har slaydda bitta 
 .body 30 so'zdan oshmasin. Matn pastki 245px ga (tugma va handle joyi) va tepadagi 120px ga kirmasin.
 
 FON RASMLARI — HAQIQIY RASMLAR
-Bot har slayd uchun rasmni Google/Pinterest kabi rasm qidiruvidan o'zi topadi. Sen faqat photo_search
-yozasan: mavzuning O'ZIGA oid haqiqiy rasmni topadigan aniq INGLIZCHA so'rov. Film bo'lsa — film nomi,
-yili, aktyor va sahna ("Edge of Tomorrow 2014 Tom Cruise exosuit battle"), joy bo'lsa — aniq nom
-("Empathy Suite Palms Casino Las Vegas"), mahsulot/odam bo'lsa — aniq nomi bilan.
-- Har slaydda boshqa kadr/burchak so'ra (sahna, yaqin plan, kostyum detali, kadr ortidan, afisha va h.k.).
-- Umumiy so'z ("luxury", "money") emas, aniq nom yoz — shunda haqiqiy rasm chiqadi.
-- Rasm linkini o'zing to'qib chiqarma, link yozma — faqat so'rov.
+Fon — mavzuning O'ZIGA oid haqiqiy rasm bo'lsin: film bo'lsa o'sha filmdan kadr (aktyor, sahna,
+kostyum), joy bo'lsa o'sha joy, mahsulot/odam bo'lsa o'sha mahsulot/odam.
+Bot rasmni maqolalarning asosiy rasmidan (og:image — ulashilganda chiqadigan katta rasm) oladi:
+- photo_pages: WebSearch natijalarida chiqqan, asosiy rasmi aynan shu slayd mavzusini ko'rsatadigan
+  1–3 ta maqola/sahifa linki (yangiliklar, kino saytlari, IMDb, Wikipedia, rasmiy sayt, Pinterest pin).
+  Faqat qidiruv natijasida haqiqatan ko'rgan linklarni yoz — o'zingdan link to'qima.
+  Har slaydga boshqa maqola ber, shunda rasmlar takrorlanmaydi (bot bir xil rasmni qayta qo'ymaydi).
+- photo_search: zaxira uchun inglizcha aniq so'rov (bepul fotobazadan, agar maqolalardan rasm chiqmasa).
 - photo_ref: sahifa egasi yuborgan rasm shu slayd foni bo'lishi kerak bo'lsa "ref-01.jpg", aks holda "".
 
 SAHIFA EGASINING IZOHLARI VA RASMLARI
@@ -63,7 +64,7 @@ Dizayn to'plami (CSS) — faqat shu klasslardan foydalan:
 """ + DESIGN_CSS + """
 
 CHIQISH
-slides: 6–9 ta slayd, har biri {position, photo_search, photo_ref, html}. 1-slayd — cover/hook, oxirgisi — izohga undovchi savol va
+slides: 6–9 ta slayd, har biri {position, photo_pages, photo_search, photo_ref, html}. 1-slayd — cover/hook, oxirgisi — izohga undovchi savol va
 obuna/saqlashga chaqiriq.
 caption: 2–4 qisqa abzats; birinchi qator hook; oxirida izohga chaqiriq va 5–8 ta mos hashtag.
 alt_text: carousel mazmunining bir gaplik tavsifi.
@@ -75,11 +76,12 @@ SLIDE = {
     "type": "object",
     "properties": {
         "position": {"type": "string", "enum": ["bottom", "center", "top"]},
+        "photo_pages": {"type": "array", "items": {"type": "string"}},
         "photo_search": {"type": "string"},
         "photo_ref": {"type": "string"},
         "html": {"type": "string"},
     },
-    "required": ["position", "photo_search", "photo_ref", "html"],
+    "required": ["position", "photo_pages", "photo_search", "photo_ref", "html"],
     "additionalProperties": False,
 }
 
