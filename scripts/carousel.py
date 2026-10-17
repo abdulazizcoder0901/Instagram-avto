@@ -1,0 +1,168 @@
+"""JSON ssenariydan premium-minimal carousel slaydlar (1080x1350 PNG) yaratadi.
+
+Ishlatish:
+    python3 scripts/carousel.py posts/2026-10-18/post.json
+
+JSON tuzilmasi (posts/README.md ga qarang):
+    {
+      "slides": [
+        {"type": "cover", "kicker": "...", "title": "...", "subtitle": "..."},
+        {"type": "content", "title": "...", "body": "..."},
+        {"type": "cta", "title": "...", "body": "..."}
+      ]
+    }
+
+Slaydlar JSON fayl turgan papkaga 01.png, 02.png, ... nomlari bilan saqlanadi.
+"""
+import json
+import sys
+from pathlib import Path
+
+from PIL import Image, ImageDraw, ImageFont
+
+W, H = 1080, 1350
+MARGIN = 96
+HANDLE = "@mr_abdulazz"
+
+BG = (246, 244, 239)
+INK = (20, 20, 22)
+MUTED = (110, 108, 104)
+ACCENT = (194, 120, 62)
+RULE = (222, 218, 210)
+
+FONT_DIR = Path("/usr/share/fonts/opentype/inter")
+FALLBACK = {
+    "bold": "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+    "regular": "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+}
+FONT_FILES = {
+    "display": "InterDisplay-Bold.otf",
+    "bold": "Inter-SemiBold.otf",
+    "regular": "Inter-Regular.otf",
+    "medium": "Inter-Medium.otf",
+}
+
+
+def font(weight, size):
+    path = FONT_DIR / FONT_FILES[weight]
+    if path.exists():
+        return ImageFont.truetype(str(path), size)
+    fallback = FALLBACK["regular" if weight == "regular" else "bold"]
+    return ImageFont.truetype(fallback, size)
+
+
+def wrap(draw, text, fnt, max_width):
+    """Matnni piksel kengligi bo'yicha qatorlarga bo'ladi; \\n ni hurmat qiladi."""
+    lines = []
+    for paragraph in text.split("\n"):
+        words, line = paragraph.split(), ""
+        for word in words:
+            candidate = f"{line} {word}".strip()
+            if draw.textlength(candidate, font=fnt) <= max_width:
+                line = candidate
+            else:
+                if line:
+                    lines.append(line)
+                line = word
+        lines.append(line)
+    return lines
+
+
+def text_block(draw, text, fnt, y, fill, line_gap=1.25, max_width=W - 2 * MARGIN):
+    for line in wrap(draw, text, fnt, max_width):
+        draw.text((MARGIN, y), line, font=fnt, fill=fill)
+        y += int(fnt.size * line_gap)
+    return y
+
+
+def fit_font(draw, text, weight, start, minimum, max_lines, max_width=W - 2 * MARGIN):
+    """Sarlavha max_lines qatorga sig'guncha shrift o'lchamini kichraytiradi."""
+    size = start
+    while size > minimum:
+        if len(wrap(draw, text, font(weight, size), max_width)) <= max_lines:
+            break
+        size -= 4
+    return font(weight, size)
+
+
+def chrome(draw, index, total, show_swipe):
+    draw.text((MARGIN, 72), HANDLE, font=font("medium", 30), fill=MUTED)
+    counter = f"{index}/{total}"
+    cf = font("medium", 30)
+    draw.text((W - MARGIN - draw.textlength(counter, font=cf), 72), counter, font=cf, fill=MUTED)
+    draw.line([(MARGIN, H - 130), (W - MARGIN, H - 130)], fill=RULE, width=2)
+    if show_swipe:
+        hint = "Suring  →"
+        hf = font("medium", 32)
+        draw.text((W - MARGIN - draw.textlength(hint, font=hf), H - 100), hint, font=hf, fill=INK)
+    # pastki chap: progress chiziqlari
+    seg, gap = 28, 10
+    for i in range(total):
+        x = MARGIN + i * (seg + gap)
+        color = INK if i < index else RULE
+        draw.rounded_rectangle([x, H - 84, x + seg, H - 78], radius=3, fill=color)
+
+
+def draw_cover(draw, s):
+    y = 300
+    if s.get("kicker"):
+        draw.text((MARGIN, y), s["kicker"].upper(), font=font("bold", 34), fill=ACCENT)
+        y += 90
+    tf = fit_font(draw, s["title"], "display", 112, 68, 5)
+    y = text_block(draw, s["title"], tf, y, INK, line_gap=1.08)
+    if s.get("subtitle"):
+        text_block(draw, s["subtitle"], font("regular", 44), y + 56, MUTED, line_gap=1.35)
+
+
+def draw_content(draw, s, number):
+    y = 250
+    draw.text((MARGIN, y), f"{number:02d}", font=font("display", 120), fill=ACCENT)
+    y += 190
+    tf = fit_font(draw, s["title"], "display", 76, 52, 3)
+    y = text_block(draw, s["title"], tf, y, INK, line_gap=1.12)
+    if s.get("body"):
+        bf = fit_font(draw, s["body"], "regular", 46, 36, 9)
+        text_block(draw, s["body"], bf, y + 44, MUTED, line_gap=1.42)
+
+
+def draw_cta(draw, s):
+    y = 380
+    draw.rounded_rectangle([MARGIN, y, MARGIN + 120, y + 10], radius=5, fill=ACCENT)
+    y += 80
+    tf = fit_font(draw, s["title"], "display", 92, 60, 4)
+    y = text_block(draw, s["title"], tf, y, INK, line_gap=1.1)
+    if s.get("body"):
+        text_block(draw, s["body"], font("regular", 44), y + 48, MUTED, line_gap=1.4)
+
+
+def render(spec_path):
+    spec_path = Path(spec_path)
+    spec = json.loads(spec_path.read_text(encoding="utf-8"))
+    slides = spec["slides"]
+    total = len(slides)
+    outputs = []
+    content_no = 0
+    for i, s in enumerate(slides, start=1):
+        img = Image.new("RGB", (W, H), BG)
+        draw = ImageDraw.Draw(img)
+        if s["type"] == "cover":
+            draw_cover(draw, s)
+        elif s["type"] == "content":
+            content_no += 1
+            draw_content(draw, s, content_no)
+        elif s["type"] == "cta":
+            draw_cta(draw, s)
+        else:
+            sys.exit(f"Noma'lum slayd turi: {s['type']}")
+        chrome(draw, i, total, show_swipe=i < total)
+        out = spec_path.parent / f"{i:02d}.png"
+        img.save(out, "PNG", optimize=True)
+        outputs.append(out)
+        print(out)
+    return outputs
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        sys.exit(__doc__)
+    render(sys.argv[1])
