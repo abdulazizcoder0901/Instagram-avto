@@ -9,7 +9,10 @@ from bot import buffer
 def options(post, limit=5):
     """(rejim, variantlar). "catalog" — Instagram'ning o'z treklari, postga avtomatik qo'shiladi;
     "preview" — Buffer'da Instagram Facebook orqali ulanmagan: faqat tinglash mumkin."""
-    catalog = buffer.music_catalog(post["music_suggestions"][:limit], limit)
+    # Biznes akkauntlarda faqat litsenziyali kutubxona musiqasi bor: avval kayfiyat/janr bo'yicha,
+    # keyin Claude tavsiya qilgan nomlar bo'yicha qidiramiz
+    queries = [post["music_query"]] + [s["title"] for s in post["music_suggestions"]]
+    catalog = buffer.music_catalog([q for q in queries if q], limit)
     if catalog:
         return "catalog", catalog
     return "preview", [{"id": None, "title": s["title"], "artist": s["artist"],

@@ -37,30 +37,24 @@ def todays_slot(now):
 AUDIO_FIELDS = "__typename ... on SearchInstagramAudioSuccess { audio { id title displayArtist previewUrl } }"
 
 
-def music_catalog(suggestions, limit=5):
-    """Instagram musiqa katalogidan treklar (namunasi bilan). Kanal Facebook Login orqali ulanmagan bo'lsa None."""
-    def search(q):
+def music_catalog(queries, limit=5):
+    """Instagram musiqa katalogidan treklar (namunasi bilan) — so'rovlar tartibida, takrorsiz.
+    Kanal Facebook Login orqali ulanmagan bo'lsa None."""
+    out, seen = [], set()
+    for q in queries:
         data = _gql(f"""query($ch: ChannelId!, $q: String!) {{
             r: searchInstagramAudio(input: {{channelId: $ch, audioType: music, query: $q}}) {{ {AUDIO_FIELDS} }} }}""",
                     {"ch": CHANNEL_ID, "q": q})["r"]
-        return data.get("audio") if data["__typename"] == "SearchInstagramAudioSuccess" else None
-
-    out, seen = [], set()
-    for s in suggestions:
-        found = search(f"{s['title']} {s['artist']}")
-        if found is None:
+        if data["__typename"] != "SearchInstagramAudioSuccess":
             return None
-        for a in found[:1]:
-            if a["id"] not in seen:
+        for a in data.get("audio", []):
+            if a["id"] not in seen and len(out) < limit:
                 seen.add(a["id"])
                 out.append(a)
-    if len(out) < limit:
-        trending = _gql(f"""query($ch: ChannelId!) {{
-            r: trendingInstagramAudio(input: {{channelId: $ch, audioType: music}}) {{ {AUDIO_FIELDS} }} }}""",
-                        {"ch": CHANNEL_ID})["r"]
-        out += [a for a in trending.get("audio", []) if a["id"] not in seen][:limit - len(out)]
+        if len(out) >= limit:
+            break
     return [{"id": a["id"], "title": a["title"], "artist": a.get("displayArtist") or "",
-             "preview_url": a.get("previewUrl")} for a in out[:limit]]
+             "preview_url": a.get("previewUrl")} for a in out]
 
 
 def create_post(image_urls, caption, alt_text, due_at=None, music=None):
