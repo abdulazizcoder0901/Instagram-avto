@@ -8,9 +8,10 @@ Har kuni @mr_abdulazz uchun carousel post: **Notion → Claude → slaydlar → 
    undan oldin bo'lgan, hali "Post" bo'lmagan eng birinchi mavzu. Bir kunga 2 ta mavzu tushsa yoki bir
    kun o'tib ketsa, mavzu yo'qolmaydi: keyingi kuni chiqadi.
 2. Claude Notion'dagi ssenariy asosida carousel yozadi (hook, amaliy misollar, faktlarni internetdan
-   tekshiradi) va har bir slaydni brend dizayn to'plami (`bot/design/base.css`) bilan HTML'da chizadi.
-   Bot ularni Chromium'da 1080×1350 rasmga aylantiradi va `posts/<sana>/` papkasiga saqlaydi.
-   Fotolar Openverse/Wikimedia'dan bepul olinadi, mualliflari post matni oxiriga yoziladi.
+   tekshiradi). Uslub: fonda mavzuga oid **haqiqiy foto** (oq-qora), markazda oq matn, kalit qism
+   kursivda. Fotolar Claude topgan maqolalarning asosiy rasmidan olinadi (film kadri, joy, odam);
+   topilmasa — bepul fotobazadan (Openverse/Wikimedia). Bot slaydlarni Chromium'da 1080×1350
+   rasmga aylantiradi va `posts/<sana>/` papkasiga saqlaydi.
 3. **10:00** — Telegram bot'ga slaydlar va post matni keladi, ostida 2 ta tugma bo'ladi:
    - **✅ Tasdiqlash** — musiqa tanlash bosqichiga o'tadi;
    - **❌ Yoqmadi** — bot nimani o'zgartirish kerakligini so'raydi. Siz yozasiz, Claude postni qayta
@@ -54,9 +55,9 @@ Workflow faqat **asosiy (`main`) branch'da** turganida har kuni o'zi ishga tusha
 ```
 bot/main.py          kunlik jarayon (holat: posts/<sana>/state.json)
 bot/writer.py        Claude: post va slayd HTML'ini yozish, izoh/rasm bo'yicha qayta yozish
-bot/design/base.css  brend dizayn to'plami (fonlar, ajratishlar, stikerlar, foto shakllari)
+bot/design/base.css  dizayn uslubi (foto fon, kulrang tus, oq matn, pastki qism)
 bot/render.py        HTML → JPEG (Chromium), matn sig'maganini tekshirish
-bot/photos.py        bepul fotolar: Openverse, Wikimedia Commons
+bot/photos.py        fotolar: maqolalardagi asosiy rasm (og:image), zaxira — Openverse/Wikimedia
 bot/notion.py        mavzuni olish, "Post" deb belgilash
 bot/telegram.py      Telegram bot
 bot/buffer.py        Buffer: jadval, musiqa, post yaratish
