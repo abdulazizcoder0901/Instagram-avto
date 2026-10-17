@@ -39,7 +39,7 @@ quyidagi 5 ta secret qo'shiladi:
 |---|---|
 | `TELEGRAM_BOT_TOKEN` | Telegram'da [@BotFather](https://t.me/BotFather) → `/newbot` → bergan token. Keyin o'z bot'ingizni ochib **Start** bosing. |
 | `TELEGRAM_CHAT_ID` | [@userinfobot](https://t.me/userinfobot) ga istalgan xabar yozing, u `Id` raqamingizni beradi. Bot faqat shu chatga javob beradi. |
-| `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com) → API Keys. Bu Claude obunasidan alohida, ishlatilganiga qarab to'lanadi. |
+| `CLAUDE_CODE_OAUTH_TOKEN` | Kompyuterda Terminal'da `curl -fsSL https://claude.ai/install.sh \| bash`, keyin `claude setup-token` buyrug'ini bering. Brauzerda Claude akkauntingizga kiring, terminal `sk-ant-oat01-...` token beradi. Claude obunangiz hisobidan ishlaydi, qo'shimcha to'lov yo'q. |
 | `NOTION_TOKEN` | [notion.so/profile/integrations](https://www.notion.so/profile/integrations) → New integration → Internal → secret'ni nusxalang. Keyin Notion'da **Kontent Plan** sahifasi → `•••` → **Connections** → shu integratsiyani qo'shing. |
 | `BUFFER_API_KEY` | [publish.buffer.com/settings/api](https://publish.buffer.com/settings/api) |
 

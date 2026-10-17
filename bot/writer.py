@@ -1,9 +1,10 @@
-"""Claude yordamida Notion mavzusidan carousel ssenariysi va post matnini yozish."""
+"""Claude yordamida Notion mavzusidan carousel ssenariysi va post matnini yozish.
+
+Claude Code CLI (`claude -p`) orqali ishlaydi: CLAUDE_CODE_OAUTH_TOKEN bilan Claude obunasi
+hisobidan, alohida API to'lovisiz.
+"""
 import json
-
-import anthropic
-
-MODEL = "claude-opus-5-5"
+import subprocess
 
 SYSTEM = """Sen @mr_abdulazz Instagram sahifasi uchun o'zbek tilida carousel postlar yozadigan muharrirsan.
 
@@ -66,29 +67,24 @@ SCHEMA = {
 }
 
 
-def _call(messages):
-    client = anthropic.Anthropic()
-    for _ in range(4):
-        response = client.beta.messages.create(
-            model=MODEL,
-            max_tokens=16000,
-            betas=["server-side-fallback-2026-07-01"],
-            fallbacks="default",
-            system=SYSTEM,
-            output_config={"effort": "high", "format": {"type": "json_schema", "schema": SCHEMA}},
-            tools=[{"type": "web_search_20260209", "name": "web_search", "max_uses": 5}],
-            messages=messages,
-        )
-        if response.stop_reason == "pause_turn":
-            messages = messages + [{"role": "assistant", "content": response.content}]
-            continue
-        if response.stop_reason == "refusal":
-            raise RuntimeError("Claude bu mavzuni yozishni rad etdi")
-        if response.stop_reason == "max_tokens":
-            raise RuntimeError("Javob juda uzun bo'lib ketdi (max_tokens)")
-        text = [b.text for b in response.content if b.type == "text"]
-        return _validate(json.loads(text[-1]))
-    raise RuntimeError("Claude javobni yakunlamadi")
+def _call(prompt):
+    cmd = [
+        "claude", "-p", prompt,
+        "--model", "opus",
+        "--system-prompt", SYSTEM,
+        "--output-format", "json",
+        "--json-schema", json.dumps(SCHEMA),
+        "--tools", "WebSearch,WebFetch",
+        "--allowedTools", "WebSearch,WebFetch",
+    ]
+    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=900)
+    try:
+        result = json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        raise RuntimeError(f"Claude ishlamadi: {(proc.stderr or proc.stdout)[-500:]}")
+    if result.get("is_error") or not result.get("structured_output"):
+        raise RuntimeError(f"Claude javob bermadi: {str(result.get('result'))[-500:]}")
+    return _validate(result["structured_output"])
 
 
 def _validate(post):
@@ -109,7 +105,7 @@ def write_post(topic, script, recent):
         f"Oxirgi chiqqan mavzular (takrorlama): {'; '.join(recent) or '—'}\n\n"
         "Shu mavzu bo'yicha carousel post tayyorla."
     )
-    return _call([{"role": "user", "content": prompt}])
+    return _call(prompt)
 
 
 def revise_post(topic, script, recent, previous, feedback):
@@ -120,4 +116,4 @@ def revise_post(topic, script, recent, previous, feedback):
         f"Sahifa egasining izohi:\n{feedback}\n\n"
         "Izohga to'liq amal qilib, postni qayta yoz. Izohda tilga olinmagan yaxshi joylarni saqlab qol."
     )
-    return _call([{"role": "user", "content": prompt}])
+    return _call(prompt)

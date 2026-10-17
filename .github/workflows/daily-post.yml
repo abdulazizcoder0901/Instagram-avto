@@ -33,6 +33,7 @@ jobs:
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq fonts-inter fonts-dejavu-core
           pip install -r requirements.txt
+          npm install -g @anthropic-ai/claude-code
 
       - name: Git identity
         run: |
@@ -41,7 +42,7 @@ jobs:
 
       - name: Run bot
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
