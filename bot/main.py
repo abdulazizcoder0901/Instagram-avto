@@ -133,21 +133,61 @@ def send_confirm(tg, day):
             buttons=[[("✅ Ha, tasdiqlayman", f"confirm:{day.version}"), ("↩️ Yo'q", f"back:{day.version}")]])
 
 
+def _when(due):
+    if not due:
+        return "hozir"
+    due = due.astimezone(TZ)
+    word = {0: "bugun", 1: "ertaga"}.get((due.date() - now().date()).days, f"{due:%d.%m}")
+    return f"{word} soat {due:%H:%M} da"
+
+
 def publish(tg, day):
     post = day.post()
     urls = day.image_urls()
     for url in urls:
         wait_public(url)
-    due = buffer.publish_time(now())
+    due = buffer.publish_time(now(), day.date)
     created = buffer.create_post(urls, post["caption"], post["alt_text"], due)
 
     notion.mark_posted(day.state["topic"]["id"], day.date)
-    day.state.update(stage="done", buffer_post_id=created["id"])
+    day.state.update(stage="done", buffer_post_id=created["id"], due_at=due.isoformat() if due else None)
     day.save()
     commit([day.dir], f"Post {day.date}: Buffer'ga yuborildi")
 
-    when = f"bugun soat {due:%H:%M} da" if due else "hozir"
-    tg.send(f"✅ Tayyor! Post {when} Instagram'ga o'zi chiqadi.")
+    tg.send(f"✅ Tayyor! Post {_when(due)} Instagram'ga o'zi chiqadi."
+            + ("\n\n🔧 Xato topsangiz, chiqishidan oldin /repair yuboring." if due else ""))
+
+
+def repairable(day):
+    """Tasdiqlangan post hali chiqmagan bo'lsa, uni /repair bilan qaytarib olish mumkin."""
+    if day.state.get("stage") != "done" or not day.state.get("buffer_post_id"):
+        return False
+    if "due_at" not in day.state:
+        status, due = buffer.post_status(day.state["buffer_post_id"])
+        day.state["due_at"] = due if status == "scheduled" else None
+    due = day.state["due_at"]
+    return bool(due) and now() < datetime.fromisoformat(due) - timedelta(minutes=2)
+
+
+def start_repair(tg, day):
+    status, _ = buffer.post_status(day.state["buffer_post_id"])
+    if status != "scheduled":
+        day.state["due_at"] = None
+        tg.send("⚠️ Post allaqachon chiqib bo'lgan, endi uni qaytarib bo'lmaydi.")
+        return
+    buffer.delete_post(day.state["buffer_post_id"])
+    topic = day.state["topic"]
+    notion.set_status(topic["id"], topic.get("status") or "Boshlanmagan")
+    day.state.update(stage="feedback", buffer_post_id=None, due_at=None)
+    day.save()
+    commit([day.dir], f"Post {day.date}: tuzatish uchun qaytarildi")
+    tg.send("🔧 Post navbatdan olindi, Instagram'ga chiqmaydi.\n\n"
+            "✏️ Nimani tuzatay? Yozib yuboring (rasm ham bo'ladi). "
+            "Yangi variantni yana tasdiqlaysiz.")
+
+
+def _is_repair(text):
+    return text.split("@")[0].strip().lower() in ("/repair", "repair")
 
 
 def wait_until(hhmm):
@@ -159,13 +199,20 @@ def wait_until(hhmm):
 
 def run():
     started = now()
-    date = os.environ.get("POST_DATE") or started.strftime("%Y-%m-%d")
+    # kechqurun (18:00 dan keyin) ertangi post tayyorlanadi, ertalab — bugungisi
+    default = started + timedelta(days=1) if started.hour >= 18 else started
+    date = os.environ.get("POST_DATE") or default.strftime("%Y-%m-%d")
     deadline = started + timedelta(minutes=int(os.environ.get("DEADLINE_MINUTES", "330")))
     tg = Telegram()
     day = Day(date)
+    try:
+        tg.set_commands([("repair", "Tasdiqlangan postni tuzatish")])
+    except Exception:
+        pass
 
-    if day.state.get("stage") == "done":
-        tg.send(f"ℹ️ {date} uchun post allaqachon Buffer'ga yuborilgan.")
+    if day.state.get("stage") == "done" and not repairable(day):
+        if os.environ.get("GITHUB_EVENT_NAME") != "schedule":
+            tg.send(f"ℹ️ {date} uchun post allaqachon Buffer'ga yuborilgan.")
         return
 
     if "topic" not in day.state:
@@ -188,15 +235,19 @@ def run():
 
     if os.environ.get("SEND_AT"):
         wait_until(os.environ["SEND_AT"])
-    tg.skip_pending()
-    if day.state.get("stage") == "confirm":
-        send_confirm(tg, day)
-    else:
-        day.state["stage"] = "review"
-        send_review(tg, day)
+    if day.state.get("stage") != "done":
+        # tasdiqlangan post kutilayotganda tunda yuborilgan /repair yo'qolmasin
+        tg.skip_pending()
+        if day.state.get("stage") == "confirm":
+            send_confirm(tg, day)
+        else:
+            day.state["stage"] = "review"
+            send_review(tg, day)
 
     pending = []  # izohsiz kelgan rasmlar: keyingi izoh bilan birga ishlatiladi
     while now() < deadline:
+        if day.state["stage"] == "done" and not repairable(day):
+            return
         events = tg.events()
         # albom bo'lib yuborilgan rasmlar bir necha qismda keladi — hammasini yig'ib olamiz
         while any(e[0] == "photo" for e in events[-1:] or []):
@@ -219,7 +270,6 @@ def run():
                 send_confirm(tg, day)
             elif action == "confirm":
                 publish(tg, day)
-                return
             elif action == "back":
                 day.state["stage"] = "review"
                 day.save()
@@ -235,7 +285,16 @@ def run():
 
         texts = [e[1] for e in events if e[0] == "text"]
         photos = [e for e in events if e[0] == "photo"]
+        if any(_is_repair(t) for t in texts):
+            texts = [t for t in texts if not _is_repair(t)]
+            if day.state["stage"] == "done":
+                start_repair(tg, day)
+                continue
+            tg.send("ℹ️ Post hali tasdiqlanmagan — o'zgartirish kerak bo'lsa, shunchaki izoh yozing.")
         stage = day.state["stage"]
+        if stage == "done" and (texts or photos):
+            tg.send("✅ Post tasdiqlangan. Tuzatish kerak bo'lsa, /repair yuboring.")
+            continue
         if stage not in ("review", "feedback", "confirm") or not (texts or photos):
             continue
 
@@ -256,7 +315,12 @@ def run():
         send_review(tg, day)
 
     day.save()
+    if day.state["stage"] == "done":
+        return
     commit([day.dir], f"Post {date}: tasdiqlanmadi")
+    if date > now().strftime("%Y-%m-%d"):
+        tg.send(f"⏰ {date} uchun post hali tasdiqlanmadi. Ertalab soat 08:00 da bot uni qayta yuboradi.")
+        return
     tg.send("⏰ Bugungi post tasdiqlanmadi, Buffer'ga yuborilmadi.\n"
             "Davom ettirish uchun GitHub → Actions → «Daily Instagram post» → Run workflow.")
 

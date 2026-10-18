@@ -1,6 +1,6 @@
 """Buffer GraphQL API: posting jadvali va post yaratish."""
 import os
-from datetime import datetime, timedelta
+from datetime import date as Date, datetime, time, timedelta
 from zoneinfo import ZoneInfo
 
 import requests
@@ -20,18 +20,17 @@ def _gql(query, variables=None):
     return body["data"]
 
 
-def todays_slot(now):
-    """Buffer'dagi bugungi posting vaqti (kanal vaqt zonasida) yoki None."""
+def slot_on(day):
+    """Buffer jadvalidagi shu kunning (YYYY-MM-DD) posting vaqti. Jadvalda vaqt bo'lmasa — 10:00."""
     data = _gql("""query($id: ChannelId!) { channel(input: {id: $id}) {
         timezone postingSchedule { day times paused } } }""", {"id": CHANNEL_ID})["channel"]
     tz = ZoneInfo(data["timezone"])
-    local = now.astimezone(tz)
-    day = DAYS[local.weekday()]
+    d = Date.fromisoformat(day)
     for entry in data["postingSchedule"]:
-        if entry["day"] == day and not entry["paused"] and entry["times"]:
+        if entry["day"] == DAYS[d.weekday()] and not entry["paused"] and entry["times"]:
             hh, mm = map(int, sorted(entry["times"])[0].split(":"))
-            return local.replace(hour=hh, minute=mm, second=0, microsecond=0)
-    return None
+            return datetime.combine(d, time(hh, mm), tz)
+    return datetime.combine(d, time(10, 0), tz)
 
 
 def create_post(image_urls, caption, alt_text, due_at=None):
@@ -58,13 +57,24 @@ def create_post(image_urls, caption, alt_text, due_at=None):
     return data["post"]
 
 
-def publish_time(now):
-    """Bugungi slot hali o'tmagan bo'lsa o'sha vaqt, aks holda None (darhol chiqarish)."""
-    slot = todays_slot(now)
-    if slot and slot > now + timedelta(minutes=3):
-        return slot
-    return None
+def publish_time(now, day):
+    """Post sanasidagi vaqt; u o'tib ketgan bo'lsa None (darhol chiqarish)."""
+    slot = slot_on(day)
+    return slot if slot > now + timedelta(minutes=3) else None
+
+
+def post_status(post_id):
+    """(holat, chiqish vaqti): holat — scheduled, sending, sent, error..."""
+    post = _gql("""query($id: PostId!) { post(input: {id: $id}) { status dueAt } }""", {"id": post_id})["post"]
+    return post["status"], post["dueAt"]
+
+
+def delete_post(post_id):
+    data = _gql("""mutation($id: PostId!) { deletePost(input: {id: $id}) {
+        __typename ... on MutationError { message } } }""", {"id": post_id})["deletePost"]
+    if data["__typename"] != "DeletePostSuccess":
+        raise RuntimeError(f"Buffer postni o'chirmadi: {data.get('message')}")
 
 
 if __name__ == "__main__":
-    print(todays_slot(datetime.now(ZoneInfo("Asia/Tashkent"))))
+    print(slot_on(datetime.now(ZoneInfo("Asia/Tashkent")).strftime("%Y-%m-%d")))

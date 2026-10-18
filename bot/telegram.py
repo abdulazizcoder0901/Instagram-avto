@@ -41,6 +41,9 @@ class Telegram:
             for f in files.values():
                 f.close()
 
+    def set_commands(self, commands):
+        self._call("setMyCommands", commands=[{"command": c, "description": d} for c, d in commands])
+
     def clear_buttons(self, message_id):
         try:
             self._call("editMessageReplyMarkup", chat_id=self.chat_id, message_id=message_id,

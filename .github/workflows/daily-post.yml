@@ -2,12 +2,15 @@ name: Daily Instagram post
 
 on:
   schedule:
-    # 09:40 Toshkent (04:40 UTC): post tayyorlanadi, soat 10:00 da Telegram'ga yuboriladi
-    - cron: "40 4 * * *"
+    # 21:35 Toshkent (16:35 UTC): ertangi post tayyorlanadi, soat 22:00 da Telegram'ga yuboriladi
+    - cron: "35 16 * * *"
+    # 08:00 Toshkent (03:00 UTC): kechqurun tasdiqlanmagan bo'lsa qayta yuboriladi;
+    # tasdiqlangan bo'lsa post chiqquncha /repair kutiladi
+    - cron: "0 3 * * *"
   workflow_dispatch:
     inputs:
       post_date:
-        description: "Sana (YYYY-MM-DD). Bo'sh qoldirilsa — bugun"
+        description: "Sana (YYYY-MM-DD). Bo'sh qoldirilsa — 18:00 dan keyin ertangi, oldin bugungi"
         required: false
 
 permissions:
@@ -48,6 +51,6 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           POST_DATE: ${{ inputs.post_date }}
-          SEND_AT: ${{ github.event_name == 'schedule' && '10:00' || '' }}
+          SEND_AT: ${{ github.event.schedule == '35 16 * * *' && '22:00' || '' }}
           DEADLINE_MINUTES: "330"
         run: python -m bot.main

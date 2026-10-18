@@ -40,6 +40,7 @@ def _topic(page):
         "url": page["url"],
         "title": _plain(props[TITLE]["title"]).strip(),
         "date": date.get("start"),
+        "status": ((props.get(STATUS) or {}).get("status") or {}).get("name"),
         "rubrics": [o["name"] for o in (props.get(RUBRIC) or {}).get("multi_select", [])],
     }
 
@@ -92,6 +93,12 @@ def page_text(page_id):
         if not data.get("has_more"):
             return "\n".join(lines)
         cursor = data["next_cursor"]
+
+
+def set_status(page_id, name):
+    r = requests.patch(f"{API}/pages/{page_id}", headers=_headers(), timeout=30,
+                       json={"properties": {STATUS: {"status": {"name": name}}}})
+    r.raise_for_status()
 
 
 def mark_posted(page_id, today):
