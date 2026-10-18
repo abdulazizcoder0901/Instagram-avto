@@ -9,6 +9,7 @@
     ]
   },
   "version": 3,
-  "stage": "done",
-  "buffer_post_id": "6ad541070a208cb32381f94c"
+  "stage": "feedback",
+  "buffer_post_id": null,
+  "due_at": null
 }
