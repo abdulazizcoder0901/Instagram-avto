@@ -1,0 +1,105 @@
+{
+  "slides": [
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://en.wikipedia.org/wiki/Spam_(food)",
+        "https://www.stripes.com/living/2023-08-14/spam-military-history-international-phenomenon-11045094.html",
+        "https://science.howstuffworks.com/innovation/edible-innovations/spam-food2.htm"
+      ],
+      "photo_search": "SPAM canned meat tin can close up",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\">Spam haqida</div><div class=\"h1\">Pochtangizdagi \"spam\" aslida <span class=\"em\">konserva nomi.</span></div><div class=\"body soft\">Go'sht bankasi qanday qilib internetdagi eng yomon so'zga aylandi?</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://hormelfoods.com/newsroom/news/spam-the-wonder-food"
+      ],
+      "photo_search": "vintage SPAM can Hormel 1937",
+      "photo_ref": "",
+      "html": "<div class=\"tag\">1937-yil, AQSH</div><div class=\"h2\">Nom uchun <span class=\"em\">100 dollar</span></div><div class=\"body\">Hormel Foods kompaniyasi yangi cho'chqa go'shti konservasiga nom izladi. Aktyor Ken Daigneau \"SPAM\" deb taklif qildi va 100 dollar yutdi.</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://www.defensemedianetwork.com/stories/war-won-spam-things/",
+        "https://hekint.org/2024/01/22/saving-the-starving-soviets-with-spam/"
+      ],
+      "photo_search": "World War II soldiers eating canned rations",
+      "photo_ref": "",
+      "html": "<div class=\"tag\">Ikkinchi jahon urushi</div><div class=\"h2\">Hamma joyda — <span class=\"em\">faqat Spam</span></div><div class=\"body\">Askarlar uni har kuni yeb, jonlariga tegdi. Britaniyada kartochka tizimi davrida u deyarli har dasturxonda bor edi.</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://www.bfi.org.uk/lists/monty-python-10-funniest-sketches",
+        "https://www.songfacts.com/facts/monty-python/the-spam-song/1000"
+      ],
+      "photo_search": "Monty Python Spam sketch Vikings cafe",
+      "photo_ref": "",
+      "html": "<div class=\"tag\">1970-yil, BBC</div><div class=\"h2\">Vikinglar <span class=\"em\">hamma gapni bosib ketdi</span></div><div class=\"body\">Monty Python skechida kafedagi menyuning deyarli har taomida Spam bor. Vikinglar esa \"Spam, Spam, Spam!\" deb kuylab, hech kimga gapirishga qo'ymaydi.</div>"
+    },
+    {
+      "position": "center",
+      "photo_pages": [
+        "https://cs.stanford.edu/people/eroberts/cs181/projects/spam/monty_python.HTML"
+      ],
+      "photo_search": "old computer terminal green text 1980s",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\">Mana asosiy sir</div><div class=\"h2\">Spam = <span class=\"em\">foydali gapni ko'mib yuboradigan shovqin</span></div><div class=\"body\">Internetning ilk foydalanuvchilari keraksiz, takroriy xabarlarni shu skech sharafiga \"spam\" deb atay boshlashdi.</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://www.thinkbrg.com/insights/publications/nervous-system-remembering-the-dawn-of-spam/",
+        "https://pplware.sapo.pt/internet/historia-do-primeiro-e-mail-de-spam/"
+      ],
+      "photo_search": "DEC computer 1978 ARPANET vintage",
+      "photo_ref": "",
+      "html": "<div class=\"tag\">3-may, 1978-yil</div><div class=\"h2\">Birinchi spam xat — <span class=\"em\">~400 kishiga</span></div><div class=\"body\">DEC kompaniyasi xodimi Gary Thuerk ARPANET orqali reklama tarqatdi. Odamlar g'azablandi, lekin aytilishicha, savdo 12 mln dollar foyda keltirgan.</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://www.historyofinformation.com/detail.php?id=1065",
+        "https://www.cjr.org/critical_eye/original_sin.php"
+      ],
+      "photo_search": "1990s internet usenet computer screen",
+      "photo_ref": "",
+      "html": "<div class=\"tag\">12-aprel, 1994-yil</div><div class=\"h2\">So'z <span class=\"em\">rasman yopishib qoldi</span></div><div class=\"body\">Ikki advokat \"Green Card\" reklamasini 5 500 dan ortiq Usenet guruhiga tashladi. Shundan keyin \"spam\" butun dunyoda keraksiz reklama ma'nosini oldi.</div>"
+    },
+    {
+      "position": "center",
+      "photo_pages": [
+        "https://www.redsearch.com.au/resources/email-spam-statistics-australia/",
+        "https://debounce.com/blog/email-spam-statistics/"
+      ],
+      "photo_search": "email inbox laptop dark",
+      "photo_ref": "",
+      "html": "<div class=\"num\">45%</div><div class=\"h3\">Dunyodagi email'larning <span class=\"em\">deyarli yarmi — spam</span></div><div class=\"body soft\">Kaspersky ma'lumotiga ko'ra, 2023-yilda kuniga taxminan 160 mlrd spam xat yuborilgan.</div>"
+    },
+    {
+      "position": "center",
+      "photo_pages": [
+        "https://www.pandasecurity.com/en/mediacenter/tips/how-to-stop-spam-emails/",
+        "https://www.purewow.com/tech/how-to-stop-spam-emails",
+        "https://www.online-tech-tips.com/how-to-stop-spam-emails/"
+      ],
+      "photo_search": "smartphone notifications hand dark",
+      "photo_ref": "",
+      "html": "<div class=\"h3\">Spamdan qutulishning <span class=\"em\">3 qoidasi</span></div><div class=\"list\"><div class=\"item\"><b>1</b>Ro'yxatdan o'tish uchun alohida pochta oching.</div><div class=\"item\"><b>2</b>Shubhali xatga javob yozmang — manzilingiz \"tirik\"ligini bildirasiz.</div><div class=\"item\"><b>3</b>\"Yutdingiz!\" degan havolani bosmang.</div></div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://waywordradio.org/newsletter-lobster-thermidor-aux-crevettes-with-a-mornay-sauce-garnished-with-truffle-pate-brandy-and-a-fried-egg-on-top-and-spam/"
+      ],
+      "photo_search": "person looking at phone black and white",
+      "photo_ref": "",
+      "html": "<div class=\"h2\">Siz oxirgi marta <span class=\"em\">qachon spamga tushdingiz?</span></div><div class=\"body\">Izohda yozing. Bilib oling: biz \"spam\" bo'lmaymiz — bunaqa faktlar uchun saqlab qo'ying va obuna bo'ling.</div>"
+    }
+  ],
+  "caption": "Pochtangizdagi \"spam\" so'zi aslida go'sht konservasining nomi 🥫\n\n1937-yilda Hormel kompaniyasi chiqargan SPAM urush yillarida hamma joyda bo'lib ketdi. 1970-yilda Monty Python skechida vikinglar \"Spam, Spam, Spam!\" deb kuylab, hamma gapni bosib ketishdi. Internetdagi ilk foydalanuvchilar keraksiz xabarlarni shu skech sharafiga spam deb atashdi.\n\nBugun dunyodagi email'larning deyarli yarmi spam. Oxirgi slayddagi 3 qoidani saqlab qo'ying.\n\nSiz oxirgi marta qachon spamga tushdingiz? Izohda yozing 👇\n\n#spam #faktlar #qiziqarlifaktlar #internet #texnologiya #ozbekcha #bilasizmi\n\n📷 ajmexico (by 2.0); A Guy Named Nyal (by-sa 2.0)",
+  "alt_text": "SPAM konservasi nomi 1937-yildan Monty Python skechi orqali internetdagi keraksiz xabarlar nomiga qanday aylangani va spamdan himoyalanish bo'yicha 3 maslahat haqida carousel."
+}
