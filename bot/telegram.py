@@ -41,15 +41,6 @@ class Telegram:
             for f in files.values():
                 f.close()
 
-    def send_audio(self, path, title, performer, buttons=None):
-        params = {"chat_id": self.chat_id, "title": title, "performer": performer}
-        if buttons:
-            params["reply_markup"] = {"inline_keyboard": [
-                [{"text": label, "callback_data": data} for label, data in row] for row in buttons
-            ]}
-        with open(path, "rb") as f:
-            return self._call("sendAudio", http_timeout=120, files={"audio": f}, **params)
-
     def clear_buttons(self, message_id):
         try:
             self._call("editMessageReplyMarkup", chat_id=self.chat_id, message_id=message_id,

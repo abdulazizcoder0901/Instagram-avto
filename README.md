@@ -13,14 +13,12 @@ Har kuni @mr_abdulazz uchun carousel post: **Notion → Claude → slaydlar → 
    topilmasa — bepul fotobazadan (Openverse/Wikimedia). Bot slaydlarni Chromium'da 1080×1350
    rasmga aylantiradi va `posts/<sana>/` papkasiga saqlaydi.
 3. **10:00** — Telegram bot'ga slaydlar va post matni keladi, ostida 2 ta tugma bo'ladi:
-   - **✅ Tasdiqlash** — bot "Rostdan ham?" deb bir marta so'raydi, keyin musiqa tanlash boshlanadi;
+   - **✅ Tasdiqlash** — bot "Rostdan ham?" deb bir marta so'raydi, "Ha" bosilsa post chiqishga qo'yiladi;
    - **❌ Yoqmadi** — bot nimani o'zgartirish kerakligini so'raydi. Siz yozasiz, Claude postni qayta
      yozadi va yangi variantni yuboradi. Tugmani bosmasdan to'g'ridan-to'g'ri izoh yozsangiz ham bo'ladi.
    - **Rasm yuborish** — foto/skrinshotni postga qo'ydirish ("shuni slaydlar orasiga qo'y") yoki
      boshqa postni namuna qilib berish ("shunga o'xshash dizaynda qil"). Albom ham bo'ladi.
-4. Musiqa: bot 5 ta variant beradi. Raqamni bossangiz, musiqa namunasi keladi — eshitib ko'rasiz.
-   Yoqsa **✅ Yoqdi** (postga qo'shiladi), yoqmasa **🔁 Boshqasi**. 0 — musiqasiz.
-5. Post Buffer'ga **avtomatik** chiqishga qo'yiladi va Buffer'dagi bugungi vaqtda o'zi chiqadi
+4. Post Buffer'ga **avtomatik** chiqishga qo'yiladi va Buffer'dagi bugungi vaqtda o'zi chiqadi
    (vaqt o'tib ketgan bo'lsa — darhol). Qo'lda hech narsa qilish shart emas. Notion'da mavzu "Post" bo'ladi.
 
 Agar soat ~15:10 gacha javob bermasangiz, o'sha kungi post yuborilmaydi. Davom ettirish uchun:
@@ -28,10 +26,9 @@ GitHub → **Actions** → **Daily Instagram post** → **Run workflow**. Bot to
 
 ### Musiqa haqida
 
-Musiqa postga avtomatik qo'shilishi uchun Instagram akkaunt Buffer'ga **Facebook Login orqali**
-ulangan bo'lishi kerak (Buffer → Channels → Instagram → Reconnect → Facebook). Shunda bot Instagram
-kutubxonasidagi haqiqiy treklarni taklif qiladi.
-Ulanmagan bo'lsa, musiqani faqat eshitib ko'rish mumkin (iTunes namunasi), post esa musiqasiz chiqadi.
+Instagram avtomatik (API orqali) chiqqan carousel'ga musiqa qo'yishga ruxsat bermaydi: Buffer trekni
+qabul qiladi, lekin Instagram uni tashlab yuboradi. Shuning uchun bot musiqa tanlashni so'ramaydi,
+carousel musiqasiz chiqadi.
 
 ## Bir martalik sozlash
 
@@ -58,7 +55,7 @@ bot/render.py        HTML → JPEG (Chromium), matn sig'maganini tekshirish
 bot/photos.py        fotolar: maqolalardagi asosiy rasm (og:image), zaxira — Openverse/Wikimedia
 bot/notion.py        mavzuni olish, "Post" deb belgilash
 bot/telegram.py      Telegram bot
-bot/buffer.py        Buffer: jadval, musiqa, post yaratish
+bot/buffer.py        Buffer: jadval, post yaratish
 posts/<sana>/vN/     har bir variantning slaydlari va matni
 ```
 

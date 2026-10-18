@@ -1,4 +1,4 @@
-"""Buffer GraphQL API: posting jadvali, Instagram musiqa katalogi va post yaratish."""
+"""Buffer GraphQL API: posting jadvali va post yaratish."""
 import os
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
@@ -34,34 +34,10 @@ def todays_slot(now):
     return None
 
 
-AUDIO_FIELDS = "__typename ... on SearchInstagramAudioSuccess { audio { id title displayArtist previewUrl } }"
-
-
-def music_catalog(queries, limit=5):
-    """Instagram musiqa katalogidan treklar (namunasi bilan) — so'rovlar tartibida, takrorsiz.
-    Kanal Facebook Login orqali ulanmagan bo'lsa None."""
-    out, seen = [], set()
-    for q in queries:
-        data = _gql(f"""query($ch: ChannelId!, $q: String!) {{
-            r: searchInstagramAudio(input: {{channelId: $ch, audioType: music, query: $q}}) {{ {AUDIO_FIELDS} }} }}""",
-                    {"ch": CHANNEL_ID, "q": q})["r"]
-        if data["__typename"] != "SearchInstagramAudioSuccess":
-            return None
-        for a in data.get("audio", []):
-            if a["id"] not in seen and len(out) < limit:
-                seen.add(a["id"])
-                out.append(a)
-        if len(out) >= limit:
-            break
-    return [{"id": a["id"], "title": a["title"], "artist": a.get("displayArtist") or "",
-             "preview_url": a.get("previewUrl")} for a in out]
-
-
-def create_post(image_urls, caption, alt_text, due_at=None, music=None):
-    """Carousel postni avtomatik chiqishga qo'yadi. due_at bo'lmasa darhol chiqaradi; music — katalog trek id."""
+def create_post(image_urls, caption, alt_text, due_at=None):
+    """Carousel postni avtomatik chiqishga qo'yadi. due_at bo'lmasa darhol chiqaradi.
+    Musiqa qo'shilmaydi: Instagram API orqali chiqqan carousel'ga musiqani qabul qilmaydi."""
     instagram = {"type": "post", "shouldShareToFeed": True, "isAiGenerated": True}
-    if music:
-        instagram["stickerFields"] = {"music": music}
     variables = {"input": {
         "channelId": CHANNEL_ID,
         "text": caption,

@@ -68,10 +68,6 @@ slides: 6–9 ta slayd, har biri {position, photo_pages, photo_search, photo_ref
 obuna/saqlashga chaqiriq.
 caption: 2–4 qisqa abzats; birinchi qator hook; oxirida izohga chaqiriq va 5–8 ta mos hashtag.
 alt_text: carousel mazmunining bir gaplik tavsifi.
-music_query: Instagram musiqa kutubxonasidan qidirish uchun 1–3 so'zli inglizcha kayfiyat/janr so'rovi
-  ("epic cinematic", "calm piano", "upbeat electronic"). Biznes akkauntda faqat litsenziyali kutubxona
-  musiqasi bor, mashhur qo'shiq nomlari topilmaydi — shuning uchun kayfiyat/janr yoz.
-music_suggestions: postga mos 5 ta mashhur trek (Instagram'da odatda bor bo'lgan), title va artist bilan.
 """
 
 SLIDE = {
@@ -93,18 +89,8 @@ SCHEMA = {
         "slides": {"type": "array", "items": SLIDE},
         "caption": {"type": "string"},
         "alt_text": {"type": "string"},
-        "music_query": {"type": "string"},
-        "music_suggestions": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {"title": {"type": "string"}, "artist": {"type": "string"}},
-                "required": ["title", "artist"],
-                "additionalProperties": False,
-            },
-        },
     },
-    "required": ["slides", "caption", "alt_text", "music_query", "music_suggestions"],
+    "required": ["slides", "caption", "alt_text"],
     "additionalProperties": False,
 }
 
