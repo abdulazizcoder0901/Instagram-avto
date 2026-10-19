@@ -7,7 +7,7 @@ import requests
 
 API = "https://api.buffer.com"
 CHANNEL_ID = os.environ.get("BUFFER_CHANNEL_ID", "6ad2a15f778b240e2f30588e")
-DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+PUBLISH_AT = os.environ.get("PUBLISH_AT", "18:30")
 
 
 def _gql(query, variables=None):
@@ -21,16 +21,9 @@ def _gql(query, variables=None):
 
 
 def slot_on(day):
-    """Buffer jadvalidagi shu kunning (YYYY-MM-DD) posting vaqti. Jadvalda vaqt bo'lmasa — 10:00."""
-    data = _gql("""query($id: ChannelId!) { channel(input: {id: $id}) {
-        timezone postingSchedule { day times paused } } }""", {"id": CHANNEL_ID})["channel"]
-    tz = ZoneInfo(data["timezone"])
-    d = Date.fromisoformat(day)
-    for entry in data["postingSchedule"]:
-        if entry["day"] == DAYS[d.weekday()] and not entry["paused"] and entry["times"]:
-            hh, mm = map(int, sorted(entry["times"])[0].split(":"))
-            return datetime.combine(d, time(hh, mm), tz)
-    return datetime.combine(d, time(10, 0), tz)
+    """Shu kunning (YYYY-MM-DD) chiqish vaqti: har kuni PUBLISH_AT (Toshkent vaqti)."""
+    hh, mm = map(int, PUBLISH_AT.split(":"))
+    return datetime.combine(Date.fromisoformat(day), time(hh, mm), ZoneInfo("Asia/Tashkent"))
 
 
 def create_post(image_urls, caption, alt_text, due_at=None):

@@ -18,25 +18,25 @@ Har kuni @mr_abdulazz uchun carousel post: **Notion → Claude → slaydlar → 
      yozadi va yangi variantni yuboradi. Tugmani bosmasdan to'g'ridan-to'g'ri izoh yozsangiz ham bo'ladi.
    - **Rasm yuborish** — foto/skrinshotni postga qo'ydirish ("shuni slaydlar orasiga qo'y") yoki
      boshqa postni namuna qilib berish ("shunga o'xshash dizaynda qil"). Albom ham bo'ladi.
-4. Post Buffer'ga **avtomatik** chiqishga qo'yiladi va ertasi kuni Buffer'dagi vaqtda o'zi chiqadi.
+4. Post Buffer'ga **avtomatik** chiqishga qo'yiladi va ertasi kuni **soat 18:30** da o'zi chiqadi
+   (vaqt workflow'dagi `PUBLISH_AT` da; Buffer'dagi jadval ishlatilmaydi).
    Qo'lda hech narsa qilish shart emas. Notion'da mavzu "Post" bo'ladi.
 5. **/repair** — tasdiqlagandan keyin xato topsangiz, post chiqishidan oldin bot'ga `/repair` yuboring.
    Post navbatdan olinadi, bot nimani tuzatishni so'raydi, yangi variantni yuboradi — uni yana tasdiqlaysiz.
    Post chiqib bo'lgach /repair ishlamaydi.
 6. Chiqish vaqti o'tgach bot postni tekshiradi: chiqqan bo'lsa linkini yuboradi. Instagram qabul
-   qilmagan bo'lsa (xato), bot uni bir marta o'zi qayta yuboradi va natijasini aytadi. Kech vaqtdagi
-   postlar kechki 21:35 dagi ishga tushishda tekshiriladi.
+   qilmagan bo'lsa (xato), bot uni bir marta o'zi qayta yuboradi va natijasini aytadi. Shuningdek kechki
+   21:35 dagi ishga tushishda ham tekshiriladi.
 
-Kechasi javob bermasangiz, **08:00** da bot postni qayta yuboradi (13:30 gacha kutadi). Undan keyin
-davom ettirish uchun: GitHub → **Actions** → **Daily Instagram post** → **Run workflow**. Bot to'xtagan
-joyidan davom etadi. Bot har kuni ~03:05–08:00 orasida ishlamaydi: shu vaqtda yuborilgan xabarlarni
-08:00 da o'qiydi.
+Kechasi javob bermasangiz, **08:00** da bot postni qayta yuboradi, **13:20** da yana eslatadi va
+18:30 gacha kutadi. Bot har kuni ~03:05–08:00 orasida ishlamaydi: shu vaqtda yuborilgan xabarlarni
+08:00 da o'qiydi. Qo'lda ishga tushirish: GitHub → **Actions** → **Daily Instagram post** → **Run workflow**.
 
 ### Musiqa haqida
 
 Instagram avtomatik (API orqali) chiqqan carousel'ga musiqa qo'yishga ruxsat bermaydi: Buffer trekni
 qabul qiladi, lekin Instagram uni tashlab yuboradi. Shuning uchun bot musiqa tanlashni so'ramaydi,
-carousel musiqasiz chiqadi.
+carousel musiqasiz chiqadi. Buffer musiqani avtomatik faqat Reels'ga qo'sha oladi.
 
 ## Bir martalik sozlash
 

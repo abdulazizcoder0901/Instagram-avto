@@ -272,7 +272,17 @@ def run():
 
     if os.environ.get("SEND_AT"):
         wait_until(os.environ["SEND_AT"])
-    if day.state.get("stage") != "done":
+    kind = os.environ.get("RUN_KIND", "")
+    if kind == "midday" and day.state.get("stage") in ("review", "feedback", "confirm"):
+        # ertalabki ishning davomi: albomni qayta yubormaymiz, faqat eslatamiz
+        if day.state["stage"] == "confirm":
+            send_confirm(tg, day)
+        elif day.state["stage"] == "feedback":
+            tg.send("✏️ Izohingizni kutyapman: nimani o'zgartiray?")
+        else:
+            tg.send(f"⏳ «{topic['title']}» posti hali tasdiqlanmagan. Soat {buffer.PUBLISH_AT} gacha tasdiqlang.",
+                    buttons=[[("✅ Tasdiqlash", f"approve:{day.version}"), ("❌ Yoqmadi", f"reject:{day.version}")]])
+    elif day.state.get("stage") != "done":
         # tasdiqlangan post kutilayotganda tunda yuborilgan /repair yo'qolmasin
         tg.skip_pending()
         if day.state.get("stage") == "confirm":
@@ -356,9 +366,11 @@ def run():
     if day.state["stage"] == "done":
         return
     commit([day.dir], f"Post {date}: tasdiqlanmadi")
-    if date > now().strftime("%Y-%m-%d"):
+    if kind == "evening":
         tg.send(f"⏰ {date} uchun post hali tasdiqlanmadi. Ertalab soat 08:00 da bot uni qayta yuboradi.")
         return
+    if kind == "morning":
+        return  # tushdan keyingi ish davom ettiradi
     tg.send("⏰ Bugungi post tasdiqlanmadi, Buffer'ga yuborilmadi.\n"
             "Davom ettirish uchun GitHub → Actions → «Daily Instagram post» → Run workflow.")
 

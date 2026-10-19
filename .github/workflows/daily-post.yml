@@ -4,9 +4,10 @@ on:
   schedule:
     # 21:35 Toshkent (16:35 UTC): ertangi post tayyorlanadi, soat 22:00 da Telegram'ga yuboriladi
     - cron: "35 16 * * *"
-    # 08:00 Toshkent (03:00 UTC): kechqurun tasdiqlanmagan bo'lsa qayta yuboriladi;
-    # tasdiqlangan bo'lsa post chiqquncha /repair kutiladi
+    # 08:00 va 13:20 Toshkent: kechqurun tasdiqlanmagan bo'lsa qayta so'raladi;
+    # tasdiqlangan bo'lsa post chiqquncha (18:30) /repair kutiladi va natija tekshiriladi
     - cron: "0 3 * * *"
+    - cron: "20 8 * * *"
   workflow_dispatch:
     inputs:
       post_date:
@@ -52,5 +53,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           POST_DATE: ${{ inputs.post_date }}
           SEND_AT: ${{ github.event.schedule == '35 16 * * *' && '22:00' || '' }}
+          RUN_KIND: ${{ github.event.schedule == '35 16 * * *' && 'evening' || github.event.schedule == '0 3 * * *' && 'morning' || github.event.schedule == '20 8 * * *' && 'midday' || '' }}
+          PUBLISH_AT: "18:30"
           DEADLINE_MINUTES: "330"
         run: python -m bot.main
