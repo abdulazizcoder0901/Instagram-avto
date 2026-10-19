@@ -174,6 +174,8 @@ def check_published(tg, day):
         commit([day.dir], f"Post {day.date}: qayta yuborildi")
         tg.send(f"⚠️ Instagram {day.date} postini qabul qilmadi ({error}). Hozir qayta yubordim.")
         return False
+    elif status == "deleted":
+        pass  # Buffer'dan qo'lda o'chirilgan
     elif status == "error":
         tg.send(f"❌ {day.date} posti yana chiqmadi: {error}\nBuffer'da postni ochib, «Retry» bosing.")
     else:

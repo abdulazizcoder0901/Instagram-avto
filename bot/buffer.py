@@ -57,15 +57,25 @@ def publish_time(now, day):
 
 
 def post_status(post_id):
-    """(holat, chiqish vaqti): holat — scheduled, sending, sent, error..."""
-    post = _gql("""query($id: PostId!) { post(input: {id: $id}) { status dueAt } }""", {"id": post_id})["post"]
+    """(holat, chiqish vaqti): holat — scheduled, sending, sent, error; Buffer'dan o'chirilgan bo'lsa deleted."""
+    try:
+        post = _gql("""query($id: PostId!) { post(input: {id: $id}) { status dueAt } }""", {"id": post_id})["post"]
+    except RuntimeError as e:
+        if "not found" in str(e).lower():
+            return "deleted", None
+        raise
     return post["status"], post["dueAt"]
 
 
 def post_result(post_id):
     """Chiqqan postning holati, Instagram linki va xato matni."""
-    post = _gql("""query($id: PostId!) { post(input: {id: $id}) { status externalLink error { message } } }""",
-                {"id": post_id})["post"]
+    try:
+        post = _gql("""query($id: PostId!) { post(input: {id: $id}) { status externalLink error { message } } }""",
+                    {"id": post_id})["post"]
+    except RuntimeError as e:
+        if "not found" in str(e).lower():
+            return "deleted", None, None
+        raise
     return post["status"], post.get("externalLink"), (post.get("error") or {}).get("message")
 
 

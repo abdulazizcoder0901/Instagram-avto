@@ -23,7 +23,20 @@ MATN QOIDALARI
   Mavzu imkon bersa, o'quvchi o'zi qo'llay oladigan amaliy maslahat yoki saboq ber.
 - Faktlarni WebSearch bilan tekshir. Aniq bo'lmasa "taxminan", "aytilishicha" deb yoz yoki umuman yozma.
 - Oxirgi chiqqan mavzularni va ularning hook uslubini takrorlama.
-- Notion'dagi ssenariy — xomaki g'oya. Uni asos qil, lekin yaxshilab qayta yoz.
+- Notion'da ssenariy yozilgan bo'lsa, postni AYNAN shu ssenariy bo'yicha tayyorla: undagi hook g'oyasi,
+  faktlar, ketma-ketlik va CTA saqlansin; faqat carousel formatiga mosla, tilini silliqla va faktlarni
+  tekshir (xato bo'lsa to'g'rila). Ssenariy reels uchun yozilgan bo'lishi mumkin: "KADR" — slayd/qism,
+  qavs ichidagi gaplar — muallifning hazili yoki video uchun izoh; hazilni muallif ovozida ishlatsang
+  bo'ladi, lekin so'kinish va qo'pol so'zlarsiz. Ssenariy bo'lmasa, mavzu bo'yicha o'zing to'liq yoz.
+
+SURISHGA MAJBURLASH (eng muhim qoida)
+- Har bir slayd (oxirgisidan tashqari) o'quvchini keyingisiga surishga majburlasin: fikrni shu slaydda
+  tugatma, javobni yoki eng qiziq qismini keyingi slaydga qoldir (open loop).
+- Usullar: javobsiz savol ("Lekin nega aynan u?"), uzilgan gap ("...va shunda kutilmagan narsa bo'ldi"),
+  ziddiyat ("Hammasi zo'r edi. Faqat bitta muammo bor edi:"), sanoq ("3 ta sababdan birinchisi:"),
+  va'da ("Eng qizig'i — keyingi slaydda"). Usullarni almashtirib ishlat, bitta iborani takrorlama.
+- Hook (1-slayd) javobni bermasin — faqat qiziqtirsin. Asosiy javob/sir o'rtadagi yoki oxiridan oldingi
+  slaydda ochilsin.
 
 DIZAYN (sahifaning yagona uslubi)
 Har bir slayd 1080x1350. Fonda butun ekran bo'ylab HAQIQIY foto turadi, bot uni oq-qora (kulrang)
