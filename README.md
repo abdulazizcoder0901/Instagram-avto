@@ -23,6 +23,9 @@ Har kuni @mr_abdulazz uchun carousel post: **Notion → Claude → slaydlar → 
 5. **/repair** — tasdiqlagandan keyin xato topsangiz, post chiqishidan oldin bot'ga `/repair` yuboring.
    Post navbatdan olinadi, bot nimani tuzatishni so'raydi, yangi variantni yuboradi — uni yana tasdiqlaysiz.
    Post chiqib bo'lgach /repair ishlamaydi.
+6. Chiqish vaqti o'tgach bot postni tekshiradi: chiqqan bo'lsa linkini yuboradi. Instagram qabul
+   qilmagan bo'lsa (xato), bot uni bir marta o'zi qayta yuboradi va natijasini aytadi. Kech vaqtdagi
+   postlar kechki 21:35 dagi ishga tushishda tekshiriladi.
 
 Kechasi javob bermasangiz, **08:00** da bot postni qayta yuboradi (13:30 gacha kutadi). Undan keyin
 davom ettirish uchun: GitHub → **Actions** → **Daily Instagram post** → **Run workflow**. Bot to'xtagan

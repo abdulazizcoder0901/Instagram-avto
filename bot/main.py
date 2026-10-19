@@ -158,6 +158,38 @@ def publish(tg, day):
             + ("\n\n🔧 Xato topsangiz, chiqishidan oldin /repair yuboring." if due else ""))
 
 
+def check_published(tg, day):
+    """Chiqish vaqti o'tgan postni tekshiradi. Instagram qabul qilmagan bo'lsa bir marta qayta yuboradi.
+    Natija aniq bo'lsa (chiqdi yoki ikkinchi marta ham xato) True."""
+    if day.state.get("stage") != "done" or not day.state.get("buffer_post_id") or day.state.get("checked"):
+        return True
+    status, link, error = buffer.post_result(day.state["buffer_post_id"])
+    if status == "sent":
+        tg.send(f"📢 {day.date} posti Instagram'ga chiqdi ✅" + (f"\n{link}" if link else ""))
+    elif status == "error" and not day.state.get("retried"):
+        post = day.post()
+        created = buffer.create_post(day.image_urls(), post["caption"], post["alt_text"])
+        day.state.update(buffer_post_id=created["id"], retried=True)
+        day.save()
+        commit([day.dir], f"Post {day.date}: qayta yuborildi")
+        tg.send(f"⚠️ Instagram {day.date} postini qabul qilmadi ({error}). Hozir qayta yubordim.")
+        return False
+    elif status == "error":
+        tg.send(f"❌ {day.date} posti yana chiqmadi: {error}\nBuffer'da postni ochib, «Retry» bosing.")
+    else:
+        return False
+    day.state["checked"] = True
+    day.save()
+    commit([day.dir], f"Post {day.date}: natija tekshirildi")
+    return True
+
+
+def wait_published(tg, day, minutes=20):
+    end = now() + timedelta(minutes=minutes)
+    while not check_published(tg, day) and now() < end:
+        time.sleep(60)
+
+
 def repairable(day):
     """Tasdiqlangan post hali chiqmagan bo'lsa, uni /repair bilan qaytarib olish mumkin."""
     if day.state.get("stage") != "done" or not day.state.get("buffer_post_id"):
@@ -210,9 +242,14 @@ def run():
     except Exception:
         pass
 
+    today = Day(started.strftime("%Y-%m-%d"))
+    if today.date != date and not repairable(today):
+        wait_published(tg, today)  # kechqurun: bugungi post chiqdimi?
+
     if day.state.get("stage") == "done" and not repairable(day):
-        if os.environ.get("GITHUB_EVENT_NAME") != "schedule":
+        if os.environ.get("GITHUB_EVENT_NAME") != "schedule" and day.state.get("checked"):
             tg.send(f"ℹ️ {date} uchun post allaqachon Buffer'ga yuborilgan.")
+        wait_published(tg, day)
         return
 
     if "topic" not in day.state:
@@ -247,6 +284,7 @@ def run():
     pending = []  # izohsiz kelgan rasmlar: keyingi izoh bilan birga ishlatiladi
     while now() < deadline:
         if day.state["stage"] == "done" and not repairable(day):
+            wait_published(tg, day)
             return
         events = tg.events()
         # albom bo'lib yuborilgan rasmlar bir necha qismda keladi — hammasini yig'ib olamiz

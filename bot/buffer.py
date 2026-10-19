@@ -69,6 +69,13 @@ def post_status(post_id):
     return post["status"], post["dueAt"]
 
 
+def post_result(post_id):
+    """Chiqqan postning holati, Instagram linki va xato matni."""
+    post = _gql("""query($id: PostId!) { post(input: {id: $id}) { status externalLink error { message } } }""",
+                {"id": post_id})["post"]
+    return post["status"], post.get("externalLink"), (post.get("error") or {}).get("message")
+
+
 def delete_post(post_id):
     data = _gql("""mutation($id: PostId!) { deletePost(input: {id: $id}) {
         __typename ... on MutationError { message } } }""", {"id": post_id})["deletePost"]
