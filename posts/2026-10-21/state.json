@@ -10,6 +10,8 @@
     ]
   },
   "version": 2,
-  "stage": "review",
-  "sent_version": 2
+  "stage": "done",
+  "sent_version": 2,
+  "buffer_post_id": "6ad79aed0f081b0afa082a4c",
+  "due_at": "2026-10-21T18:30:00+05:00"
 }
