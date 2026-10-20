@@ -2,20 +2,18 @@ name: Daily Instagram post
 
 on:
   schedule:
-    # 21:35 Toshkent (16:35 UTC): ertangi post tayyorlanadi, soat 22:00 da Telegram'ga yuboriladi
-    - cron: "35 16 * * *"
-    # 08:00 va 13:20 Toshkent: kechqurun tasdiqlanmagan bo'lsa qayta so'raladi;
-    # tasdiqlangan bo'lsa post chiqquncha (18:30) /repair kutiladi va natija tekshiriladi
-    - cron: "0 3 * * *"
-    - cron: "20 8 * * *"
+    # Bot o'zini o'zi uzluksiz qayta ishga tushiradi (bot/main.py: dispatch_next).
+    # Bu jadval faqat zaxira: zanjir uzilib qolsa, botni qayta tiklaydi.
+    - cron: "17 */6 * * *"
   workflow_dispatch:
     inputs:
       post_date:
-        description: "Sana (YYYY-MM-DD). Bo'sh qoldirilsa — 18:00 dan keyin ertangi, oldin bugungi"
+        description: "Sana (YYYY-MM-DD). Bo'sh qoldirilsa — bot o'zi tanlaydi (21:30 dan keyin ertangi post)"
         required: false
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: daily-post
@@ -24,7 +22,7 @@ concurrency:
 jobs:
   post:
     runs-on: ubuntu-latest
-    timeout-minutes: 350
+    timeout-minutes: 355
     steps:
       - uses: actions/checkout@v4
 
@@ -52,8 +50,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           POST_DATE: ${{ inputs.post_date }}
-          SEND_AT: ${{ github.event.schedule == '35 16 * * *' && '22:00' || '' }}
-          RUN_KIND: ${{ github.event.schedule == '35 16 * * *' && 'evening' || github.event.schedule == '0 3 * * *' && 'morning' || github.event.schedule == '20 8 * * *' && 'midday' || '' }}
           PUBLISH_AT: "18:30"
-          DEADLINE_MINUTES: "330"
+          BUDGET_MINUTES: "340"
+          GITHUB_TOKEN: ${{ github.token }}
         run: python -m bot.main

@@ -59,12 +59,6 @@ class Telegram:
         except RuntimeError:
             pass
 
-    def skip_pending(self):
-        """Bot ishga tushishidan oldingi eski xabarlarni o'tkazib yuboradi."""
-        updates = self._call("getUpdates", offset=-1, timeout=0)
-        if updates:
-            self.offset = updates[-1]["update_id"] + 1
-
     def events(self, poll_seconds=50):
         """Faqat egasining chatidan kelgan hodisalar:
         ('button', data, cb_id, msg_id), ('text', matn) yoki ('photo', file_id, izoh)."""

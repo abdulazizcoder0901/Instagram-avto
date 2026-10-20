@@ -4,33 +4,32 @@ Har kuni @mr_abdulazz uchun carousel post: **Notion → Claude → slaydlar → 
 
 ## Har kuni nima bo'ladi
 
-1. **21:35** — GitHub Actions ishga tushadi va Notion'dan **ertangi** mavzuni oladi: sanasi ertaga yoki
-   undan oldin bo'lgan, hali "Post" bo'lmagan eng birinchi mavzu. Bir kunga 2 ta mavzu tushsa yoki bir
-   kun o'tib ketsa, mavzu yo'qolmaydi: keyingi kuni chiqadi.
-2. Claude Notion'dagi ssenariy asosida carousel yozadi (hook, amaliy misollar, faktlarni internetdan
-   tekshiradi). Uslub: fonda mavzuga oid **haqiqiy foto** (oq-qora), markazda oq matn, kalit qism
-   kursivda. Fotolar Claude topgan maqolalarning asosiy rasmidan olinadi (film kadri, joy, odam);
-   topilmasa — bepul fotobazadan (Openverse/Wikimedia). Bot slaydlarni Chromium'da 1080×1350
-   rasmga aylantiradi va `posts/<sana>/` papkasiga saqlaydi.
-3. **22:00** — Telegram bot'ga slaydlar va post matni keladi, ostida 2 ta tugma bo'ladi:
-   - **✅ Tasdiqlash** — bot "Rostdan ham?" deb bir marta so'raydi, "Ha" bosilsa post chiqishga qo'yiladi;
-   - **❌ Yoqmadi** — bot nimani o'zgartirish kerakligini so'raydi. Siz yozasiz, Claude postni qayta
-     yozadi va yangi variantni yuboradi. Tugmani bosmasdan to'g'ridan-to'g'ri izoh yozsangiz ham bo'ladi.
-   - **Rasm yuborish** — foto/skrinshotni postga qo'ydirish ("shuni slaydlar orasiga qo'y") yoki
-     boshqa postni namuna qilib berish ("shunga o'xshash dizaynda qil"). Albom ham bo'ladi.
-4. Post Buffer'ga **avtomatik** chiqishga qo'yiladi va ertasi kuni **soat 18:30** da o'zi chiqadi
-   (vaqt workflow'dagi `PUBLISH_AT` da; Buffer'dagi jadval ishlatilmaydi).
-   Qo'lda hech narsa qilish shart emas. Notion'da mavzu "Post" bo'ladi.
-5. **/repair** — tasdiqlagandan keyin xato topsangiz, post chiqishidan oldin bot'ga `/repair` yuboring.
-   Post navbatdan olinadi, bot nimani tuzatishni so'raydi, yangi variantni yuboradi — uni yana tasdiqlaysiz.
-   Post chiqib bo'lgach /repair ishlamaydi.
-6. Chiqish vaqti o'tgach bot postni tekshiradi: chiqqan bo'lsa linkini yuboradi. Instagram qabul
-   qilmagan bo'lsa (xato), bot uni bir marta o'zi qayta yuboradi va natijasini aytadi. Shuningdek kechki
-   21:35 dagi ishga tushishda ham tekshiriladi.
+Bot GitHub Actions'da **uzluksiz** ishlaydi: har bir ish ~5.5 soat davom etadi va oxirida keyingisini
+o'zi ishga tushiradi (GitHub jadvali soatlab kechikishi mumkin, shuning uchun unga tayanmaymiz;
+6 soatlik jadval faqat zaxira — zanjir uzilsa tiklaydi). Repo public bo'lgani uchun bepul.
 
-Kechasi javob bermasangiz, **08:00** da bot postni qayta yuboradi, **13:20** da yana eslatadi va
-18:30 gacha kutadi. Bot har kuni ~03:05–08:00 orasida ishlamaydi: shu vaqtda yuborilgan xabarlarni
-08:00 da o'qiydi. Qo'lda ishga tushirish: GitHub → **Actions** → **Daily Instagram post** → **Run workflow**.
+1. **21:30** — bot Notion'dan **ertangi** mavzuni oladi: sanasi ertaga yoki undan oldin bo'lgan,
+   hali "Post" bo'lmagan eng birinchi mavzu. Mavzu chiqmay qolsa, yo'qolmaydi: keyingi kuni chiqadi.
+2. Claude Notion'dagi ssenariy bo'yicha carousel yozadi (ssenariy bo'lmasa — o'zi), faktlarni
+   internetdan tekshiradi. Har bir slayd keyingisiga surishga majburlaydi. Uslub: fonda mavzuga oid
+   **haqiqiy foto** (oq-qora), markazda oq matn, kalit qism kursivda. Bot slaydlarni 1080×1350
+   rasmga aylantiradi va `posts/<sana>/` papkasiga saqlaydi.
+3. **22:00** — Telegram bot'ga slaydlar va post matni keladi:
+   - **✅ Tasdiqlash** — bot "Rostdan ham?" deb bir marta so'raydi, "Ha" bosilsa post chiqishga qo'yiladi;
+   - **❌ Yoqmadi** — bot nimani o'zgartirish kerakligini so'raydi, Claude qayta yozadi. Tugmasiz
+     to'g'ridan-to'g'ri izoh yozsangiz ham bo'ladi.
+   - **Rasm yuborish** — postga qo'yish ("shuni slaydlar orasiga qo'y") yoki namuna sifatida
+     ("shunga o'xshash dizaynda qil"). Albom ham bo'ladi.
+4. Post Buffer orqali **soat 18:30** da o'zi chiqadi (`PUBLISH_AT`). Notion'da mavzu "Post" bo'ladi.
+   Tasdiqlanmagan bo'lsa, bot **09:00** va **14:00** da eslatadi.
+5. **/repair** — tasdiqlagandan keyin xato topsangiz, 18:30 gacha bot'ga `/repair` yuboring: post
+   navbatdan olinadi, bot nimani tuzatishni so'raydi va yangi variantni yana tasdiqlaysiz.
+6. 18:30 dan keyin bot postni tekshiradi: chiqqan bo'lsa linkini yuboradi, Instagram qabul qilmagan
+   bo'lsa bir marta o'zi qayta yuboradi.
+7. 21:30 gacha tasdiqlanmagan post chiqmaydi, mavzusi ertangi kunga o'tadi.
+
+Qo'lda ishga tushirish (masalan, boshqa sanani tayyorlash): GitHub → **Actions** → **Daily Instagram
+post** → **Run workflow** (`post_date` bilan).
 
 ### Musiqa haqida
 

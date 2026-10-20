@@ -123,6 +123,9 @@ def send_review(tg, day):
         f"📌 {day.state['topic']['title']}\n🗓 {day.date} · {day.version}-variant\n\n{post['caption']}",
         buttons=[[("✅ Tasdiqlash", f"approve:{day.version}"), ("❌ Yoqmadi", f"reject:{day.version}")]],
     )
+    day.state["sent_version"] = day.version
+    day.save()
+    commit([day.dir], f"Post {day.date}: {day.version}-variant yuborildi")
 
 
 def send_confirm(tg, day):
@@ -224,41 +227,81 @@ def _is_repair(text):
     return text.split("@")[0].strip().lower() in ("/repair", "repair")
 
 
-def wait_until(hhmm):
+PREP_AT = "21:30"  # shu vaqtdan ertangi post tayyorlanadi
+SEND_AT = "22:00"  # ertangi post Telegram'ga shu vaqtda yuboriladi
+REMIND_AT = ("09:00", "14:00")  # tasdiqlanmagan post haqida eslatma
+BUDGET = timedelta(minutes=int(os.environ.get("BUDGET_MINUTES", "340")))
+
+
+def _at(hhmm, base=None):
+    base = base or now()
     hh, mm = map(int, hhmm.split(":"))
-    target = now().replace(hour=hh, minute=mm, second=0, microsecond=0)
-    if now() < target:
-        time.sleep((target - now()).total_seconds())
+    return base.replace(hour=hh, minute=mm, second=0, microsecond=0)
 
 
-def run():
-    started = now()
-    # kechqurun (18:00 dan keyin) ertangi post tayyorlanadi, ertalab — bugungisi
-    default = started + timedelta(days=1) if started.hour >= 18 else started
-    date = os.environ.get("POST_DATE") or default.strftime("%Y-%m-%d")
-    deadline = started + timedelta(minutes=int(os.environ.get("DEADLINE_MINUTES", "330")))
-    tg = Telegram()
-    day = Day(date)
-    try:
-        tg.set_commands([("repair", "Tasdiqlangan postni tuzatish")])
-    except Exception:
-        pass
+def _today():
+    return now().strftime("%Y-%m-%d")
 
-    today = Day(started.strftime("%Y-%m-%d"))
-    if today.date != date and not repairable(today):
-        wait_published(tg, today)  # kechqurun: bugungi post chiqdimi?
+
+def active_date():
+    """Bot hozir qaysi kunning posti bilan ishlaydi: 21:30 dan keyin ertangi, undan oldin bugungi."""
+    t = now()
+    return (t + timedelta(days=1) if t >= _at(PREP_AT, t) else t).strftime("%Y-%m-%d")
+
+
+def idle(tg, day, current):
+    """Bu kunning ishi tugagan: kunning almashishini kutadi, kelgan xabarlarga qisqa javob beradi."""
+    while current():
+        events = tg.events()
+        for e in events:
+            if e[0] == "button":
+                tg.answer(e[2])
+        if any(e[0] in ("text", "photo") for e in events):
+            if day.state.get("stage") == "done":
+                tg.send(f"✅ {day.date} posti chiqib bo'lgan. Keyingi post soat {SEND_AT} da keladi.")
+            else:
+                tg.send(f"ℹ️ Keyingi post soat {SEND_AT} da keladi.")
+
+
+def remind(tg, day):
+    """Tasdiqlanmagan post haqida kunduzi eslatadi (har vaqt uchun bir marta)."""
+    if day.date != _today() or day.state.get("stage") not in ("review", "confirm", "feedback"):
+        return
+    done = day.state.setdefault("reminded", [])
+    due = [r for r in REMIND_AT if now() >= _at(r) and r not in done]
+    if not due or now() >= buffer.slot_on(day.date):
+        return
+    done.extend(due)
+    day.save()
+    commit([day.dir], f"Post {day.date}: eslatma")
+    if day.state["stage"] == "feedback":
+        tg.send("✏️ Izohingizni kutyapman: nimani o'zgartiray?")
+    else:
+        tg.send(f"⏳ «{day.state['topic']['title']}» posti hali tasdiqlanmagan. "
+                f"Soat {buffer.PUBLISH_AT} gacha tasdiqlang (yuqoridagi postda).",
+                buttons=[[("✅ Tasdiqlash", f"approve:{day.version}"), ("❌ Yoqmadi", f"reject:{day.version}")]])
+        day.state["stage"] = "review"
+        day.save()
+
+
+def serve(tg, day, end, forced=False):
+    """Bitta kunning posti: tayyorlash, yuborish, tasdiqlash, /repair va natijani tekshirish.
+    Kun almashsa (21:30) yoki ish vaqti tugasa qaytadi."""
+    def current():
+        return now() < end and (forced or active_date() == day.date)
 
     if day.state.get("stage") == "done" and not repairable(day):
-        if os.environ.get("GITHUB_EVENT_NAME") != "schedule" and day.state.get("checked"):
-            tg.send(f"ℹ️ {date} uchun post allaqachon Buffer'ga yuborilgan.")
         wait_published(tg, day)
-        return
+        return idle(tg, day, current)
 
     if "topic" not in day.state:
-        topic = notion.next_topic(date)
+        topic = notion.next_topic(day.date)
         if not topic:
-            tg.send(f"ℹ️ {date}: Notion'da chiqmagan mavzu qolmadi. Yangi mavzu qo'shing.")
-            return
+            if not day.state.get("no_topic"):
+                tg.send(f"ℹ️ {day.date}: Notion'da chiqmagan mavzu qolmadi. Yangi mavzu qo'shing.")
+                day.state["no_topic"] = True
+                day.save()
+            return idle(tg, day, current)
         day.state["topic"] = topic
     topic = day.state["topic"]
     script = notion.page_text(topic["id"])
@@ -270,34 +313,24 @@ def run():
                                   images=day.refs())
 
     if not day.version:
+        if end - now() < timedelta(minutes=25):
+            return  # vaqt kam — keyingi ish tayyorlaydi
         day.add_version(writer.write_post(topic, script, recent), fix=fixer)
 
-    if os.environ.get("SEND_AT"):
-        wait_until(os.environ["SEND_AT"])
-    kind = os.environ.get("RUN_KIND", "")
-    if kind == "midday" and day.state.get("stage") in ("review", "feedback", "confirm"):
-        # ertalabki ishning davomi: albomni qayta yubormaymiz, faqat eslatamiz
-        if day.state["stage"] == "confirm":
-            send_confirm(tg, day)
-        elif day.state["stage"] == "feedback":
-            tg.send("✏️ Izohingizni kutyapman: nimani o'zgartiray?")
-        else:
-            tg.send(f"⏳ «{topic['title']}» posti hali tasdiqlanmagan. Soat {buffer.PUBLISH_AT} gacha tasdiqlang.",
-                    buttons=[[("✅ Tasdiqlash", f"approve:{day.version}"), ("❌ Yoqmadi", f"reject:{day.version}")]])
-    elif day.state.get("stage") != "done":
-        # tasdiqlangan post kutilayotganda tunda yuborilgan /repair yo'qolmasin
-        tg.skip_pending()
-        if day.state.get("stage") == "confirm":
-            send_confirm(tg, day)
-        else:
-            day.state["stage"] = "review"
-            send_review(tg, day)
+    if day.date > _today() and not forced:
+        send_at = _at(SEND_AT)
+        while now() < min(send_at, end):
+            time.sleep(min(60, max(1, (send_at - now()).total_seconds())))
+    if day.state.get("stage") != "done" and day.state.get("sent_version") != day.version:
+        day.state["stage"] = "review"
+        send_review(tg, day)
 
     pending = []  # izohsiz kelgan rasmlar: keyingi izoh bilan birga ishlatiladi
-    while now() < deadline:
+    while current():
         if day.state["stage"] == "done" and not repairable(day):
             wait_published(tg, day)
-            return
+            return idle(tg, day, current)
+        remind(tg, day)
         events = tg.events()
         # albom bo'lib yuborilgan rasmlar bir necha qismda keladi — hammasini yig'ib olamiz
         while any(e[0] == "photo" for e in events[-1:] or []):
@@ -365,16 +398,40 @@ def run():
         send_review(tg, day)
 
     day.save()
-    if day.state["stage"] == "done":
+    if day.state["stage"] != "done" and now() < end and not forced:
+        # 21:30 bo'ldi, post tasdiqlanmadi: mavzu Notion'da "Post" emas, ertaga o'zi qayta olinadi
+        commit([day.dir], f"Post {day.date}: tasdiqlanmadi")
+        tg.send(f"⏰ «{topic['title']}» posti tasdiqlanmadi va chiqmadi. Bu mavzu ertangi kunga o'tadi.")
+
+
+def run():
+    end = now() + BUDGET
+    tg = Telegram()
+    try:
+        tg.set_commands([("repair", "Tasdiqlangan postni tuzatish")])
+    except Exception:
+        pass
+    today = Day(_today())
+    if not repairable(today):
+        wait_published(tg, today)  # bugungi post chiqdimi?
+
+    forced = os.environ.get("POST_DATE")
+    while now() < end - timedelta(minutes=2):
+        date = forced or active_date()
+        serve(tg, Day(date), end, forced=bool(forced))
+        if forced or active_date() == date:
+            break  # ish vaqti tugadi yoki keyingi ishga qoldirildi
+
+
+def dispatch_next():
+    """Keyingi ishni o'zi ishga tushiradi: bot uzluksiz ishlaydi, GitHub jadvalining kechikishiga bog'liq emas."""
+    token = os.environ.get("GITHUB_TOKEN")
+    if not token:
         return
-    commit([day.dir], f"Post {date}: tasdiqlanmadi")
-    if kind == "evening":
-        tg.send(f"⏰ {date} uchun post hali tasdiqlanmadi. Ertalab soat 08:00 da bot uni qayta yuboradi.")
-        return
-    if kind == "morning":
-        return  # tushdan keyingi ish davom ettiradi
-    tg.send("⏰ Bugungi post tasdiqlanmadi, Buffer'ga yuborilmadi.\n"
-            "Davom ettirish uchun GitHub → Actions → «Daily Instagram post» → Run workflow.")
+    r = requests.post(f"https://api.github.com/repos/{REPO}/actions/workflows/daily-post.yml/dispatches",
+                      headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"},
+                      json={"ref": os.environ.get("GITHUB_REF_NAME", "main")}, timeout=30)
+    print("Keyingi ish:", r.status_code, r.text[:200])
 
 
 def main():
@@ -382,9 +439,13 @@ def main():
         run()
     except Exception as e:
         try:
-            Telegram().send(f"⚠️ Bot xatolik bilan to'xtadi: {type(e).__name__}: {e}")
-        finally:
-            raise
+            Telegram().send(f"⚠️ Bot xatolik bilan to'xtadi: {type(e).__name__}: {e}\n10 daqiqadan keyin qayta ishga tushadi.")
+        except Exception:
+            pass
+        time.sleep(600)  # xato takrorlansa, xabarlar oqimi bo'lmasin
+        raise
+    finally:
+        dispatch_next()
 
 
 if __name__ == "__main__":
