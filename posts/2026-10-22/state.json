@@ -10,5 +10,6 @@
     ]
   },
   "version": 1,
-  "stage": "review"
+  "stage": "review",
+  "sent_version": 1
 }
