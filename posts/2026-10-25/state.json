@@ -11,5 +11,8 @@
   },
   "version": 1,
   "stage": "review",
-  "sent_version": 1
+  "sent_version": 1,
+  "reminded": [
+    "09:00"
+  ]
 }
