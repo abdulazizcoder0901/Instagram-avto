@@ -6,8 +6,8 @@ GitHub Actions har kuni ishga tushiradi (.github/workflows/daily-post.yml):
 import json
 import os
 import subprocess
+import re
 import sys
-import tempfile
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -407,12 +407,10 @@ def serve(tg, day, end, forced=False):
 
 def intake(tg, end):
     """To'xtatilgan rejim (PAUSE): postlar tayyorlanmaydi va chiqmaydi. Egasi yuborgan fayl, rasm va
-    izohlar Notion'dagi «Bot materiallari» sahifasiga saqlanadi."""
-    folder = Path(tempfile.mkdtemp())
+    izohlar repodagi materials/<sana>/ papkasiga saqlanadi."""
     while now() < end:
         for event in tg.events():
             kind = event[0]
-            stamp = f"{now():%d.%m.%Y %H:%M}"
             if kind == "button":
                 tg.answer(event[2])
                 continue
@@ -424,21 +422,29 @@ def intake(tg, end):
                 tg.send("📥 Bot hozir fayl qabul qilish rejimida: post tayyorlamaydi va chiqarmaydi.\n"
                         "PDF, rasm, video yoki matn yuboring — hammasi saqlanadi.")
                 continue
-            if kind == "text":
-                name, path, mime, note = None, None, None, f"{stamp} — {event[1]}"
-            elif kind == "photo":
-                name, mime = f"rasm-{now():%Y%m%d-%H%M%S}.jpg", "image/jpeg"
-            else:
-                name, mime = event[3], event[4]
-            if kind != "text":
-                note = f"{stamp} — {name}" + (f": {event[2]}" if event[2] else "")
+            folder = ROOT / "materials" / now().strftime("%Y-%m-%d")
+            folder.mkdir(parents=True, exist_ok=True)
+            notes = folder / "izohlar.md"
+            stamp = f"{now():%H:%M}"
             try:
-                if kind != "text":
-                    path = tg.download(event[1], folder / name)
-                notion.add_material(note, path, name, mime)
-                tg.send(f"✅ Qabul qilindi: {name}" if name else "✅ Izoh saqlandi.")
+                if kind == "text":
+                    with notes.open("a") as f:
+                        f.write(f"- {stamp} — {event[1]}\n")
+                    commit([notes], "Material: izoh")
+                    tg.send("✅ Izoh saqlandi.")
+                    continue
+                name = f"rasm-{now():%H%M%S}.jpg" if kind == "photo" else re.sub(r"[^\w.\- ]", "_", event[3])
+                dest = folder / name
+                if dest.exists():
+                    dest = folder / f"{now():%H%M%S}-{name}"
+                tg.download(event[1], dest)
+                if event[2]:
+                    with notes.open("a") as f:
+                        f.write(f"- {stamp} — {dest.name}: {event[2]}\n")
+                commit([folder], f"Material: {dest.name}")
+                tg.send(f"✅ Qabul qilindi: {dest.name}")
             except Exception as e:
-                tg.send(f"⚠️ {name or 'Izoh'} saqlanmadi: {e}")
+                tg.send(f"⚠️ Saqlanmadi: {e}")
 
 
 def run():

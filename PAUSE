@@ -1,4 +1,4 @@
 Bot to'xtatilgan: Notion'dagi kontent-plan bo'yicha postlar tayyorlanmaydi va chiqmaydi.
-Bu vaqtda bot faqat fayl qabul qiladi: Telegram'ga yuborilgan fayl, rasm va izohlar Notion'dagi
-"Bot materiallari" sahifasiga saqlanadi.
+Bu vaqtda bot faqat fayl qabul qiladi: Telegram'ga yuborilgan fayl, rasm va izohlar repodagi
+materials/<sana>/ papkasiga saqlanadi.
 Postlarni qayta yoqish uchun shu faylni o'chiring.

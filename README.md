@@ -29,8 +29,9 @@ o'zi ishga tushiradi (GitHub jadvali soatlab kechikishi mumkin, shuning uchun un
 7. 21:30 gacha tasdiqlanmagan post chiqmaydi, mavzusi ertangi kunga o'tadi.
 
 **To'xtatib turish:** repo ildizida `PAUSE` fayli bo'lsa, bot post tayyorlamaydi va chiqarmaydi —
-faqat fayl qabul qiladi: Telegram'ga yuborilgan PDF, rasm, video va izohlar Notion'dagi
-**Bot materiallari** sahifasiga saqlanadi (Telegram bot 20 MB gacha faylni ola oladi).
+faqat fayl qabul qiladi: Telegram'ga yuborilgan PDF, rasm, video va izohlar repodagi
+`materials/<sana>/` papkasiga saqlanadi (Telegram bot 20 MB gacha faylni ola oladi). Repo public —
+bu fayllarni hamma ko'ra oladi.
 Postlarni qayta yoqish: `PAUSE` faylini o'chiring.
 
 Qo'lda ishga tushirish (masalan, boshqa sanani tayyorlash): GitHub → **Actions** → **Daily Instagram
