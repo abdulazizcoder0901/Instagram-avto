@@ -35,8 +35,9 @@ jobs:
         run: pip install -r requirements.txt
 
       # PAUSE fayli bo'lsa, bot faqat fayl qabul qiladi: brauzer va Claude kerak emas
+      # (post_date bilan qo'lda ishga tushirilsa — post tayyorlanadi, ular kerak)
       - name: Install browser and Claude
-        if: hashFiles('PAUSE') == ''
+        if: hashFiles('PAUSE') == '' || inputs.post_date != ''
         run: |
           python -m playwright install --with-deps chromium
           npm install -g @anthropic-ai/claude-code
