@@ -6,6 +6,8 @@ import requests
 API = "https://api.notion.com/v1"
 VERSION = "2025-09-03"
 DATA_SOURCE_ID = os.environ.get("NOTION_DATA_SOURCE_ID", "13954e42-ad65-811e-be30-000bafe10b9d")
+# Telegram bot'ga yuborilgan fayl va izohlar shu sahifaga tushadi (Kontent Plan ichida, yopiq)
+MATERIALS_PAGE_ID = os.environ.get("NOTION_MATERIALS_PAGE_ID", "40b54e42-ad65-81f5-bd21-fa81826cff8d")
 
 TITLE = "Kontent mavzu"
 STATUS = "Content Status"
@@ -109,3 +111,26 @@ def mark_posted(page_id, today):
         },
     })
     r.raise_for_status()
+
+
+def _check(r):
+    if not r.ok:
+        raise RuntimeError(f"Notion {r.status_code}: {r.text[:300]}")
+    return r.json()
+
+
+def add_material(note, path=None, name=None, mime=None):
+    """«Bot materiallari» sahifasiga izoh va (bo'lsa) faylni qo'shadi."""
+    children = [{"type": "paragraph", "paragraph": {"rich_text": [
+        {"type": "text", "text": {"content": note[i:i + 2000]}} for i in range(0, len(note), 2000)]}}]
+    if path:
+        upload = _check(requests.post(f"{API}/file_uploads", headers=_headers(), timeout=30,
+                                      json={"filename": name, "content_type": mime}))
+        headers = {k: v for k, v in _headers().items() if k != "Content-Type"}
+        with open(path, "rb") as f:
+            _check(requests.post(f"{API}/file_uploads/{upload['id']}/send", headers=headers, timeout=300,
+                                 files={"file": (name, f, mime)}))
+        kind = "pdf" if mime == "application/pdf" else "image" if mime.startswith("image/") else "file"
+        children.append({"type": kind, kind: {"type": "file_upload", "file_upload": {"id": upload["id"]}}})
+    _check(requests.patch(f"{API}/blocks/{MATERIALS_PAGE_ID}/children", headers=_headers(), timeout=30,
+                          json={"children": children}))

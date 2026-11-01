@@ -7,6 +7,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -404,9 +405,47 @@ def serve(tg, day, end, forced=False):
         tg.send(f"⏰ «{topic['title']}» posti tasdiqlanmadi va chiqmadi. Bu mavzu ertangi kunga o'tadi.")
 
 
+def intake(tg, end):
+    """To'xtatilgan rejim (PAUSE): postlar tayyorlanmaydi va chiqmaydi. Egasi yuborgan fayl, rasm va
+    izohlar Notion'dagi «Bot materiallari» sahifasiga saqlanadi."""
+    folder = Path(tempfile.mkdtemp())
+    while now() < end:
+        for event in tg.events():
+            kind = event[0]
+            stamp = f"{now():%d.%m.%Y %H:%M}"
+            if kind == "button":
+                tg.answer(event[2])
+                continue
+            if kind == "toobig":
+                tg.send(f"⚠️ «{event[1]}» 20 MB dan katta — Telegram bot bunday faylni ololmaydi. "
+                        "Kichikroq qilib yoki bir necha qismga bo'lib yuboring.")
+                continue
+            if kind == "text" and event[1].startswith("/"):
+                tg.send("📥 Bot hozir fayl qabul qilish rejimida: post tayyorlamaydi va chiqarmaydi.\n"
+                        "PDF, rasm, video yoki matn yuboring — hammasi saqlanadi.")
+                continue
+            if kind == "text":
+                name, path, mime, note = None, None, None, f"{stamp} — {event[1]}"
+            elif kind == "photo":
+                name, mime = f"rasm-{now():%Y%m%d-%H%M%S}.jpg", "image/jpeg"
+            else:
+                name, mime = event[3], event[4]
+            if kind != "text":
+                note = f"{stamp} — {name}" + (f": {event[2]}" if event[2] else "")
+            try:
+                if kind != "text":
+                    path = tg.download(event[1], folder / name)
+                notion.add_material(note, path, name, mime)
+                tg.send(f"✅ Qabul qilindi: {name}" if name else "✅ Izoh saqlandi.")
+            except Exception as e:
+                tg.send(f"⚠️ {name or 'Izoh'} saqlanmadi: {e}")
+
+
 def run():
     end = now() + BUDGET
     tg = Telegram()
+    if (ROOT / "PAUSE").exists():
+        return intake(tg, end)
     try:
         tg.set_commands([("repair", "Tasdiqlangan postni tuzatish")])
     except Exception:
@@ -426,7 +465,7 @@ def run():
 def dispatch_next():
     """Keyingi ishni o'zi ishga tushiradi: bot uzluksiz ishlaydi, GitHub jadvalining kechikishiga bog'liq emas."""
     token = os.environ.get("GITHUB_TOKEN")
-    if not token or (ROOT / "PAUSE").exists():
+    if not token:
         return
     r = requests.post(f"https://api.github.com/repos/{REPO}/actions/workflows/daily-post.yml/dispatches",
                       headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"},

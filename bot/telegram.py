@@ -6,6 +6,9 @@ from pathlib import Path
 import requests
 
 
+MAX_DOWNLOAD = 20 * 1024 * 1024  # Bot API bundan katta faylni yuklab bermaydi
+
+
 class Telegram:
     def __init__(self):
         self.base = f"https://api.telegram.org/bot{os.environ['TELEGRAM_BOT_TOKEN']}"
@@ -61,7 +64,8 @@ class Telegram:
 
     def events(self, poll_seconds=50):
         """Faqat egasining chatidan kelgan hodisalar:
-        ('button', data, cb_id, msg_id), ('text', matn) yoki ('photo', file_id, izoh)."""
+        ('button', data, cb_id, msg_id), ('text', matn), ('photo', file_id, izoh),
+        ('file', file_id, izoh, nomi, mime) yoki ('toobig', nomi)."""
         params = {"timeout": poll_seconds, "allowed_updates": ["message", "callback_query"]}
         if self.offset is not None:
             params["offset"] = self.offset
@@ -83,8 +87,15 @@ class Telegram:
                     file_id = msg["photo"][-1]["file_id"]  # eng katta o'lcham
                 elif msg.get("document", {}).get("mime_type", "").startswith("image/"):
                     file_id = msg["document"]["file_id"]
+                media = next((msg[k] for k in ("document", "video", "audio", "voice") if msg.get(k)), None)
                 if file_id:
                     out.append(("photo", file_id, msg.get("caption", "").strip()))
+                elif media and media.get("file_size", 0) > MAX_DOWNLOAD:
+                    out.append(("toobig", media.get("file_name") or "fayl"))
+                elif media:
+                    out.append(("file", media["file_id"], msg.get("caption", "").strip(),
+                                media.get("file_name") or f"{media['file_unique_id']}.bin",
+                                media.get("mime_type") or "application/octet-stream"))
                 elif msg.get("text", "").strip():
                     out.append(("text", msg["text"].strip()))
         return out
