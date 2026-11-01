@@ -426,7 +426,7 @@ def run():
 def dispatch_next():
     """Keyingi ishni o'zi ishga tushiradi: bot uzluksiz ishlaydi, GitHub jadvalining kechikishiga bog'liq emas."""
     token = os.environ.get("GITHUB_TOKEN")
-    if not token:
+    if not token or (ROOT / "PAUSE").exists():
         return
     r = requests.post(f"https://api.github.com/repos/{REPO}/actions/workflows/daily-post.yml/dispatches",
                       headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"},

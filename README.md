@@ -28,6 +28,9 @@ o'zi ishga tushiradi (GitHub jadvali soatlab kechikishi mumkin, shuning uchun un
    bo'lsa bir marta o'zi qayta yuboradi.
 7. 21:30 gacha tasdiqlanmagan post chiqmaydi, mavzusi ertangi kunga o'tadi.
 
+**To'xtatib turish:** repo ildizida `PAUSE` fayli bo'lsa, bot ishlamaydi (zaxira jadval ham bir necha
+soniyada tugaydi). Qayta yoqish: `PAUSE` faylini o'chirib, **Run workflow** bosing.
+
 Qo'lda ishga tushirish (masalan, boshqa sanani tayyorlash): GitHub → **Actions** → **Daily Instagram
 post** → **Run workflow** (`post_date` bilan).
 
