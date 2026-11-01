@@ -14,5 +14,6 @@
   "sent_version": 2,
   "reminded": [],
   "buffer_post_id": "6ae765c7fa39ab5d4d841211",
-  "due_at": null
+  "due_at": null,
+  "checked": true
 }
