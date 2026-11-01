@@ -153,7 +153,8 @@ def publish(tg, day):
     due = buffer.publish_time(now(), day.date)
     created = buffer.create_post(urls, post["caption"], post["alt_text"], due)
 
-    notion.mark_posted(day.state["topic"]["id"], day.date)
+    if not day.state["topic"].get("script"):  # Notion'dan olingan mavzu
+        notion.mark_posted(day.state["topic"]["id"], day.date)
     day.state.update(stage="done", buffer_post_id=created["id"], due_at=due.isoformat() if due else None)
     day.save()
     commit([day.dir], f"Post {day.date}: Buffer'ga yuborildi")
@@ -215,7 +216,8 @@ def start_repair(tg, day):
         return
     buffer.delete_post(day.state["buffer_post_id"])
     topic = day.state["topic"]
-    notion.set_status(topic["id"], topic.get("status") or "Boshlanmagan")
+    if not topic.get("script"):
+        notion.set_status(topic["id"], topic.get("status") or "Boshlanmagan")
     day.state.update(stage="feedback", buffer_post_id=None, due_at=None)
     day.save()
     commit([day.dir], f"Post {day.date}: tuzatish uchun qaytarildi")
@@ -305,7 +307,8 @@ def serve(tg, day, end, forced=False):
             return idle(tg, day, current)
         day.state["topic"] = topic
     topic = day.state["topic"]
-    script = notion.page_text(topic["id"])
+    # tayyor ssenariyli mavzu (masalan, kurs materiallaridan) — Notion'ga murojaat qilinmaydi
+    script = topic.get("script") or notion.page_text(topic["id"])
     recent = notion.recent_titles()
 
     def fixer(post, report):
@@ -450,7 +453,7 @@ def intake(tg, end):
 def run():
     end = now() + BUDGET
     tg = Telegram()
-    if (ROOT / "PAUSE").exists():
+    if (ROOT / "PAUSE").exists() and not os.environ.get("POST_DATE"):
         return intake(tg, end)
     try:
         tg.set_commands([("repair", "Tasdiqlangan postni tuzatish")])
