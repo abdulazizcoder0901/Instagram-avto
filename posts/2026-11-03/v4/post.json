@@ -1,0 +1,96 @@
+{
+  "slides": [
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://www.yotpo.com/glossary/what-is-a-cart-abandonment-rate/",
+        "https://wiserreview.com/glossary/cart-abandonment/"
+      ],
+      "photo_search": "customer leaving shop empty handed",
+      "photo_ref": "",
+      "html": "<div class=\"tag\" style=\"background:rgba(0,0,0,.45)\">CJM</div><div class=\"h1\" style=\"text-shadow:0 4px 30px rgba(0,0,0,.85)\">Mijoz sizni topdi. <span class=\"em\">Lekin sotib olmadi.</span></div><div class=\"small\" style=\"text-shadow:0 2px 16px rgba(0,0,0,.9)\">Muammo reklamada emas →</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://www.nice.com/info/understanding-the-customer-journey-map-an-in-depth-guide",
+        "https://cequens.com/knowledge-hub/glossary/shopping-cart-abandonment"
+      ],
+      "photo_search": "frustrated business owner looking at laptop",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\" style=\"text-shadow:0 2px 14px rgba(0,0,0,.9)\">Ko'p uchraydigan xato</div><div class=\"h2\" style=\"text-shadow:0 4px 28px rgba(0,0,0,.85)\">Reklamaga pul tikasiz. <span class=\"em\">Sotuv o'smaydi.</span></div><div class=\"body\" style=\"text-shadow:0 2px 18px rgba(0,0,0,.9)\">Chunki mijoz reklamadan xaridgacha bir necha bosqichdan o'tadi. Bittasida tiqilsa — qolgani behuda.</div><div class=\"small\" style=\"text-shadow:0 2px 16px rgba(0,0,0,.9)\">Qayerda tiqilishini ko'rsatadigan vosita bor:</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://metricool.com/whats-customer-journey",
+        "https://piwik.pro/glossary/customer-journey-mapping/"
+      ],
+      "photo_search": "winding road map journey aerial",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\" style=\"text-shadow:0 2px 14px rgba(0,0,0,.9)\">Customer Journey Map</div><div class=\"h2\" style=\"text-shadow:0 4px 28px rgba(0,0,0,.85)\">Mijoz yo'lining <span class=\"em\">xaritasi.</span></div><div class=\"body\" style=\"text-shadow:0 2px 18px rgba(0,0,0,.9)\">Mijoz sizni ilk bor ko'rganidan to qaytib kelguncha bosgan har bir qadami — bitta varaqda.</div><div class=\"small\" style=\"text-shadow:0 2px 16px rgba(0,0,0,.9)\">Bu yo'l 5 bosqichdan iborat →</div>"
+    },
+    {
+      "position": "center",
+      "photo_pages": [
+        "https://static2.creately.com/guides/how-to-create-a-customer-journey-map/",
+        "https://www.beautiful.ai/blog/how-do-i-create-a-customer-journey-map"
+      ],
+      "photo_search": "customer journey stages diagram whiteboard",
+      "photo_ref": "",
+      "html": "<div class=\"h2\" style=\"text-shadow:0 4px 28px rgba(0,0,0,.85)\">Mijozning <span class=\"em\">5 bosqichi</span></div><div class=\"glass\"><div class=\"list\"><div class=\"item\"><b>1</b>Xabardorlik — sizni ko'rdi</div><div class=\"item\"><b>2</b>Qiziqish — solishtiryapti</div><div class=\"item\"><b>3</b>Xarid — pul to'layapti</div><div class=\"item\"><b>4</b>Foydalanish — ishlatyapti</div><div class=\"item\"><b>5</b>Sodiqlik — qaytadi, tavsiya qiladi</div></div></div><div class=\"small\" style=\"text-shadow:0 2px 16px rgba(0,0,0,.9)\">Har bosqichga 3 ta savol beriladi. Qaysilar?</div>"
+    },
+    {
+      "position": "center",
+      "photo_pages": [
+        "https://blogs.kent.ac.uk/isux/?p=396",
+        "https://learningloop.io/plays/workshop-exercise/journey-mapping"
+      ],
+      "photo_search": "team mapping sticky notes on wall",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\" style=\"text-shadow:0 2px 14px rgba(0,0,0,.9)\">Har bosqichda yozing</div><div class=\"glass\"><div class=\"list\"><div class=\"item\"><b>1</b>Qayerda uchrashamiz? Sayt, yozishma, qo'ng'iroq, do'kon</div><div class=\"item\"><b>2</b>Mijoz nima qiladi va nima o'ylaydi?</div><div class=\"item\"><b>3</b>Qayerda qiynaladi?</div></div></div><div class=\"small\" style=\"text-shadow:0 2px 16px rgba(0,0,0,.9)\">Pul aynan 3-savolda yashiringan.</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://callcentrehelper.com/guide-creating-customer-journey-map-234701.htm",
+        "https://www.listen360.com/blog/how-to-create-a-customer-journey-map/"
+      ],
+      "photo_search": "customer waiting phone annoyed",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\" style=\"text-shadow:0 2px 14px rgba(0,0,0,.9)\">Og'riq nuqtasi</div><div class=\"h2\" style=\"text-shadow:0 4px 28px rgba(0,0,0,.85)\">Mijoz shu yerda <span class=\"em\">raqobatchiga ketadi.</span></div><div class=\"body\" style=\"text-shadow:0 2px 18px rgba(0,0,0,.9)\">Javob kech keldi. Narx yozilmagan. To'lov noqulay. Har biri — kichik narsa. Lekin mijoz ortiga qaytmaydi.</div><div class=\"small\" style=\"text-shadow:0 2px 16px rgba(0,0,0,.9)\">Bitta biznes misolida ko'raylik →</div>"
+    },
+    {
+      "position": "center",
+      "photo_pages": [
+        "https://smallbiztrends.com/customer-journey-mapping-workshop/",
+        "https://www.smaply.com/blog/journey-mapping-workshop"
+      ],
+      "photo_search": "furniture store showroom interior",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\" style=\"text-shadow:0 2px 14px rgba(0,0,0,.9)\">Misol: mebel do'koni</div><div class=\"glass\"><div class=\"list\"><div class=\"item\"><b>✓</b>Reklamani ko'rdi, qiziqdi</div><div class=\"item\"><b>✗</b>Narx so'radi — javob ertasi kuni</div><div class=\"item\"><b>✗</b>Yetkazish muddati noma'lum</div><div class=\"item\"><b>✓</b>Mebel sifati yoqdi</div><div class=\"item\"><b>✗</b>Keyin hech kim bog'lanmadi</div></div></div><div class=\"h3\" style=\"text-shadow:0 4px 26px rgba(0,0,0,.85)\">Reklamani emas, <span class=\"em\">✗ larni tuzating.</span></div>"
+    },
+    {
+      "position": "center",
+      "photo_pages": [
+        "https://squareup.com/au/en/townsquare/what-is-customer-journey-mapping",
+        "https://blog.abmatic.ai/what-is-customer-journey-mapping"
+      ],
+      "photo_search": "business owner planning at desk notebook",
+      "photo_ref": "",
+      "html": "<div class=\"h2\" style=\"text-shadow:0 4px 28px rgba(0,0,0,.85)\">O'z xaritangiz: <span class=\"em\">4 qadam</span></div><div class=\"glass\"><div class=\"list\"><div class=\"item\"><b>1</b>Bitta mijoz turini tanlang</div><div class=\"item\"><b>2</b>Yo'lni o'zingiz mijoz bo'lib bosib o'ting</div><div class=\"item\"><b>3</b>Mijozlardan so'rang: nega oldi, nega olmadi?</div><div class=\"item\"><b>4</b>Har bosqichda nechta odam keyingisiga o'tganini o'lchang</div></div></div><div class=\"small\" style=\"text-shadow:0 2px 16px rgba(0,0,0,.9)\">Nimani o'lchab bo'lmasa, uni o'stirib bo'lmaydi.</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://www.omind.ai/blogs/how-to-create-a-customer-journey-map-with-examples",
+        "https://startups.co.uk/strategy/best-customer-journey-map-templates/"
+      ],
+      "photo_search": "entrepreneur thinking with coffee and notebook",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\" style=\"text-shadow:0 2px 14px rgba(0,0,0,.9)\">Navbat sizda</div><div class=\"h2\" style=\"text-shadow:0 4px 28px rgba(0,0,0,.85)\">Mijozingiz qaysi bosqichda <span class=\"em\">tushib qolyapti?</span></div><div class=\"body\" style=\"text-shadow:0 2px 18px rgba(0,0,0,.9)\">Izohda sohangiz va bosqichni yozing. Postni saqlang — xarita chizganda kerak bo'ladi.</div>"
+    }
+  ],
+  "caption": "Mijoz sizni topdi, qiziqdi — lekin sotib olmadi. Muammo ko'pincha reklamada emas, mijozning yo'lida.\n\nCJM (Customer Journey Map) — mijoz yo'lining xaritasi. 5 bosqich: xabardorlik, qiziqish, xarid, foydalanish, sodiqlik. Har birida yozing: qayerda uchrashamiz, mijoz nima qiladi va o'ylaydi, qayerda qiynaladi.\n\nKech kelgan javob, yozilmagan narx, noqulay to'lov — mana shu og'riq nuqtalarida mijozni yo'qotasiz. Reklamaga pul qo'shishdan oldin ularni tuzating va har bosqichda nechta odam keyingisiga o'tganini o'lchang.\n\nMijozingiz qaysi bosqichda tushib qolyapti? Izohda yozing va postni saqlab qo'ying 👇\n\n#cjm #marketing #biznes #tadbirkorlik #marketolog #mijoz #sotuv #mr_abdulazz",
+  "alt_text": "Customer Journey Map (mijoz yo'li xaritasi) haqidagi carousel: 5 bosqich, har bosqichdagi 3 ta savol, mijoz ketib qoladigan joylar, mebel do'koni misoli va o'z xaritangizni tuzishning 4 qadami."
+}
