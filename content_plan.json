@@ -1,0 +1,150 @@
+{
+  "source": "Marketing kursi materiallari (materials/2026-11-01)",
+  "rules": "MANBA: marketing kursi materiallari (ichki konspekt). QAT'IY QOIDALAR:\n- Hech qanday kompaniya, brend, mijoz, agentlik yoki shaxs nomi va case study yozilmasin — na slaydlarda,\n  na caption'da. Kurs, kurs nomi va mentorlar ham tilga olinmasin. Post muallifning o'z bilimi sifatida yozilsin.\n- Faqat tushuncha, qoida, formula va bosqichlar. Misol kerak bo'lsa — umumiy va nomsiz (\"onlayn kurs\",\n  \"mebel do'koni\", \"go'zallik saloni\" kabi), o'zingdan aniq raqam yoki natija to'qima.\n- Fon rasmlari mavzuga oid umumiy rasmlar bo'lsin (ish jarayoni, biznes, grafik, odamlar), brend logotiplarisiz.\n- Auditoriya: tadbirkorlar, biznes egalari va marketologlar. Ohang: amaliy, qisqa, \"saqlab qo'yadigan\" foydali post.\n- Oxirida: izohga savol va postni saqlashga undash.",
+  "posts": [
+    {
+      "id": "kurs-smart-maqsad",
+      "date": "2026-11-03",
+      "title": "Nega maqsadlaringiz amalga oshmaydi: SMART",
+      "rubrics": [
+        "Foydali"
+      ],
+      "script": "Oddiy maqsad vs SMART maqsad.\nOddiy maqsad: \"O'zbekistondagi eng zo'r marketolog bo'laman\" — bulut, o'lchab bo'lmaydi.\nSMART: Specific (aniq), Measurable (o'lchanadigan), Attainable (erishsa bo'ladigan), Relevant (sohaga oid), Time-bound (muddatli).\nMisol: \"1 oy ichida o'rgangan sotuv usullarim orqali 2000$ chekli bitta loyiha olaman\" — har bir harf qayerda ekanini ko'rsat.\nFikr: \"Nimani o'lchab bo'lmasa, uni o'stirib bo'lmaydi.\" A nuqta (hozirgi lavozim, loyiha, daromad) va B nuqtani yozish.\nOxirida o'quvchi o'z SMART maqsadini izohda yozsin."
+    },
+    {
+      "id": "kurs-marketing-3-yonalish",
+      "date": "2026-11-06",
+      "title": "Marketing 3 xil bo'ladi. Siz qaysi birini qilyapsiz?",
+      "rubrics": [
+        "Foydali"
+      ],
+      "script": "Marketing — mahsulot ishlab chiqishdan qayta sotuvgacha bo'lgan jarayon.\n3 yo'nalish:\n1) Strategik marketing — maqsadga marketing vositalari orqali yetish harakatlari ketma-ketligi. Strategiya = maqsadga olib boradigan qadamlar ketma-ketligi.\n2) Brend marketing — brend = odamlar ongidagi mahsulot yoki xizmat haqidagi tasavvur; brend marketing shu tasavvurni kuchaytiradi.\n3) Performance marketing — performance = vazifani standartdan yaxshiroq bajarish; biznesda samaradorlik, sifat va daromadni oshirish.\nHar birida nima o'lchanadi va qachon kerakligini sodda misollar bilan tushuntir. Xato: bittasini qilib, hammasini kutish."
+    },
+    {
+      "id": "kurs-nisha-tanlash",
+      "date": "2026-11-10",
+      "title": "Nisha tanlashning 3 yo'li: qaysi biri sizga mos?",
+      "rubrics": [
+        "Foydali"
+      ],
+      "script": "Marketolog/agentlik uchun nishalashning 3 turi:\n1) Nishalashmagan — ko'p xizmatni turli bizneslarga sotish. + sotuv konversiyasi yuqori, cross-sell/upsell imkoni, mashtablash oson. − bitta xizmatda lider bo'lish qiyin, o'rtacha chek past, reputatsiya xavfi, jarayonlarni tizimlash qiyin.\n2) Xizmat turiga ko'ra — bitta xizmatni (SMM, performance, SEO, brending, PR, strategiya, tadqiqot, shaxsiy brend) ko'p sohalarga sotish. + bozor lideriga aylanish, katta chek, kam jamoa bilan yuqori aylanma, tizimlash oson. − super mashtab qiyin, monotonlik.\n3) Sohaga ko'ra — turli xizmatlarni bitta sohaga (qurilish, tibbiyot, HoReCa, ta'lim, e-commerce) sotish. + ekspertlik, moslashishga vaqt kerak emas, tavsiya (referal) yaxshi ishlaydi. − loyiha topish qiyin, bozor cheklangan, raqobatchi bizneslar bilan bir vaqtda ishlab bo'lmaydi, soha inqirozga uchrasa hammasi to'xtaydi.\nXulosa jadvali: mashtab / katta chek / tizim / ekspertlik / monotonlik xavfi."
+    },
+    {
+      "id": "kurs-qiymat-formulasi",
+      "date": "2026-11-13",
+      "title": "Narxni tushirmang. Qiymatni oshiring: 4 qismli formula",
+      "rubrics": [
+        "Foydali"
+      ],
+      "script": "Qiymat = (Kutilgan natija × Erishishga ishonch) / (Vaqt × Harakat).\nYuqoridagilarni oshiring, pastdagilarni kamaytiring:\n- Kutilgan natija: lead, konversiya, savdo, o'rtacha chek, doimiy mijozlar — aniq va o'lchanadigan va'da.\n- Ishonch: risksiz kafolat, social proof (fikrlar), ko'proq natijalar, tavsiyalar.\n- Vaqt: natijaga qanchalik tez yetadi — \"biznes uchun vaqt — pul\".\n- Harakat: mijoz qancha kuch sarflaydi — hisobot, nazorat, boshqaruvni o'z zimmangizga oling.\nShu formula bilan USP yozish shabloni: \"[natija] [muddat] ichida, [kafolat], siz faqat [minimal harakat]\".\nNarxni tushirish — \"inkor nuqtasi\": marja nolga, qiymat ham pastga ketadi."
+    },
+    {
+      "id": "kurs-qimmat-sotish",
+      "date": "2026-11-17",
+      "title": "Arzon narx mijozingizga ham zarar qiladi",
+      "rubrics": [
+        "Foydali"
+      ],
+      "script": "An'anaviy narx qo'yish: raqobatchidan arzon / teng / qimmat — qiymat raqobatchiga bog'lanib qoladi.\nNarx 3 faktordan: tannarx, ustama (mark-up), qiymat.\nArzon va qimmat narxda mijozda nima bo'ladi (jadval): emotsiya ↓/↑, qiymat ↓/↑, natija ↓/↑, talab ↑/↓, mijozning o'zi natijaga qo'yadigan kuchi ↓/↑. Ya'ni qimmat to'lagan mijoz ko'proq harakat qiladi va natija ko'proq.\nQiymatni oshirish usullari: mijoz og'riqlariga aniq yechim, to'langan pulga nisbatan bonuslar.\nQoida: doim 3 xil variant (paket) bering; qimmatroq sotish uchun 2-variantni eng jozibali qiling."
+    },
+    {
+      "id": "kurs-tijoriy-taklif",
+      "date": "2026-11-20",
+      "title": "Tijoriy taklifni Telegram'da tashlab yuborish — eng katta xato",
+      "rubrics": [
+        "Foydali"
+      ],
+      "script": "KP (tijoriy taklif)dagi 3 keng tarqalgan xato: Telegram'da fayl qilib tashlab yuborish; hammaga bir xil standart KP; KP'da faqat narx.\nTo'g'ri KP: har mijozga moslash, uning og'riqlariga yechim, brief ma'lumotlaridan foydalanish, muddat (deadline) berish.\nIshlaydigan KP'ning 8 bo'limi: 1) tanishuv 2) beriladigan qiymat (1-2-3) 3) ish jarayoni 4) jamoa 5) 3 xil narx 6) cheklanganlik (scarcity) 7) tavsiyalar/fikrlar 8) kontaktlar.\nKP qabul qilingandan keyin: shartnoma (nega kerak — 5 sabab) va og'zaki kelishuvda ham bo'lishi shart bandlar: kim bilan, maqsad, muddat, summa, ikki tomonning majburiyatlari, uzaytirish/bekor qilish, fors-major."
+    },
+    {
+      "id": "kurs-sotuvchi-sms",
+      "date": "2026-11-24",
+      "title": "Bunday xabarga hech kim javob bermaydi",
+      "rubrics": [
+        "Foydali"
+      ],
+      "script": "Mijozga birinchi xabar.\nYomon (shablon): \"Assalomu alaykum, men marketologman, bizda target, SMM, dizayn xizmatlari bor, 1 yillik tajribamiz bor, biznesingizni rivojlantiramiz, aloqaga chiqing\" — o'zingizni sotadi, javob kelmaydi.\nYaxshi (sotuvchi xabar): o'zingizni emas, natijani soting. Namunalar: \"Menda o'quv markazlar sotuvini oshiradigan bitta usul bor, qiziq bo'lsa gaplashamiz\"; \"Sahifangizni ko'rib chiqdim va 10 ta o'sish nuqtasini topdim, xohlasangiz uchrashib tushuntiraman\".\nUchrashuvga yozilishni oshiradigan offerlar: bepul audit, bepul strategiya, risksiz kafolat (natija bo'lmasa — pul qaytadi yoki KPI bo'yicha ishlash).\nMijozlar marketologlardan nimadan norozi: kommunikatsiya kam, muddatga amal qilmaslik, reklama o'zini oqlamasligi, aniq raqam ko'rsata olmaslik — xabarda shularni yeching."
+    },
+    {
+      "id": "kurs-peregovor-12-qadam",
+      "date": "2026-11-27",
+      "title": "Uchrashuvda sotishning 12 qadami",
+      "rubrics": [
+        "Foydali"
+      ],
+      "script": "Peregovor (sotuv uchrashuvi) ketma-ketligi:\n1) e'tibor tortish 2) munosabat o'rnatish (umumiy tanishlar, suhbat) 3) avtoritet 4) muammoni aniqlash 5) yechim 6) kutilma o'rnatish 7) social proof 8) afzalliklar 9) rad etib bo'lmas taklif 10) risksiz kafolat 11) muddat (deadline) 12) aniq harakatga chaqiruv.\nHar qadamda nima deyish kerakligini qisqa izohla. Xato: 5-qadamdan (yechim) boshlash — muammoni aniqlamay turib taklif berish."
+    },
+    {
+      "id": "kurs-loyiha-filtrlari",
+      "date": "2026-12-01",
+      "title": "Har loyihani olmang: 4 ta filtr va 5 ta qizil bayroq",
+      "rubrics": [
+        "Foydali"
+      ],
+      "script": "Marketolog/agentlik loyiha olishdan oldin.\nNega filtr kerak: portfolio va reputatsiya, stress kam, natija ehtimoli yuqori, uzoq hamkorlik (LTV), jamoani saqlash.\n4 filtr: 1) Reklama bilan ishlash osonmi? (an'anaviy, B2B xomashyo, luxury, bitta filialli mahalliy biznesda qiyin) 2) Biznes qachondan beri bor? (start-up — katta kutilma, mavhum raqamlar; qisqa vaqtda 5-10x kutish) 3) Avval marketolog bilan ishlaganmi? (birinchi marketolog bo'lsangiz yoki tez-tez almashtirsa — xavf) 4) Marketingsiz ham barqaror daromad bormi? (sof foyda sizga to'lanadiganidan 3 barobar kam bo'lsa, qarzi bo'lsa, mavsumiylik kuchli bo'lsa — olmang).\n5 qizil bayroq (biznes egasining xarakteri): marketingni sizdan yaxshi bilaman deydi; mikromenejment; perfeksionizm; natijani video va rasm chiroyiga qarab baholaydi; qarorlarini tez-tez o'zgartiradi."
+    },
+    {
+      "id": "kurs-tam-sam-som",
+      "date": "2026-12-04",
+      "title": "Sizning bozoringiz butun O'zbekiston emas",
+      "rubrics": [
+        "Foydali"
+      ],
+      "script": "Bozor ulushi = sizning savdongiz / bozor hajmi × 100% (bir xil muddat uchun).\nDiqqat: aylanmangiz o'zgarmasa, lekin bozor o'ssa — ulushingiz kichrayadi (\"bozordan orqada qolish\").\nBozor hajmini taxminlashning 3 yo'li: ochiq soliq/statistika ma'lumotlari (soha aylanmasi, norasmiy qism ulushini hisobga olib), so'rovnoma asosida hisob (potensial mijozlar × xarid ehtimoli × o'rtacha chek), kuzatish (import, statistika, bojxona, oqim).\nTAM — potensial to'liq bozor; SAM — xizmat ko'rsatishga tayyor bozor (raqobatchilar shu yerda); SOM — resurs va byudjetingiz bilan haqiqatda egallay oladigan qism, u SMART maqsad bo'lishi kerak.\nXulosa: rejani TAM'ga emas, SOM'ga quring. Raqamli misollar to'qima — formulani umumiy ko'rsat."
+    },
+    {
+      "id": "kurs-custdev",
+      "date": "2026-12-08",
+      "title": "Mijozingizni bilaman deysizmi? 4 qadamli tekshiruv",
+      "rubrics": [
+        "Foydali"
+      ],
+      "script": "CustDev — mijozni savollar orqali uning bilgan va bilmagan og'riqlarini topish.\nNega kerak: to'g'ri mahsulot, kutilmalar, to'g'ri narx, reklama g'oyalari, offer.\nNega ko'pchilik qilmaydi: egasi \"mijozni zo'r bilaman\" deydi, marketolog o'z farazlariga ishonadi. \"Qimmat mashinada yurgan odam velosipedni qanday sotadi?\"\nKimdan so'rash: biznes egasi, menejerlar, sotuv bo'limi; hozirgi faol va nofaol mijozlar; potensial mijozlar.\n4 qadam: gipoteza (isbotlanmagan fikr) → so'rovnoma (online, 200-400 kishi, sovg'a bilan motivatsiya, 10 kishilik sinov) → intervyu (har segmentdan kamida 10 kishi) → kuzatish (xarid paytidagi xatti-harakat).\nIntervyu qoidalari: bu sotuv emas, reklama qilmang; avval iliq suhbat; hozirgi va kelajak haqida so'rang; \"zo'r, sifatli\" emas, o'lchanadigan javob; diktofon; o'zingiz xohlagan javobga yo'naltirmang."
+    },
+    {
+      "id": "kurs-talash-mahsulot",
+      "date": "2026-12-11",
+      "title": "Mijozlar talashadigan mahsulot formulasi",
+      "rubrics": [
+        "Foydali"
+      ],
+      "script": "So'rovnoma va intervyudan bilishingiz shart bo'lgan 8 narsa: demografiya, kimlarni kuzatadi, A nuqtasi (hozirgi holati), og'riqlari, qo'rquvlari, to'siqlari (baryerlar), kutilmalari, sizni qanchalik tavsiya qiladi (NPS).\nShu ma'lumotdan mahsulot formulasi:\n1) Og'riq < Yechim\n2) Qo'rquv < Kafolat (risksiz)\n3) To'siq < Imkoniyatlar (variantlar: bo'lib to'lash, yetkazish va h.k.)\n4) Kutilma < Haqiqat\nHar birini umumiy misol bilan tushuntir. Xulosa: mijozni taxmin bilan emas, ma'lumot bilan biling."
+    },
+    {
+      "id": "kurs-cjm",
+      "date": "2026-12-15",
+      "title": "Mijozingiz qaysi bosqichda sizni tashlab ketyapti?",
+      "rubrics": [
+        "Foydali"
+      ],
+      "script": "CJM — mijoz yo'li xaritasi: mahsulotni olguncha bosib o'tadigan yo'li va sizdan xarid qilish qanchalik qulayligi.\nMaqsad: bosqichlarni ko'rish, his-tuyg'ularni boshqarish, aloqa nuqtalarini (touchpoint) topish, xaridni osonlashtirish.\n6 bosqich (maishiy texnika xaridi misolida, nomsiz): 1) motivatsiya — xursand 2) qidiruv — xursand, ko'p variant 3) saytga/do'konga kirish — ikkilanadi, ma'lumot juda ko'p (yomon tajriba) 4) taqqoslash — hamma bir-biriga o'xshaydi (yomon tajriba) 5) baholash — fikrlar, tavsiyalar 6) to'lov — avval xavotir, keyin xursand.\nHar bosqichda kompaniya nima qilishi kerak: motivatsiya — reklama; qidiruv — qidiruv va reklama joylarida bo'lish; kirish — tez javob, qulay ish vaqti; taqqoslash — batafsil va ishonchli ma'lumot; baholash — USP va afzalliklar; to'lov — qulay to'lov turlari.\nXulosa: \"yomon\" bosqichlarda aralashing va mijoz yo'lini o'zingiz bosib o'ting."
+    },
+    {
+      "id": "kurs-4-strategiya",
+      "date": "2026-12-18",
+      "title": "Marketingda bor-yo'g'i 4 ta strategiya bor",
+      "rubrics": [
+        "Foydali"
+      ],
+      "script": "Strategiya — maqsadga olib boradigan qadamlar ketma-ketligi. Marketingning 4 asosiy strategiyasi (\"4 ustunli bino\"):\n1) Lidogeneratsiya — hali hech kim tanimaganda va resurs kam bo'lganda maksimal lead olish: kontent marketing, SEO/kontekst reklama, ijtimoiy tarmoq reklamasi.\n2) Brend / qamrov — aloqa nuqtalarini ko'paytirish, \"isitish\": SMM, blogerlar, PR, tadbirlar/homiylik.\n3) Sotuv — barcha reklama faoliyatini sotuvga qaratish: voronka, mahsulot demosi, vebinar/seminar, chegirma va aksiyalar.\n4) Qayta sotuv — sizni taniydigan va sotib olganlarga qayta sotish: mijozlarga xizmat, sodiqlik dasturi, SMS/email, hamjamiyat.\nStrategiyani boshlashdan oldin kerak: bozor tahlili, mijoz tahlili, raqobatchilar tahlili (4P bo'yicha SWOT), unikal savdo taklifi.\nSavol: siz hozir qaysi strategiyani qilyapsiz va qaysi biri yetishmayapti?"
+    },
+    {
+      "id": "kurs-reklama-4-qoida",
+      "date": "2026-12-22",
+      "title": "Reklama pulingiz qayerda yo'qolyapti: 4 qoida",
+      "rubrics": [
+        "Foydali"
+      ],
+      "script": "Ijtimoiy tarmoq reklamasining 4 qoidasi:\n1) Muammo trafikda emas — trafikni har doim sotib olsa bo'ladi; pul konversiyada yo'qoladi. \"Offer bo'lmasa, u reklama emas.\"\n2) Texnologiyaga emas, psixologiyaga e'tibor bering — algoritm o'zgaradi, odamlar o'zgarmaydi. \"Mijozingizni kechasi nima o'ylab uxlolmaydi?\"\n3) Mahsulotni emas, bosishni (click) soting — kuchli qiziqish + katta aniq foyda; aniq harakatga chaqiruv.\n4) Reklamaning boshi reklamaga o'xshamasin — odamlar tarmoqqa reklama ko'rishga kirmaydi; birinchi 3 soniya hal qiladi.\nQo'shimcha: reklama bitta odamga qaratilsin — ko'pchilikka gapirsangiz, mijoz o'zini ko'rmaydi."
+    },
+    {
+      "id": "kurs-reklama-formulalari",
+      "date": "2026-12-25",
+      "title": "Reklama matnini 6 qadamda yozing (shablon)",
+      "rubrics": [
+        "Foydali"
+      ],
+      "script": "Reklama matni formulalari (umumiy misol — nomsiz yetkazib berish xizmati yoki onlayn do'kon):\n1) Og'riq → Kutilma → USP → Kafolat → Cheklanganlik → Harakatga chaqiruv (asosiy shablon, har qismiga bitta gap).\n2) PAS: Muammo → Kuchaytirish (muammo qancha zarar keltiradi) → Yechim.\n3) Social proof → Natija → Kutilma → Chaqiruv.\n4) Og'riq → Raqobatchilar kamchiligi → USP → Chaqiruv.\n5) Rolli dialog (ikki do'st suhbati) → yechim → chaqiruv.\n6) USP → tafsilotlar ro'yxati → chaqiruv.\nHar birini qisqa namuna bilan ko'rsat, raqamlarni to'qima (\"X kunda\", \"[narx]\" kabi joy qoldir).\nKuchli USP — og'riqqa kafolatli yechim: \"[muddat]da yetkazamiz, bo'lmasa [kompensatsiya]\"."
+    }
+  ]
+}

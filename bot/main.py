@@ -15,7 +15,7 @@ from zoneinfo import ZoneInfo
 
 import requests
 
-from bot import buffer, notion, writer
+from bot import buffer, notion, plan, writer
 from bot.telegram import Telegram
 from bot.render import render_post
 
@@ -253,17 +253,18 @@ def active_date():
 
 
 def idle(tg, day, current):
-    """Bu kunning ishi tugagan: kunning almashishini kutadi, kelgan xabarlarga qisqa javob beradi."""
+    """Bu kunning ishi tugagan yoki post yo'q kun: kunning almashishini kutadi.
+    Shu vaqtda yuborilgan fayl, rasm va izohlar materials/ ga saqlanadi."""
     while current():
-        events = tg.events()
-        for e in events:
-            if e[0] == "button":
-                tg.answer(e[2])
-        if any(e[0] in ("text", "photo") for e in events):
-            if day.state.get("stage") == "done":
-                tg.send(f"✅ {day.date} posti chiqib bo'lgan. Keyingi post soat {SEND_AT} da keladi.")
+        for event in tg.events():
+            if event[0] == "button":
+                tg.answer(event[2])
+            elif event[0] == "text" and event[1].startswith("/"):
+                nxt = plan.next_date(day.date)
+                tg.send("ℹ️ Bugun post yo'q." + (f" Keyingi post: {nxt}, soat {buffer.PUBLISH_AT}." if nxt else "")
+                        + "\nFayl, rasm yoki izoh yuborsangiz — saqlab qo'yaman.")
             else:
-                tg.send(f"ℹ️ Keyingi post soat {SEND_AT} da keladi.")
+                save_incoming(tg, event)
 
 
 def remind(tg, day):
@@ -298,7 +299,9 @@ def serve(tg, day, end, forced=False):
         return idle(tg, day, current)
 
     if "topic" not in day.state:
-        topic = notion.next_topic(day.date)
+        topic = plan.topic_for(day.date, ROOT) if plan.enabled() else notion.next_topic(day.date)
+        if not topic and plan.enabled():
+            return idle(tg, day, current)  # rejada bu kunga post yo'q
         if not topic:
             if not day.state.get("no_topic"):
                 tg.send(f"ℹ️ {day.date}: Notion'da chiqmagan mavzu qolmadi. Yangi mavzu qo'shing.")
@@ -370,6 +373,8 @@ def serve(tg, day, end, forced=False):
                         "📎 Rasm ham yuborishingiz mumkin: postga qo'yish uchun (foto, skrinshot, haqiqiy misol) "
                         "yoki namuna sifatida («shunga o'xshash qil»). Rasm izohiga nima qilishni yozing.")
 
+        for event in [e for e in events if e[0] in ("file", "toobig")]:
+            save_incoming(tg, event)
         texts = [e[1] for e in events if e[0] == "text"]
         photos = [e for e in events if e[0] == "photo"]
         if any(_is_repair(t) for t in texts):
@@ -408,46 +413,49 @@ def serve(tg, day, end, forced=False):
         tg.send(f"⏰ «{topic['title']}» posti tasdiqlanmadi va chiqmadi. Bu mavzu ertangi kunga o'tadi.")
 
 
+def save_incoming(tg, event):
+    """Egasi yuborgan fayl, rasm yoki matnni repodagi materials/<sana>/ papkasiga saqlaydi."""
+    kind = event[0]
+    if kind == "toobig":
+        tg.send(f"⚠️ «{event[1]}» 20 MB dan katta — Telegram bot bunday faylni ololmaydi. "
+                "Kichikroq qilib yoki bir necha qismga bo'lib yuboring.")
+        return
+    folder = ROOT / "materials" / now().strftime("%Y-%m-%d")
+    folder.mkdir(parents=True, exist_ok=True)
+    notes = folder / "izohlar.md"
+    stamp = f"{now():%H:%M}"
+    try:
+        if kind == "text":
+            with notes.open("a") as f:
+                f.write(f"- {stamp} — {event[1]}\n")
+            commit([notes], "Material: izoh")
+            tg.send("✅ Izoh saqlandi.")
+            return
+        name = f"rasm-{now():%H%M%S}.jpg" if kind == "photo" else re.sub(r"[^\w.\- ]", "_", event[3])
+        dest = folder / name
+        if dest.exists():
+            dest = folder / f"{now():%H%M%S}-{name}"
+        tg.download(event[1], dest)
+        if event[2]:
+            with notes.open("a") as f:
+                f.write(f"- {stamp} — {dest.name}: {event[2]}\n")
+        commit([folder], f"Material: {dest.name}")
+        tg.send(f"✅ Qabul qilindi: {dest.name}")
+    except Exception as e:
+        tg.send(f"⚠️ Saqlanmadi: {e}")
+
+
 def intake(tg, end):
-    """To'xtatilgan rejim (PAUSE): postlar tayyorlanmaydi va chiqmaydi. Egasi yuborgan fayl, rasm va
-    izohlar repodagi materials/<sana>/ papkasiga saqlanadi."""
+    """To'xtatilgan rejim (PAUSE): postlar tayyorlanmaydi va chiqmaydi, faqat fayllar qabul qilinadi."""
     while now() < end:
         for event in tg.events():
-            kind = event[0]
-            if kind == "button":
+            if event[0] == "button":
                 tg.answer(event[2])
-                continue
-            if kind == "toobig":
-                tg.send(f"⚠️ «{event[1]}» 20 MB dan katta — Telegram bot bunday faylni ololmaydi. "
-                        "Kichikroq qilib yoki bir necha qismga bo'lib yuboring.")
-                continue
-            if kind == "text" and event[1].startswith("/"):
+            elif event[0] == "text" and event[1].startswith("/"):
                 tg.send("📥 Bot hozir fayl qabul qilish rejimida: post tayyorlamaydi va chiqarmaydi.\n"
                         "PDF, rasm, video yoki matn yuboring — hammasi saqlanadi.")
-                continue
-            folder = ROOT / "materials" / now().strftime("%Y-%m-%d")
-            folder.mkdir(parents=True, exist_ok=True)
-            notes = folder / "izohlar.md"
-            stamp = f"{now():%H:%M}"
-            try:
-                if kind == "text":
-                    with notes.open("a") as f:
-                        f.write(f"- {stamp} — {event[1]}\n")
-                    commit([notes], "Material: izoh")
-                    tg.send("✅ Izoh saqlandi.")
-                    continue
-                name = f"rasm-{now():%H%M%S}.jpg" if kind == "photo" else re.sub(r"[^\w.\- ]", "_", event[3])
-                dest = folder / name
-                if dest.exists():
-                    dest = folder / f"{now():%H%M%S}-{name}"
-                tg.download(event[1], dest)
-                if event[2]:
-                    with notes.open("a") as f:
-                        f.write(f"- {stamp} — {dest.name}: {event[2]}\n")
-                commit([folder], f"Material: {dest.name}")
-                tg.send(f"✅ Qabul qilindi: {dest.name}")
-            except Exception as e:
-                tg.send(f"⚠️ Saqlanmadi: {e}")
+            else:
+                save_incoming(tg, event)
 
 
 def run():

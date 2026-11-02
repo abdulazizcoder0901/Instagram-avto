@@ -28,6 +28,11 @@ o'zi ishga tushiradi (GitHub jadvali soatlab kechikishi mumkin, shuning uchun un
    bo'lsa bir marta o'zi qayta yuboradi.
 7. 21:30 gacha tasdiqlanmagan post chiqmaydi, mavzusi ertangi kunga o'tadi.
 
+**Kontent-reja fayli:** repo ildizida `content_plan.json` bo'lsa, mavzular Notion'dan emas, shu fayldan
+olinadi (`bot/plan.py`): har bir punktda sana, sarlavha va ssenariy, `rules` — barcha postlar uchun umumiy
+qoidalar (masalan, kurs materiallaridan olingan postlarda kompaniya nomlari va case study'lar yozilmaydi).
+Rejada post yo'q kunlarda bot faqat fayl va izohlarni qabul qiladi (`materials/<sana>/`).
+
 **To'xtatib turish:** repo ildizida `PAUSE` fayli bo'lsa, bot post tayyorlamaydi va chiqarmaydi —
 faqat fayl qabul qiladi: Telegram'ga yuborilgan PDF, rasm, video va izohlar repodagi
 `materials/<sana>/` papkasiga saqlanadi (Telegram bot 20 MB gacha faylni ola oladi). Repo public —
