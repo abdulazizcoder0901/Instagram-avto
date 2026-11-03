@@ -1,0 +1,107 @@
+{
+  "slides": [
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://yourcx.io/en/blog/2025/03/why-do-users-abandon-their-shopping-carts/",
+        "https://www.netsuite.com/portal/resource/articles/ecommerce/cart-abandonment.shtml"
+      ],
+      "photo_search": "empty shopping cart abandoned store aisle",
+      "photo_ref": "",
+      "html": "<div class=\"tag\" style=\"background:rgba(0,0,0,.45)\">CJM</div><div class=\"h1\" style=\"text-shadow:0 4px 30px rgba(0,0,0,.85)\">Mijoz sizni topdi. <span class=\"em\">Lekin sotib olmadi.</span></div><div class=\"small\" style=\"text-shadow:0 2px 16px rgba(0,0,0,.9)\">U aynan qayerda ketib qoldi? Buni ko'rsatadigan bitta xarita bor →</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://piwik.pro/glossary/customer-journey-mapping/",
+        "https://uxpressia.com/blog/define-journey-map-stages"
+      ],
+      "photo_search": "customer journey map diagram on wall",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\" style=\"text-shadow:0 2px 14px rgba(0,0,0,.9)\">Customer Journey Map</div><div class=\"h2\" style=\"text-shadow:0 4px 28px rgba(0,0,0,.85)\">CJM — <span class=\"em\">mijoz yo'li xaritasi</span></div><div class=\"body\" style=\"text-shadow:0 2px 18px rgba(0,0,0,.9)\">Mijoz mahsulotingizni olguncha bosib o'tadigan yo'l. Va shu yo'lda sizdan xarid qilish qanchalik qulay ekani.</div><div class=\"small\" style=\"text-shadow:0 2px 16px rgba(0,0,0,.9)\">Xarita sizga 4 ta narsani beradi:</div>"
+    },
+    {
+      "position": "center",
+      "photo_pages": [
+        "https://www.relevantaudience.com/digital-marketing-en/customer-journey-stages-touchpoints-map/",
+        "https://www.invoca.com/blog/customer-journey-touchpoints"
+      ],
+      "photo_search": "marketing team planning customer experience whiteboard",
+      "photo_ref": "",
+      "html": "<div class=\"h2\" style=\"text-shadow:0 4px 28px rgba(0,0,0,.85)\">CJM nima <span class=\"em\">beradi?</span></div><div class=\"glass\"><div class=\"list\"><div class=\"item\"><b>1</b>Har bir bosqichni ko'rasiz</div><div class=\"item\"><b>2</b>Mijoz his-tuyg'ularini boshqarasiz</div><div class=\"item\"><b>3</b>Aloqa nuqtalarini topasiz: reklama, sahifa, qo'ng'iroq</div><div class=\"item\"><b>4</b>Xaridni osonlashtirasiz</div></div></div><div class=\"small\" style=\"text-shadow:0 2px 16px rgba(0,0,0,.9)\">Endi xaritani chizamiz. Misol — maishiy texnika xaridi →</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://woopra.com/blog/customer-journey-map",
+        "https://metricool.com/whats-customer-journey"
+      ],
+      "photo_search": "person searching online on smartphone smiling",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\" style=\"text-shadow:0 2px 14px rgba(0,0,0,.9)\">1–2-bosqich</div><div class=\"h2\" style=\"text-shadow:0 4px 28px rgba(0,0,0,.85)\">Motivatsiya va qidiruv: <span class=\"em\">mijoz xursand</span></div><div class=\"body\" style=\"text-shadow:0 2px 18px rgba(0,0,0,.9)\">Eski muzlatkich buzildi — ehtiyoj paydo bo'ldi. Qidiradi, variant ko'p, kayfiyat yaxshi.</div><div class=\"small\" style=\"text-shadow:0 2px 16px rgba(0,0,0,.9)\">Keyin esa kayfiyat keskin tushadi. Sababi:</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://www.cmswire.com/customer-experience/choice-paralysis-is-quietly-wrecking-your-conversions",
+        "https://www.oberlo.com/blog/choice-overload",
+        "https://www.fullstory.com/resources/guide-to-understanding-frustrating-user-experiences-online/"
+      ],
+      "photo_search": "confused frustrated person looking at laptop screen",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\" style=\"text-shadow:0 2px 14px rgba(0,0,0,.9)\">3-bosqich · yomon tajriba</div><div class=\"h2\" style=\"text-shadow:0 4px 28px rgba(0,0,0,.85)\">Saytga yoki do'konga kirish: <span class=\"em\">ikkilanish</span></div><div class=\"body\" style=\"text-shadow:0 2px 18px rgba(0,0,0,.9)\">Ma'lumot juda ko'p, kim nima taklif qilyapti — tushunarsiz. Savolga javob kech keladi.</div><div class=\"small\" style=\"text-shadow:0 2px 16px rgba(0,0,0,.9)\">Lekin eng xavfli bosqich — keyingisi.</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://thestory.is/en/journal/product-comparison-ecommerce/",
+        "https://wiserreview.com/glossary/product-comparison/"
+      ],
+      "photo_search": "customer comparing appliances in electronics store",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\" style=\"text-shadow:0 2px 14px rgba(0,0,0,.9)\">4-bosqich · yomon tajriba</div><div class=\"h2\" style=\"text-shadow:0 4px 28px rgba(0,0,0,.85)\">Taqqoslash: <span class=\"em\">hammasi bir xil</span></div><div class=\"body\" style=\"text-shadow:0 2px 18px rgba(0,0,0,.9)\">Narx o'xshash, tavsif o'xshash, rasm o'xshash. Farqni ko'rmagan mijoz narxga qaraydi — yoki umuman ketadi.</div><div class=\"small\" style=\"text-shadow:0 2px 16px rgba(0,0,0,.9)\">Unda u oxirida nimaga ishonadi?</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://wisernotify.com/blog/online-review-stats/",
+        "https://findstack.com/resources/online-review-statistics"
+      ],
+      "photo_search": "person reading reviews on phone before buying",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\" style=\"text-shadow:0 2px 14px rgba(0,0,0,.9)\">5–6-bosqich</div><div class=\"h2\" style=\"text-shadow:0 4px 28px rgba(0,0,0,.85)\">Baholash va to'lov</div><div class=\"body\" style=\"text-shadow:0 2px 18px rgba(0,0,0,.9)\">Fikrlar va tavsiyalarni o'qiydi. To'lovda avval xavotir, xarid bo'lgach — xursandchilik.</div><div class=\"small\" style=\"text-shadow:0 2px 16px rgba(0,0,0,.9)\">Xarita tayyor. Endi asosiy savol: har bosqichda siz nima qilasiz?</div>"
+    },
+    {
+      "position": "center",
+      "photo_pages": [
+        "https://wise.com/us/blog/payment-options-for-small-business",
+        "https://www.zenbusiness.com/ways-accept-payments-small-business/"
+      ],
+      "photo_search": "customer paying by card at shop counter",
+      "photo_ref": "",
+      "html": "<div class=\"h3\" style=\"text-shadow:0 4px 26px rgba(0,0,0,.85)\">Har bosqichda <span class=\"em\">sizning ishingiz</span></div><div class=\"glass\"><div class=\"list\"><div class=\"item\"><b>1</b>Motivatsiya — reklama</div><div class=\"item\"><b>2</b>Qidiruv — mijoz qidirgan joyda bo'ling</div><div class=\"item\"><b>3</b>Kirish — tez javob, qulay ish vaqti</div><div class=\"item\"><b>4</b>Taqqoslash — batafsil, ishonchli ma'lumot</div><div class=\"item\"><b>5</b>Baholash — USP va afzalliklar</div><div class=\"item\"><b>6</b>To'lov — qulay to'lov turlari</div></div></div><div class=\"small\" style=\"text-shadow:0 2px 16px rgba(0,0,0,.9)\">Eng muhim qoida esa bu ro'yxatda yo'q →</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://www.atlassian.com/team-playbook/plays/customer-journey-mapping",
+        "https://www.smaply.com/blog/journey-mapping-workshop"
+      ],
+      "photo_search": "business owner testing own service phone call",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\" style=\"text-shadow:0 2px 14px rgba(0,0,0,.9)\">Asosiy qoida</div><div class=\"h2\" style=\"text-shadow:0 4px 28px rgba(0,0,0,.85)\">Mijoz yo'lini <span class=\"em\">o'zingiz bosib o'ting.</span></div><div class=\"body\" style=\"text-shadow:0 2px 18px rgba(0,0,0,.9)\">O'z biznesingizga mijoz bo'lib yozing, qo'ng'iroq qiling, buyurtma bering. Qayerda ikkilansangiz — aynan o'sha bosqichga aralashing.</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://affine.pro/blog/creating-a-customer-journey-map-on-a-whiteboard",
+        "https://learningloop.io/plays/workshop-exercise/journey-mapping"
+      ],
+      "photo_search": "entrepreneur drawing map on whiteboard sticky notes",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\" style=\"text-shadow:0 2px 14px rgba(0,0,0,.9)\">Navbat sizda</div><div class=\"h2\" style=\"text-shadow:0 4px 28px rgba(0,0,0,.85)\">Mijozingiz <span class=\"em\">qaysi bosqichda ketyapti?</span></div><div class=\"body\" style=\"text-shadow:0 2px 18px rgba(0,0,0,.9)\">Izohda bosqich raqamini (1–6) yozing. Postni saqlang — xaritani o'z biznesingizga chizasiz.</div>"
+    }
+  ],
+  "caption": "Mijoz sizni topdi, lekin sotib olmadi. U qaysi bosqichda ketib qolganini bilasizmi?\n\nCJM — mijoz yo'li xaritasi. Bu mijoz mahsulotni olguncha bosib o'tadigan yo'l: motivatsiya → qidiruv → saytga yoki do'konga kirish → taqqoslash → baholash → to'lov. Har bosqichda mijozning kayfiyati o'zgaradi. Eng ko'p mijoz yo'qotiladigan joylar — kirish va taqqoslash: ma'lumot ko'p, hamma bir-biriga o'xshaydi.\n\nHar bosqichda sizning ishingiz bor: reklama, mijoz qidirgan joyda bo'lish, tez javob, ishonchli ma'lumot, aniq USP va qulay to'lov. Eng muhim qoida esa — mijoz yo'lini o'zingiz bosib o'ting va mijoz ikkilangan joyga aralashing.\n\nSizda mijoz qaysi bosqichda ketyapti? Izohda raqamini (1–6) yozing va postni saqlab qo'ying 👇\n\n#cjm #mijozyoli #marketing #biznes #tadbirkorlik #marketolog #sotuv #mr_abdulazz",
+  "alt_text": "CJM (mijoz yo'li xaritasi) haqidagi carousel: u nima beradi, xaridning 6 bosqichi va mijoz har birida nimani his qilishi, har bosqichda biznes nima qilishi kerakligi va mijoz yo'lini o'zingiz bosib o'tish qoidasi."
+}
