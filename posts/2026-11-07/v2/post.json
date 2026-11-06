@@ -1,0 +1,105 @@
+{
+  "slides": [
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://www.dovetailapp.com/customer-research/what-are-customer-pain-points/"
+      ],
+      "photo_search": "customer hesitating looking at smartphone online shopping",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\">Marketing · Saqlab qo'ying</div><div class=\"h1\">Mijoz sizni topdi. <span class=\"em\">Nega sotib olmadi?</span></div><div class=\"body soft\">Javob reklamada ham, narxda ham bo'lmasligi mumkin. U boshqa joyda yashiringan.</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://squareup.com/au/en/townsquare/what-is-customer-journey-mapping"
+      ],
+      "photo_search": "small business owner behind counter shop",
+      "photo_ref": "",
+      "html": "<div class=\"tag\">Asosiy xato</div><div class=\"h2\">Siz biznesni <span class=\"em\">ichkaridan</span> ko'rasiz</div><div class=\"body\">Mijoz esa tashqaridan ko'radi: reklama, sahifa, yozishma, qo'ng'iroq, kutish. Siz bu yo'lni hech qachon uning ko'zi bilan bosib o'tmagansiz.</div><div class=\"small soft\">Buni ko'rishning bitta usuli bor.</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://www.nice.com/info/understanding-the-customer-journey-map-an-in-depth-guide",
+        "https://piwik.pro/glossary/customer-journey-mapping/"
+      ],
+      "photo_search": "customer journey map whiteboard planning",
+      "photo_ref": "",
+      "html": "<div class=\"tag\">CJM</div><div class=\"h2\">Customer Journey Map — <span class=\"em\">mijoz yo'li xaritasi</span></div><div class=\"body\">Mijoz siz haqingizda ilk bor eshitgan paytdan boshqalarga tavsiya qilguncha bosgan har bir qadam — bitta varaqda.</div><div class=\"small soft\">Xarita 5 bosqichdan iborat. Mijoz qaysi birida yo'qoladi?</div>"
+    },
+    {
+      "position": "center",
+      "photo_pages": [
+        "https://metricool.com/whats-customer-journey",
+        "https://blog.abmatic.ai/what-is-customer-journey-mapping"
+      ],
+      "photo_search": "path road journey stages aerial view",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\">Mijoz yo'lining 5 bosqichi</div><div class=\"list\"><div class=\"item\"><b>1</b>Xabardorlik — sizni ilk bor ko'radi</div><div class=\"item\"><b>2</b>Tanlash — boshqalar bilan solishtiradi</div><div class=\"item\"><b>3</b>Xarid — pul to'laydi</div><div class=\"item\"><b>4</b>Foydalanish — mahsulotni sinaydi</div><div class=\"item\"><b>5</b>Sodiqlik — qaytadi va tavsiya qiladi</div></div><div class=\"small soft\">Har bosqichga nima yoziladi? Keyingi slaydda.</div>"
+    },
+    {
+      "position": "center",
+      "photo_pages": [
+        "https://helio.zurb.com/ux-research/ux-deliverables/touchpoint-map/",
+        "https://careerfoundry.com/en/blog/ux-design/how-to-make-customer-journey-map-with-template/"
+      ],
+      "photo_search": "team analyzing customer data sticky notes wall",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\">Har bosqichda 4 qator</div><div class=\"list\"><div class=\"item\"><b>1</b>Harakat — mijoz nima qiladi</div><div class=\"item\"><b>2</b>Aloqa nuqtasi — qayerda uchrashasiz: reklama, sahifa, qo'ng'iroq, do'kon</div><div class=\"item\"><b>3</b>Fikr va his — nimani o'ylaydi, nimadan xavotirda</div><div class=\"item\"><b>4</b>Og'riq nuqtasi — qayerda qiynaladi</div></div><div class=\"small soft\">Eng qimmati — 4-qator. Nega? Misolda ko'ring.</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://www.leaderonomics.com/articles/business/why-waiting-on-hold-feels-more-frustrating-than-ever",
+        "https://en-contact.com/waiting-the-number-1-pain-point-of-the-customer-experience-is-not-inevitable"
+      ],
+      "photo_search": "woman waiting on phone frustrated",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\">Misol: go'zallik saloni</div><div class=\"glass\"><div class=\"body\"><b>Xabardorlik:</b> Instagram'da ishlarni ko'rdi, yoqdi.<br><b>Tanlash:</b> narxni so'radi — javob ertasi kuni keldi.<br><b>Xarid:</b> yozilish uchun qo'ng'iroq qildi — ko'tarilmadi.</div></div><div class=\"h3\">Mijoz ketdi. <span class=\"em\">Reklama esa ishlagandi.</span></div><div class=\"small soft\">Unda pul qayerda yo'qoldi?</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://www.givainc.com/blog/customer-pain-points/",
+        "https://www.woopra.com/blog/customer-journey-pain-points"
+      ],
+      "photo_search": "empty store customer leaving door",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\">Asosiy saboq</div><div class=\"h2\">Mijoz reklamada emas, <span class=\"em\">yo'l o'rtasida yo'qoladi.</span></div><div class=\"body\">Xaritasiz biznes reklamaga ko'proq pul tikadi. Xarita esa teshikni ko'rsatadi: javobsiz xabar, noaniq narx, uzoq kutish.</div><div class=\"small soft\">Xaritani qanday tuzish kerak?</div>"
+    },
+    {
+      "position": "center",
+      "photo_pages": [
+        "https://www.smaply.com/blog/journey-mapping-workshop",
+        "https://affine.pro/blog/creating-a-customer-journey-map-on-a-whiteboard",
+        "https://blogs.kent.ac.uk/isux/?p=396"
+      ],
+      "photo_search": "team workshop sticky notes whiteboard",
+      "photo_ref": "",
+      "html": "<div class=\"kicker\">CJM tuzish — 5 qadam</div><div class=\"list\"><div class=\"item\"><b>1</b>Bitta mijoz turini tanlang</div><div class=\"item\"><b>2</b>Uning bosqichlarini yozing</div><div class=\"item\"><b>3</b>Har bosqichga aloqa nuqtalarini qo'ying</div><div class=\"item\"><b>4</b>Fikr va og'riqlarni mijozlarning o'zidan so'rang</div><div class=\"item\"><b>5</b>Eng og'riqli nuqtani birinchi tuzating</div></div><div class=\"small soft\">Lekin ko'pchilik 4-qadamda xato qiladi.</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://www.moengage.com/blog/how-to-create-a-customer-journey-map/",
+        "https://www.genesys.com/en-sg/article/customer-journey-mapping-a-step-by-step-guide"
+      ],
+      "photo_search": "customer interview feedback conversation cafe",
+      "photo_ref": "",
+      "html": "<div class=\"tag\">Oltin qoida</div><div class=\"h2\">Xarita ideal yo'lni emas, <span class=\"em\">haqiqiy yo'lni</span> ko'rsatsin</div><div class=\"body\">Taxmin qilmang. Sharhlar, mijozlar bilan suhbat, javobsiz qolgan xabarlar — manba shular. Xaritani vaqti-vaqti bilan yangilab turing.</div>"
+    },
+    {
+      "position": "bottom",
+      "photo_pages": [
+        "https://uxpressia.com/blog/customer-journey-map-guide-examples/amp",
+        "https://callcentrehelper.com/guide-creating-customer-journey-map-234701.htm"
+      ],
+      "photo_search": "person typing comment on phone coffee shop",
+      "photo_ref": "",
+      "html": "<div class=\"h2\">Sizning mijozingiz qaysi bosqichda <span class=\"em\">yo'qolyapti?</span></div><div class=\"body\">Izohda biznesingiz turini va o'sha bosqichni yozing. Mebel do'koni, salon yoki onlayn kurs — farqi yo'q.</div><div class=\"tag\">Saqlab qo'ying — xarita tuzishda kerak bo'ladi</div>"
+    }
+  ],
+  "caption": "Mijoz sizni topdi, qiziqdi, lekin sotib olmadi. Nega?\n\nKo'pincha sabab reklamada emas. Mijoz yo'lning o'rtasida yo'qoladi: javobsiz xabar, noaniq narx, ko'tarilmagan qo'ng'iroq.\n\nCJM (mijoz yo'li xaritasi) shu teshiklarni ko'rsatadi. 5 bosqich, har birida harakat, aloqa nuqtasi, fikr va og'riq nuqtasi. Xaritani taxmin bilan emas, mijozlarning haqiqiy fikri bilan to'ldiring.\n\nSizning mijozingiz qaysi bosqichda yo'qolyapti? Izohda yozing 👇 Postni saqlab qo'ying, xarita tuzishda asqotadi.\n\n#cjm #mijozyoli #marketing #biznes #tadbirkorlik #sotuv #marketolog #oʻzbekiston",
+  "alt_text": "Customer Journey Map (mijoz yo'li xaritasi) nima ekanini, uning 5 bosqichini, har bosqichda nimalar yozilishini, umumiy go'zallik saloni misolini va xaritani tuzishning 5 qadamini tushuntiruvchi carousel."
+}
