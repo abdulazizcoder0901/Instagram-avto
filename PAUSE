@@ -1,0 +1,4 @@
+Bot to'xtatilgan: postlar tayyorlanmaydi va chiqmaydi, Claude ishlatilmaydi.
+Bu vaqtda bot faqat fayl qabul qiladi: Telegram'ga yuborilgan fayl, rasm va izohlar repodagi
+materials/<sana>/ papkasiga saqlanadi.
+Postlarni qayta yoqish uchun shu faylni o'chiring.

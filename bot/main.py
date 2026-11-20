@@ -7,6 +7,7 @@ import json
 import os
 import subprocess
 import re
+import shutil
 import sys
 import time
 from datetime import datetime, timedelta
@@ -288,6 +289,23 @@ def remind(tg, day):
         day.save()
 
 
+def reuse_version(day):
+    """Tasdiqlanmay ertasiga o'tgan mavzu uchun avvalgi kunning oxirgi variantini nusxalaydi.
+    Shunda har kuni bir xil post uchun Claude qayta ishlatilmaydi. Nusxa olinsa True."""
+    tid = day.state["topic"].get("id")
+    for prev_state in sorted((ROOT / "posts").glob("*/state.json"), reverse=True):
+        prev = Day(prev_state.parent.name)
+        if prev.date == day.date or prev.state.get("topic", {}).get("id") != tid or not prev.version:
+            continue
+        out = day.version_dir(1)
+        shutil.copytree(prev.version_dir(), out)
+        day.state.update(version=1, stage="review")
+        day.save()
+        commit([day.dir], f"Post {day.date}: {prev.date} dagi variant qayta ishlatildi")
+        return True
+    return False
+
+
 def serve(tg, day, end, forced=False):
     """Bitta kunning posti: tayyorlash, yuborish, tasdiqlash, /repair va natijani tekshirish.
     Kun almashsa (21:30) yoki ish vaqti tugasa qaytadi."""
@@ -319,7 +337,9 @@ def serve(tg, day, end, forced=False):
                                   "Texnik muammo, faqat shuni tuzat (mazmunni o'zgartirma):\n" + report,
                                   images=day.refs())
 
-    if not day.version:
+    if not day.version and reuse_version(day):
+        pass  # mavzu avvalgi kundan o'tgan: tayyor variant qayta ishlatiladi, Claude chaqirilmaydi
+    elif not day.version:
         if end - now() < timedelta(minutes=25):
             return  # vaqt kam — keyingi ish tayyorlaydi
         day.add_version(writer.write_post(topic, script, recent), fix=fixer)
