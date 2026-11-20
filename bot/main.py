@@ -511,17 +511,25 @@ def dispatch_next():
 
 
 def main():
+    chain = True
     try:
         run()
     except Exception as e:
+        limit = "limit" in str(e).lower()
         try:
-            Telegram().send(f"⚠️ Bot xatolik bilan to'xtadi: {type(e).__name__}: {e}\n10 daqiqadan keyin qayta ishga tushadi.")
+            Telegram().send(f"⚠️ Bot xatolik bilan to'xtadi: {type(e).__name__}: {e}\n"
+                            + ("Claude limiti tugagan: bot qayta urinmaydi, 6 soatlik zaxira jadval bilan tekshiradi."
+                               if limit else "10 daqiqadan keyin qayta ishga tushadi."))
         except Exception:
             pass
-        time.sleep(600)  # xato takrorlansa, xabarlar oqimi bo'lmasin
+        if limit:
+            chain = False  # limitni har 10 daqiqada qayta urinish bilan yeb qo'ymaslik uchun
+        else:
+            time.sleep(600)  # xato takrorlansa, xabarlar oqimi bo'lmasin
         raise
     finally:
-        dispatch_next()
+        if chain:
+            dispatch_next()
 
 
 if __name__ == "__main__":
